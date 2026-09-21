@@ -216,3 +216,31 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- MOFSemNet project-specific ---
+# Generated artifacts: logs, figures, results, model checkpoints, cached embeddings/graphs.
+# Keep the directory structure (.gitkeep) but not the generated contents.
+outputs/*
+!outputs/.gitkeep
+!outputs/logs/.gitkeep
+!outputs/figures/.gitkeep
+!outputs/results/.gitkeep
+!outputs/models/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/embeddings/*
+!data/embeddings/.gitkeep
+logs/
+*.pt
+*.pth
+*.ckpt
+!.dockerignore
+
+# Downloaded reference material — copyrighted (publisher/journal PDFs, arXiv preprints,
+# the professor's exposé doc), not this project's own IP to redistribute via git. Keep the
+# per-paper notes (papers/notes/*.md) and papers/README.md tracked — those are citation
+# metadata, not the copyrighted work itself. docs/architecture.mmd stays tracked (it's this
+# project's own generated diagram source, not reference material).
+papers/*.pdf
+docs/*.pdf
+docs/*.docx

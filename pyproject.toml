@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mofsemnet"
+version = "0.1.0"
+description = "Semantic graph learning for MOF Pore Limiting Diameter prediction: chemical-language-model embeddings + Black Hole sparsification."
+requires-python = ">=3.10"
+readme = "README.md"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.pytest.ini_options]
+# Ensures `from src.baseline.config import ...`-style imports resolve regardless of the
+# directory pytest is invoked from, without requiring an editable install first.
+pythonpath = ["."]
+testpaths = ["tests"]

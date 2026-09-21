@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from graph_construction import (
+from src.baseline.graph_construction import (
     KNN_VALUES,
     THRESHOLD_PHI,
     build_similarity_graphs,

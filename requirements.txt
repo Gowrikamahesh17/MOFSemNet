@@ -1,0 +1,47 @@
+# Runtime dependencies for MOFSemNet.
+#
+# PyTorch: pinned to the CPU wheel by default so `pip install -r requirements.txt` works
+# on any machine (personal laptop, university server, Colab CPU runtime) without extra
+# index URLs. For a GPU machine, install the matching CUDA wheel *before* this file, e.g.:
+#   pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu121
+# then re-run `pip install -r requirements.txt` — pip will see torch is already satisfied.
+# See notebooks/colab_setup.ipynb for the Colab-specific install sequence (torch-geometric's
+# compiled extensions need a wheel matched to the exact torch+CUDA combination at runtime).
+torch==2.6.0
+
+# PyTorch Geometric — core package only. The optional compiled extensions
+# (torch-scatter/torch-sparse/torch-cluster) are NOT required for the GCN/GraphSAGE/GAT
+# layers used in this project (torch_geometric.nn.GCNConv/SAGEConv/GATConv run on the
+# pure-PyTorch message-passing backend), so they are deliberately left out here to keep
+# `pip install` device-agnostic and dependency-free. See notebooks/colab_setup.ipynb if a
+# future module needs them.
+torch_geometric==2.6.1
+
+# Chemistry / cheminformatics
+rdkit==2025.9.6
+
+# Pretrained chemical language models (ChemBERTa, MolT5). Kept on the transformers 4.x line
+# (not 5.x) since that's what both DeepChem/ChemBERTa-zinc-base-v1 and laituan245/molt5-base
+# were last verified against. tokenizers/sentencepiece are left unpinned so pip resolves
+# whichever versions transformers==4.57.6 actually depends on.
+transformers==4.57.6
+sentencepiece
+
+# Graph construction / sparsification
+networkx==3.5
+
+# Classical ML baselines (Random Forest, k-NN, MLP) + k-center coreset utilities
+scikit-learn==1.7.2
+
+# Explainability (Step 6)
+shap==0.48.0
+
+# Data handling / numerics
+pandas==2.3.3
+numpy==2.2.6
+
+# Plotting (EDA plots, architecture diagram fallback)
+matplotlib==3.10.9
+
+# Efficiency tracking (Step 5: memory usage during training)
+psutil==7.1.0

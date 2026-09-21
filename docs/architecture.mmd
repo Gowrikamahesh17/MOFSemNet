@@ -1,0 +1,26 @@
+graph TD
+    s1["Step 1
+Baseline reproduction
+(RF / k-NN / GCN / GraphSAGE / GAT
+on Tanimoto graph)"] --> s5
+    s2["Step 2
+Language embeddings
+(ChemBERTa / MolT5)"] --> s3a["Fingerprint graph"]
+    s2 --> s3b["Semantic graph"]
+    s2 --> s3c["Hybrid graph"]
+    s3a --> s4["Step 4
+Sparsification
+(Black Hole vs. random vs. k-center
+@ 30% / 50% retention)"]
+    s3b --> s4
+    s3c --> s4
+    s4 --> s5["Step 5
+Model comparison
+(RF / MLP vs. GCN / GraphSAGE,
+>=5 seeds, MAE/RMSE/R2 + efficiency)"]
+    s5 --> s6["Step 6
+Explainability
+(SHAP, embedding ablation,
+confidence calibration)"]
+    s6 --> report["Thesis report
+(reports/)"]

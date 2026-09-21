@@ -33,7 +33,7 @@ import psutil
 from networkx.algorithms.community import louvain_communities
 from sklearn.preprocessing import MinMaxScaler
 
-from logging_setup import get_logger
+from src.baseline.logging_setup import get_logger
 
 logger = get_logger(__name__)
 
@@ -214,11 +214,8 @@ def save_sparsified_graph(result: dict, refcodes: np.ndarray, dataset: str, thre
 
 
 if __name__ == "__main__":
-    import sys
-
-    sys.path.insert(0, os.path.dirname(__file__))
-    from data_ingestion import load_dataset
-    from graph_construction import build_similarity_graphs, compute_topology_metrics, select_best_graph
+    from src.baseline.data_ingestion import load_dataset
+    from src.baseline.graph_construction import build_similarity_graphs, compute_topology_metrics, select_best_graph
 
     for dataset_name in ("small", "large"):
         print("=" * 60)

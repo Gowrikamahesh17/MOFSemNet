@@ -6,8 +6,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import feature_engineering as fe
-from feature_engineering import (
+import src.baseline.feature_engineering as fe
+from src.baseline.feature_engineering import (
     build_compact_features,
     build_features,
     build_fingerprint_features,

@@ -4,8 +4,8 @@ and the master comparison table combining them with Phase 5's GNN results."""
 import numpy as np
 import pytest
 
-from baseline_models import build_master_comparison_table, run_baseline_comparison
-from gnn_training import CATEGORY_ORDER
+from src.baseline.baseline_models import build_master_comparison_table, run_baseline_comparison
+from src.baseline.gnn_training import CATEGORY_ORDER
 
 
 @pytest.fixture

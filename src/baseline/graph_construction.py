@@ -33,8 +33,8 @@ import pandas as pd
 import networkx as nx
 from networkx.algorithms.community import louvain_communities, modularity as nx_modularity
 
-from feature_engineering import compute_fingerprint_matrix
-from logging_setup import get_logger
+from src.baseline.feature_engineering import compute_fingerprint_matrix
+from src.baseline.logging_setup import get_logger
 
 logger = get_logger(__name__)
 
@@ -228,11 +228,7 @@ def save_graphs(graphs: dict[str, nx.Graph], refcodes: np.ndarray, topology: pd.
 
 
 if __name__ == "__main__":
-    import sys
-    import os
-
-    sys.path.insert(0, os.path.dirname(__file__))
-    from data_ingestion import load_dataset
+    from src.baseline.data_ingestion import load_dataset
 
     for dataset_name in ("small", "large"):
         print("=" * 60)

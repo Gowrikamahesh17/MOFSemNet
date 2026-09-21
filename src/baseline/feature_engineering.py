@@ -28,7 +28,7 @@ from rdkit import Chem, RDLogger
 from rdkit.Chem import Descriptors, rdFingerprintGenerator
 from sklearn.preprocessing import MinMaxScaler
 
-from logging_setup import get_logger
+from src.baseline.logging_setup import get_logger
 
 RDLogger.DisableLog("rdApp.*")
 logger = get_logger(__name__)
@@ -173,10 +173,7 @@ def save_features(features: np.ndarray, metadata: dict, refcodes: pd.Series, out
 
 
 if __name__ == "__main__":
-    import sys
-
-    sys.path.insert(0, os.path.dirname(__file__))
-    from data_ingestion import load_dataset
+    from src.baseline.data_ingestion import load_dataset
 
     for dataset_name, scheme in (("small", "compact"), ("large", "fingerprint")):
         print("=" * 60)

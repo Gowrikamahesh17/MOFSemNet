@@ -23,8 +23,8 @@ from sklearn.metrics import (
 )
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 
-from gnn_training import CATEGORY_ORDER, make_splits
-from logging_setup import get_logger
+from src.baseline.gnn_training import CATEGORY_ORDER, make_splits
+from src.baseline.logging_setup import get_logger
 
 logger = get_logger(__name__)
 
@@ -103,15 +103,11 @@ def build_master_comparison_table(gnn_results: dict, baseline_results: dict, tas
 
 
 if __name__ == "__main__":
-    import os
-    import sys
-
-    sys.path.insert(0, os.path.dirname(__file__))
-    from black_hole_sparsification import apply_black_hole_sparsification
-    from data_ingestion import load_dataset
-    from feature_engineering import build_features
-    from gnn_training import run_gnn_comparison
-    from graph_construction import build_similarity_graphs, compute_topology_metrics, select_best_graph
+    from src.baseline.black_hole_sparsification import apply_black_hole_sparsification
+    from src.baseline.data_ingestion import load_dataset
+    from src.baseline.feature_engineering import build_features
+    from src.baseline.gnn_training import run_gnn_comparison
+    from src.baseline.graph_construction import build_similarity_graphs, compute_topology_metrics, select_best_graph
 
     for dataset_name in ("small", "large"):
         print("=" * 60)

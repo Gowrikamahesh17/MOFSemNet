@@ -29,8 +29,8 @@ from sklearn.metrics import confusion_matrix, cohen_kappa_score, f1_score, mean_
 from torch_geometric.data import Data
 from torch_geometric.nn import GATConv, GCNConv
 
-from black_hole_sparsification import apply_black_hole_sparsification, calculate_gravity_per_community
-from logging_setup import get_logger
+from src.baseline.black_hole_sparsification import apply_black_hole_sparsification, calculate_gravity_per_community
+from src.baseline.logging_setup import get_logger
 
 logger = get_logger(__name__)
 
@@ -295,13 +295,9 @@ def plot_loss_curves(results: dict, dataset: str, output_dir: str = "outputs") -
 
 
 if __name__ == "__main__":
-    import os
-    import sys
-
-    sys.path.insert(0, os.path.dirname(__file__))
-    from data_ingestion import load_dataset
-    from feature_engineering import build_features
-    from graph_construction import build_similarity_graphs, compute_topology_metrics, select_best_graph
+    from src.baseline.data_ingestion import load_dataset
+    from src.baseline.feature_engineering import build_features
+    from src.baseline.graph_construction import build_similarity_graphs, compute_topology_metrics, select_best_graph
 
     for dataset_name in ("small", "large"):
         print("=" * 60)

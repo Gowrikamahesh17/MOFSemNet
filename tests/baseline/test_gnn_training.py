@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 import torch
 
-from gnn_training import (
+from src.baseline.gnn_training import (
     CATEGORY_ORDER,
     GAT,
     GCN,

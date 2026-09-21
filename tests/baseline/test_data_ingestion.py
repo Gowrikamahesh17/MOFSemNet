@@ -5,8 +5,8 @@ import math
 import pandas as pd
 import pytest
 
-import data_ingestion
-from data_ingestion import (
+import src.baseline.data_ingestion as data_ingestion
+from src.baseline.data_ingestion import (
     INVALID_SMILES,
     INVALID_SMILES_REPLACEMENT,
     derive_pld_category,

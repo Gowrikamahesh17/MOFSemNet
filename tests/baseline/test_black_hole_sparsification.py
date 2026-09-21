@@ -7,7 +7,7 @@ import pandas as pd
 import pytest
 from networkx.algorithms.community import louvain_communities
 
-from black_hole_sparsification import (
+from src.baseline.black_hole_sparsification import (
     apply_black_hole_sparsification,
     black_hole_strategy_per_community,
     calculate_gravity_per_community,

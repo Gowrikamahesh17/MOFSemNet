@@ -13,8 +13,8 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from config import DATASET_CHOICES
-from logging_setup import get_logger
+from src.baseline.config import DATASET_CHOICES
+from src.baseline.logging_setup import get_logger
 
 logger = get_logger(__name__)
 
