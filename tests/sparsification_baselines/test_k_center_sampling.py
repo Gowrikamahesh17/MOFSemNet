@@ -44,3 +44,24 @@ def test_k_center_selects_diverse_points():
     result = k_center_sparsify(graph, features, retention=0.2, seed=0)
     kept = set(result["graph"].nodes())
     assert kept & set(range(10)) and kept & set(range(10, 20))
+
+
+def test_k_center_honors_requested_count_when_feature_space_lacks_diversity():
+    """Real bug found running Step 4 on the actual MOF dataset: only 3,047 of 14,296 MOFs have
+    a distinct linker fingerprint (most share a linker, differing only by metal), so greedy
+    farthest-point search exhausts all genuinely-distinct points long before reaching 50%
+    retention. Before the fix, retention=0.3 and retention=0.5 silently returned the exact same
+    node count — breaking the "matched retention levels" comparison Step 4 depends on."""
+    n = 100
+    # Only 10 distinct feature vectors, each duplicated 10x -- far fewer than n.
+    distinct = np.random.default_rng(0).normal(size=(10, 4))
+    features = np.repeat(distinct, 10, axis=0)
+    graph = nx.Graph()
+    graph.add_nodes_from(range(n))
+
+    result_low = k_center_sparsify(graph, features, retention=0.3, seed=0)
+    result_high = k_center_sparsify(graph, features, retention=0.7, seed=0)
+
+    assert result_low["graph"].number_of_nodes() == 30
+    assert result_high["graph"].number_of_nodes() == 70
+    assert result_low["graph"].number_of_nodes() != result_high["graph"].number_of_nodes()
