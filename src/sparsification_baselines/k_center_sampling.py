@@ -24,7 +24,16 @@ logger = get_logger(__name__)
 def _greedy_k_center_indices(features: np.ndarray, n_centers: int, seed: int, required: list[int]) -> list[int]:
     """Greedily grow a center set that maximizes the minimum distance to any already-chosen
     center, starting from `required` (e.g. the fixed test nodes) so they're always kept, then
-    filling the remaining budget with the standard farthest-point heuristic."""
+    filling the remaining budget with the standard farthest-point heuristic.
+
+    Always returns exactly min(n_centers, n) indices. When the feature space has fewer
+    *distinct* points than n_centers (every remaining point sits at distance 0 from an
+    already-selected center — true here, since many MOFs share the same linker fingerprint and
+    differ only by metal), farthest-point selection alone can't produce more genuinely-new
+    centers. Rather than silently returning fewer nodes than requested — which would break the
+    "matched retention levels" comparison this function exists for — the remaining budget is
+    filled with a deterministic (seeded) random draw from whatever's left unselected.
+    """
     n = features.shape[0]
     rng = np.random.default_rng(seed)
 
@@ -45,6 +54,12 @@ def _greedy_k_center_indices(features: np.ndarray, n_centers: int, seed: int, re
         dist = np.linalg.norm(features - features[next_center], axis=1)
         min_dist = np.minimum(min_dist, dist)
         min_dist[next_center] = 0.0
+
+    remaining_budget = min(n_centers, n) - len(selected)
+    if remaining_budget > 0:
+        unselected = np.setdiff1d(np.arange(n), np.array(selected, dtype=int), assume_unique=False)
+        filler = rng.choice(unselected, size=remaining_budget, replace=False)
+        selected.extend(int(i) for i in filler)
 
     return selected[:n_centers]
 

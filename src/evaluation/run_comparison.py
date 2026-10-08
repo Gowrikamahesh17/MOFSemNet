@@ -34,6 +34,7 @@ import pandas as pd
 import torch
 
 from src.baseline.black_hole_sparsification import apply_black_hole_sparsification
+from src.baseline.feature_engineering import compute_fingerprint_matrix
 from src.baseline.gnn_training import (
     GCN,
     GraphSAGE,
@@ -47,6 +48,7 @@ from src.common.config import RuntimeConfig
 from src.common.logging_setup import get_logger
 from src.evaluation.efficiency import graph_efficiency_row, track_efficiency
 from src.evaluation.metrics import build_comparison_table
+from src.graphs.graph_utils import normalize_embeddings
 from src.models.mlp import train_and_evaluate_mlp
 from src.sparsification_baselines.k_center_sampling import k_center_sparsify
 from src.sparsification_baselines.random_sampling import random_sparsify
@@ -54,6 +56,30 @@ from src.sparsification_baselines.random_sampling import random_sparsify
 logger = get_logger(__name__)
 
 GNN_MODEL_CLASSES = {"gcn": GCN, "graphsage": GraphSAGE}
+
+
+def k_center_feature_space(graph_type: str, linker_smiles: pd.Series, embeddings: np.ndarray) -> np.ndarray:
+    """The feature space k-center measures diversity in, matched to whichever signal built the
+    graph it's sparsifying — fingerprint diversity for the fingerprint graph, embedding-space
+    diversity for the semantic graph, both (concatenated) for the hybrid graph. Each block is
+    L2-normalized before concatenating so fingerprint's sparse 0/1 bits and the embedding's
+    larger-magnitude floats contribute comparably to Euclidean distance; without this, one block
+    would dominate greedy farthest-point selection regardless of the other's structure.
+
+    Without this, k-center would always measure diversity in fingerprint space even when
+    sparsifying the semantic/hybrid graphs — making it blind to exactly the information those
+    graphs were built from, while Black Hole (which operates on the graph object directly) is
+    not. That would make the three-way comparison unfair in Black Hole's favor on those graphs.
+    """
+    if graph_type == "fingerprint":
+        return normalize_embeddings(compute_fingerprint_matrix(linker_smiles))
+    if graph_type == "semantic":
+        return normalize_embeddings(embeddings)
+    if graph_type == "hybrid":
+        fingerprint_block = normalize_embeddings(compute_fingerprint_matrix(linker_smiles))
+        embedding_block = normalize_embeddings(embeddings)
+        return np.concatenate([fingerprint_block, embedding_block], axis=1)
+    raise ValueError(f"Unknown graph_type {graph_type!r}")
 
 
 def compute_global_fixed_test_nodes(n: int, config: RuntimeConfig) -> set[int]:
@@ -85,9 +111,13 @@ def sparsify_graph(
     retention: float,
     seed: int,
     fixed_test_nodes: set[int],
-    features: np.ndarray,
+    k_center_features: np.ndarray,
     config: RuntimeConfig,
 ) -> dict:
+    """`k_center_features` is only used by the "k_center" branch — pass the output of
+    k_center_feature_space() for the graph type being sparsified, not the GNN/RF/MLP node
+    feature matrix (those are a separate, deliberately graph-type-independent concern; see
+    run_full_comparison)."""
     if method == "black_hole":
         weights = (
             config.gravity_degree_weight,
@@ -100,7 +130,7 @@ def sparsify_graph(
     if method == "random":
         return random_sparsify(graph, retention, seed, fixed_test_nodes)
     if method == "k_center":
-        return k_center_sparsify(graph, features, retention, seed, fixed_test_nodes)
+        return k_center_sparsify(graph, k_center_features, retention, seed, fixed_test_nodes)
     raise ValueError(f"Unknown sparsification method {method!r}")
 
 
@@ -174,12 +204,18 @@ def run_full_comparison(
     features: np.ndarray,
     graphs: dict[str, nx.Graph],
     config: RuntimeConfig,
+    embeddings: np.ndarray,
 ) -> pd.DataFrame:
     """Runs every (model x graph type x sparsification method x retention level) configuration
     for config.seeds seeds each, and returns the aggregated mean +/- std comparison table.
 
     `graphs` maps graph_type -> nx.Graph, e.g. built via src.graphs.fingerprint_graph,
     src.graphs.semantic_graph, src.graphs.hybrid_graph (see scripts/run_step3_build_graphs.py).
+    `features` is the fixed node-feature matrix (fingerprint scheme) fed to every GNN/RF/MLP
+    regardless of graph type — deliberately held constant so the comparison isolates the effect
+    of graph *structure*, not node features. `embeddings` (config.language_model's output) is
+    separate: it's only used to build k-center's graph-type-matched feature space (see
+    k_center_feature_space) for the semantic/hybrid graphs.
     """
     n = len(df)
     labels = df["pld_value"].values.astype(np.float32)
@@ -196,11 +232,20 @@ def run_full_comparison(
         ]
 
     for graph_type, graph in graphs.items():
+        # Only built when actually needed: avoids the fingerprint/embedding work when
+        # "k_center" isn't in config.sparsification_methods, and avoids requiring a
+        # "linker_smiles" column from callers that never exercise that method.
+        k_center_features = (
+            k_center_feature_space(graph_type, df["linker_smiles"], embeddings)
+            if "k_center" in config.sparsification_methods
+            else None
+        )
         for method in config.sparsification_methods:
             for retention in config.retention_levels:
-                per_seed_metrics = []
                 for seed in config.seeds:
-                    sparsified = sparsify_graph(graph, df, method, retention, seed, fixed_test_nodes, features, config)
+                    sparsified = sparsify_graph(
+                        graph, df, method, retention, seed, fixed_test_nodes, k_center_features, config
+                    )
                     pruned_graph = sparsified["graph"]
 
                     for architecture in config.gnn_architectures:
