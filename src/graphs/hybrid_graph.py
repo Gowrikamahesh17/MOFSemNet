@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 
 from src.baseline.feature_engineering import compute_fingerprint_matrix
-from src.graphs.graph_utils import build_knn_graph_from_similarity, normalize_embeddings
+from src.graphs.graph_utils import build_knn_graph_from_similarity, normalize_embeddings, safe_matmul
 
 DEFAULT_K = 10
 DEFAULT_BETA = 0.5  # weight on semantic similarity; (1 - beta) on fingerprint Tanimoto similarity
@@ -38,12 +38,12 @@ def build_hybrid_graph(
     n = len(linker_smiles)
 
     def similarity_fn(row_slice):
-        intersection = fingerprints[row_slice] @ fingerprints.T
+        intersection = safe_matmul(fingerprints[row_slice], fingerprints.T)
         union = fp_row_sums[row_slice][:, None] + fp_row_sums[None, :] - intersection
         union[union == 0] = 1.0
         tanimoto_block = intersection / union
 
-        cosine_block = normalized_embeddings[row_slice] @ normalized_embeddings.T
+        cosine_block = safe_matmul(normalized_embeddings[row_slice], normalized_embeddings.T)
 
         return beta * cosine_block + (1 - beta) * tanimoto_block
 

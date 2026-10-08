@@ -235,6 +235,7 @@ logs/
 *.pth
 *.ckpt
 !.dockerignore
+.DS_Store
 
 # Downloaded reference material — copyrighted (publisher/journal PDFs, arXiv preprints,
 # the professor's exposé doc), not this project's own IP to redistribute via git. Keep the

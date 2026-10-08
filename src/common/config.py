@@ -44,7 +44,7 @@ LANGUAGE_MODEL_CHOICES = ("chemberta", "molt5")
 # Hugging Face Hub ids. ChemBERTa is a RoBERTa encoder; MolT5 is a T5 encoder-decoder (only the
 # encoder is used for embeddings) — see src/language/chemberta.py and src/language/molt5.py.
 LANGUAGE_MODEL_HF_IDS = {
-    "chemberta": "DeepChem/ChemBERTa-zinc-base-v1",
+    "chemberta": "seyonec/ChemBERTa-zinc-base-v1",
     "molt5": "laituan245/molt5-base",
 }
 

@@ -66,10 +66,24 @@ def build_knn_graph_from_similarity(
     return graph
 
 
+def safe_matmul(a: np.ndarray, b: np.ndarray) -> np.ndarray:
+    """`a @ b`, with numpy's overflow/invalid-value/divide-by-zero RuntimeWarnings suppressed.
+
+    On macOS, numpy's float32 matmul runs through Apple's Accelerate BLAS backend, which has a
+    documented bug (numpy/numpy#21798, #21826) where it raises spurious overflow/invalid-value
+    FP exception flags on some matmuls even when every input and output value is finite and
+    correct — verified here by comparing against np.einsum (bit-identical result, no NaN/Inf)
+    on this project's actual fingerprint/embedding matrices. Scoped to just this call rather
+    than a broader warnings filter, so a genuine NaN/Inf bug elsewhere still surfaces normally.
+    """
+    with np.errstate(over="ignore", invalid="ignore", divide="ignore"):
+        return a @ b
+
+
 def cosine_similarity_block(embeddings: np.ndarray, row_slice: slice) -> np.ndarray:
     """Cosine similarity between embeddings[row_slice] and all of embeddings. Embeddings are
     L2-normalized once by the caller (see normalize_embeddings) so this reduces to a matmul."""
-    return embeddings[row_slice] @ embeddings.T
+    return safe_matmul(embeddings[row_slice], embeddings.T)
 
 
 def normalize_embeddings(embeddings: np.ndarray) -> np.ndarray:

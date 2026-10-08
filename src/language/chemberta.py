@@ -1,6 +1,8 @@
 """ChemBERTa embedder (Step 2).
 
-Uses DeepChem/ChemBERTa-zinc-base-v1, a RoBERTa encoder pretrained on ~77M SMILES from ZINC.
+Uses seyonec/ChemBERTa-zinc-base-v1 (the DeepChem-trained checkpoint, published under the
+`seyonec` Hugging Face namespace rather than `DeepChem`), a RoBERTa encoder pretrained on ~77M
+SMILES from ZINC.
 The embedding for a SMILES string is the mean-pooled last hidden state over its real (non-pad)
 tokens — standard sentence-embedding pooling for an encoder-only model; CLS-token pooling is
 available in prior ChemBERTa work but mean pooling is more robust when fine-tuning wasn't done

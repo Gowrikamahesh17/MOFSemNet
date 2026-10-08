@@ -31,7 +31,7 @@ def test_rejects_out_of_range_retention_level():
 
 
 def test_language_model_hf_id_property():
-    assert RuntimeConfig(language_model="chemberta").language_model_hf_id == "DeepChem/ChemBERTa-zinc-base-v1"
+    assert RuntimeConfig(language_model="chemberta").language_model_hf_id == "seyonec/ChemBERTa-zinc-base-v1"
     assert RuntimeConfig(language_model="molt5").language_model_hf_id == "laituan245/molt5-base"
 
 

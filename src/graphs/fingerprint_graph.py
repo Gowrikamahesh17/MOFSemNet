@@ -14,7 +14,7 @@ import networkx as nx
 import pandas as pd
 
 from src.baseline.feature_engineering import compute_fingerprint_matrix
-from src.graphs.graph_utils import build_knn_graph_from_similarity
+from src.graphs.graph_utils import build_knn_graph_from_similarity, safe_matmul
 
 DEFAULT_K = 10
 
@@ -26,7 +26,7 @@ def build_fingerprint_graph(linker_smiles: pd.Series, k: int = DEFAULT_K) -> nx.
     n = len(linker_smiles)
 
     def similarity_fn(row_slice):
-        intersection = fingerprints[row_slice] @ fingerprints.T
+        intersection = safe_matmul(fingerprints[row_slice], fingerprints.T)
         union = fp_row_sums[row_slice][:, None] + fp_row_sums[None, :] - intersection
         union[union == 0] = 1.0
         return intersection / union
