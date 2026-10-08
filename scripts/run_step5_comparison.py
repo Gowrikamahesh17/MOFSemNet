@@ -41,7 +41,7 @@ def main() -> None:
         "hybrid": build_hybrid_graph(df["linker_smiles"], embeddings),
     }
 
-    table = run_full_comparison(df, features, graphs, config)
+    table = run_full_comparison(df, features, graphs, config, embeddings)
 
     os.makedirs(config.results_dir, exist_ok=True)
     out_path = os.path.join(config.results_dir, f"step5_comparison_{args.model}.csv")
