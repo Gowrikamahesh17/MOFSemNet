@@ -1,0 +1,69 @@
+/* Design tokens — the only place colors, type, and spacing are defined. Every component
+   reads from these; nothing hardcodes a hex value or a px size outside this file and the
+   scale below. Palette: warm paper ground (echoes the prior MOFQuantumNet console's cream
+   tone, so this reads as the same lineage) with a deep teal accent and status semantics
+   kept visually distinct from the accent hue. */
+
+:root {
+  /* Color */
+  --color-bg: #faf8f4;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-border: #e6e1d6;
+  --color-border-strong: #d4cdbc;
+  --color-ink: #211d16;
+  --color-ink-soft: #655f52;
+  --color-ink-faint: #9b9484;
+
+  --color-accent: #0f5e56;
+  --color-accent-strong: #0a4740;
+  --color-accent-soft: #e4efec;
+  --color-accent-contrast: #ffffff;
+
+  --color-done: #2f7a4f;
+  --color-done-bg: #e5f2e9;
+  --color-next: #a66b17;
+  --color-next-bg: #faf0dd;
+  --color-planned: #767169;
+  --color-planned-bg: #ece9e1;
+
+  --color-graph: #5a4fcf;
+  --color-graph-bg: #ecebfa;
+
+  /* Type */
+  --font-display: 'Source Serif 4', Georgia, serif;
+  --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+
+  --text-2xs: 0.72rem;
+  --text-xs: 0.8rem;
+  --text-sm: 0.9rem;
+  --text-base: 1rem;
+  --text-lg: 1.15rem;
+  --text-xl: 1.4rem;
+  --text-2xl: 1.85rem;
+  --text-3xl: 2.4rem;
+  --text-4xl: 3.2rem;
+
+  /* Spacing scale (px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  --shadow-card: 0 1px 2px rgba(33, 29, 22, 0.04), 0 4px 16px rgba(33, 29, 22, 0.05);
+  --shadow-raised: 0 4px 10px rgba(33, 29, 22, 0.06), 0 12px 32px rgba(33, 29, 22, 0.08);
+
+  --content-max-width: 1180px;
+
+  color-scheme: light;
+}

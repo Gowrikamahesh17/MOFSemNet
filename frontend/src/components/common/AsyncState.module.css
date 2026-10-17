@@ -1,0 +1,11 @@
+.loading {
+  color: var(--color-ink-soft);
+}
+
+.error {
+  color: #a6342a;
+  background: #fbebe8;
+  border: 1px solid #edc4bc;
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
