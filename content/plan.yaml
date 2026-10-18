@@ -1,0 +1,46 @@
+# Research questions and scope guardrails, shown on /plan. Pulled directly from the thesis
+# expose so this page never drifts from what's actually been registered/approved.
+
+context: >
+  A prior Case Study reproduced MOFGalaxyNet and the Black Hole sparsification strategy to
+  predict Pore Limiting Diameter (PLD) of Metal-Organic Frameworks from a Tanimoto
+  fingerprint-similarity graph combined with a Graph Neural Network. Across a 2,004-MOF and
+  a 14,296-MOF dataset, non-graph baselines (Random Forest, k-NN) outperformed every GNN
+  configuration tested, because the similarity graph was built from information already
+  present in each node's own feature vector. Message passing re-derived a smoothed version
+  of existing information rather than adding genuinely new relational signal.
+
+thesis_statement: >
+  This thesis tests whether a similarity graph built from a different kind of information
+  — fixed embeddings from a pretrained chemical language model computed over each MOF's
+  linker SMILES — can give a GNN a genuine advantage over non-graph baselines on the same
+  continuous PLD target. A second, related question is whether Black Hole sparsification,
+  reused unmodified from the prior Case Study, preserves predictive performance on the
+  resulting semantic and hybrid graphs when pruned by 30% and 50%, and whether it continues
+  to outperform random and k-center sampling baselines at matched retention levels.
+
+research_questions:
+  - id: rq1
+    text: "Do pretrained chemical-language representations add predictive signal beyond conventional molecular fingerprints, for MOF linker chemistry specifically?"
+  - id: rq2
+    text: "Do semantic or hybrid similarity graphs built from such representations improve PLD prediction compared with the original fingerprint graph and with non-graph baselines?"
+  - id: rq3
+    text: "Can Black Hole sparsification preserve the predictive performance of fingerprint, semantic, and hybrid graphs while reducing their computational cost?"
+  - id: rq4
+    text: "Does Black Hole sparsification outperform random and k-center sampling at matched retention levels, on these new graph types, as it does on the original fingerprint graph?"
+
+guardrails:
+  - "One dataset: the large, 14,296-MOF set"
+  - "One prediction target: continuous Pore Limiting Diameter"
+  - "One primary language model: ChemBERTa, with MolT5 as a secondary comparison"
+  - "At most two GNN architectures: GCN, GraphSAGE"
+  - "Two pruning levels: 30% and 50% retention"
+  - "No literature mining, generative design, data augmentation, or additional target properties"
+
+negative_result_framing: >
+  Consistent with the prior Case Study's own framing, a negative result here — the semantic
+  or hybrid graph again failing to outperform Random Forest or MLP — is treated as a
+  complete and useful scientific outcome, not a failed thesis. It would extend the Case
+  Study's finding into a second, materially different information source, strengthening the
+  evidence for exactly which conditions cause a MOF similarity graph to add predictive
+  value and which do not.

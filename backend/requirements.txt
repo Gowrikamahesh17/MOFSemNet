@@ -1,0 +1,7 @@
+# Backend-only dependencies. The backend also imports from src/ (e.g. src.language.embeddings
+# for the live demo endpoint), so install the root ML pipeline requirements first:
+#   pip install -r requirements.txt -r backend/requirements.txt
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pyyaml==6.0.2
+python-dotenv==1.0.1

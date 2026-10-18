@@ -1,0 +1,51 @@
+# MOFSemNet web console — single-container production build.
+#
+# Stage 1 builds the React frontend to static files; Stage 2 is a Python runtime that
+# serves both the API and those static files from one FastAPI process on one port, matching
+# the prior Case Study web console's "one process, one URL" design. Separate from the root
+# Dockerfile, which packages the ML pipeline/test environment, not this app.
+#
+# Build:  docker build -f Dockerfile.webapp -t mofsemnet-webapp .
+# Run:    docker run -p 8000:8000 -v $(pwd)/data:/app/data -v $(pwd)/outputs:/app/outputs mofsemnet-webapp
+
+# ---- Stage 1: frontend build ----
+FROM node:20-slim AS frontend-build
+WORKDIR /app/frontend
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
+
+# ---- Stage 2: backend runtime, serving the built frontend ----
+FROM python:3.11-slim AS runtime
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libxrender1 \
+    libxext6 \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# ML pipeline dependencies first (the backend imports src.language.embeddings for the live
+# demo), then the backend's own.
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY backend/requirements.txt ./backend-requirements.txt
+RUN pip install --no-cache-dir -r backend-requirements.txt
+
+COPY src/ ./src/
+COPY backend/ ./backend/
+COPY content/ ./content/
+COPY papers/ ./papers/
+COPY --from=frontend-build /app/frontend/dist ./frontend/dist
+
+ENV MOFSEMNET_CONTENT_DIR=/app/content \
+    MOFSEMNET_DATA_DIR=/app/data \
+    MOFSEMNET_OUTPUTS_DIR=/app/outputs \
+    MOFSEMNET_PAPERS_DIR=/app/papers \
+    PYTHONUNBUFFERED=1
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app.main:app", "--app-dir", "backend", "--host", "0.0.0.0", "--port", "8000"]

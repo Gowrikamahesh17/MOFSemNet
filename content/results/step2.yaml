@@ -1,0 +1,20 @@
+title: "Step 2 — Language Representations"
+status: done
+summary: >
+  Computed ChemBERTa and MolT5 embeddings for all 14,296 linker SMILES, cached to disk,
+  plus a separate one-hot metal representation kept independent of the linker embedding.
+stats:
+  - label: "MOFs embedded"
+    value: "14,296"
+  - label: "Embedding dimension"
+    value: "768"
+  - label: "Unique metals"
+    value: "53"
+  - label: "NaN / Inf found"
+    value: "0"
+    emphasis: true
+finding: >
+  Found and fixed a real bug before any embedding was computed: the configured ChemBERTa
+  Hugging Face repository id didn't exist. A separate floating-point batching artifact
+  (about one part in a million) was investigated directly rather than assumed harmless —
+  confirmed benign by comparing the same SMILES embedded alone versus batched.

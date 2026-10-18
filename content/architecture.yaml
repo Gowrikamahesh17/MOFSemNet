@@ -1,0 +1,204 @@
+# Single source of truth for the interactive architecture explorer (/architecture).
+#
+# Add a new pipeline stage, graph type, or comparison method by adding a node and its
+# edges here — the frontend lays the diagram out automatically (dagre, layered by the
+# edges below), so this file is the only thing to touch. No layout code changes needed.
+#
+# node.status: "done" | "next" | "planned" — drives the color coding everywhere in the app.
+# node.references: ids from content/papers.yaml — cross-linked into the /references page.
+# node.metrics: optional free-form key/value pairs shown in the detail panel for nodes
+#   with real measured results. Omit entirely for "next"/"planned" nodes — never invent one.
+
+nodes:
+  - id: step1
+    label: "Step 1\nBaseline Reproduction"
+    group: pipeline
+    status: done
+    summary: "Ported, re-verified Tanimoto-graph baseline from the prior Case Study."
+    description: >
+      Ports the working, tested pipeline from the prior Case Study into this repository:
+      data ingestion, fingerprint feature engineering, Tanimoto graph construction, Black
+      Hole sparsification, and the GCN / GraphSAGE / GAT training loop, plus Random Forest
+      and k-NN non-graph baselines. Re-run end-to-end on the real 14,296-MOF dataset to
+      re-establish the reference numbers everything else compares against.
+    why_chosen: >
+      Reused unmodified rather than rewritten, so this thesis's results stay directly
+      comparable to the Case Study's own reported numbers.
+    studied:
+      - "MOFGalaxyNet's similarity-graph + GCN design, and where its reference implementation
+         leaked test-set information into early stopping."
+      - "The Black Hole Strategy's gravity-score formula and its community-stratified pruning."
+    references: [p1, p2]
+    metrics:
+      "Random Forest MAE": "0.525 Å"
+      "Random Forest RMSE": "1.001 Å"
+      "Random Forest R²": "0.893"
+      "Best GNN R²": "0.687"
+
+  - id: step2
+    label: "Step 2\nLanguage Embeddings"
+    group: pipeline
+    status: done
+    summary: "ChemBERTa + MolT5 embeddings for every linker SMILES, cached to disk."
+    description: >
+      Computes a fixed, frozen embedding per unique linker SMILES using a pretrained
+      chemical language model (ChemBERTa primary, MolT5 secondary), mean-pooled over the
+      final hidden layer, disk-cached so downstream graph construction never re-embeds. A
+      separate one-hot metal representation is kept independent of the linker embedding.
+    why_chosen: >
+      ChemBERTa was chosen as the primary model because its embeddings correlate less with
+      Tanimoto fingerprint similarity than MolFormer's do (r=0.48 vs r=0.64 reported) —
+      making it the more promising candidate for adding genuinely new relational signal
+      rather than re-encoding what the fingerprint graph already captures.
+    studied:
+      - "ChemBERTa's RoBERTa-style masked-LM pretraining on 77M PubChem SMILES."
+      - "MolFormer's own correlation analysis between its embeddings and classical fingerprint
+         similarity — the direct reason ChemBERTa was picked over it."
+      - "Praski et al.'s rigorous benchmark finding ChemBERTa only practically equivalent to
+         ECFP fingerprints as flat classifier input — engaged with directly as a risk to the
+         thesis premise, not ignored."
+    references: [p4, p5, p6]
+    metrics:
+      "MOFs embedded": "14,296"
+      "Embedding dimension": "768"
+      "Unique metals": "53"
+      "NaN / Inf found": "0"
+
+  - id: graph_fingerprint
+    label: "Fingerprint Graph"
+    group: graph
+    status: done
+    summary: "Tanimoto similarity over Morgan fingerprints — the control condition."
+    description: >
+      Top-k (k=10) nearest-neighbour graph built from Tanimoto similarity over 1024-bit
+      Morgan fingerprints of the linker SMILES. Identical signal to the Case Study's own
+      graph; serves as the direct control every new graph type is measured against.
+    why_chosen: "The known quantity the Case Study already showed adds nothing on its own."
+    studied: []
+    references: [p1]
+    metrics:
+      "Nodes": "14,296"
+      "Edges": "115,576"
+
+  - id: graph_semantic
+    label: "Semantic Graph"
+    group: graph
+    status: done
+    summary: "Cosine similarity over ChemBERTa embeddings — the thesis's central graph."
+    description: >
+      Top-k (k=10) nearest-neighbour graph built from cosine similarity over ChemBERTa
+      linker embeddings, constructed the same blocked way as the fingerprint graph so the
+      three graph types are an apples-to-apples comparison of signal, not of method.
+    why_chosen: >
+      Grounded in cosine similarity over a fixed embedding rather than learned end-to-end,
+      following GSL-MPP's own ablation warning that learning inter-molecule graph structure
+      from scratch, without a chemically grounded starting point, performs worse than no
+      graph at all.
+    studied:
+      - "GSL-MPP's inter-molecule graph construction and its from-scratch learning ablation."
+      - "ReadMOF's evidence that LM embeddings of MOF-related text carry real structure-property
+         signal, even without a graph."
+    references: [p10, p13]
+    metrics:
+      "Nodes": "14,296"
+      "Edges": "113,534"
+      "Jaccard overlap vs. fingerprint": "0.21"
+
+  - id: graph_hybrid
+    label: "Hybrid Graph"
+    group: graph
+    status: done
+    summary: "Weighted blend of Tanimoto and cosine similarity."
+    description: >
+      Top-k graph from a weighted combination of Tanimoto fingerprint similarity and cosine
+      embedding similarity (default beta=0.5), testing whether the two signals are
+      complementary rather than one dominating.
+    why_chosen: "Tests whether blending outperforms either pure signal on its own."
+    studied:
+      - "MolPROP's atom-level fusion of ChemBERTa token embeddings onto a molecular graph —
+         a favourable prior for fusing language and structural signal, at a different level."
+    references: [p9, p10]
+    metrics:
+      "Nodes": "14,296"
+      "Edges": "113,784"
+      "Jaccard overlap vs. fingerprint": "0.30"
+      "Jaccard overlap vs. semantic": "0.26"
+
+  - id: step4
+    label: "Step 4\nSparsification"
+    group: pipeline
+    status: done
+    summary: "Black Hole vs. random vs. k-center, at 30% and 50% retention."
+    description: >
+      Applies Black Hole gravity-based pruning (reused unmodified from the Case Study),
+      random sampling, and greedy k-center sampling to all three graph types at two
+      retention levels, with one fixed test set held constant across every method and
+      graph type so the comparison is genuinely apples-to-apples.
+    why_chosen: >
+      Random and k-center give Black Hole two structurally different baselines to beat:
+      one with no reasoning at all, one that reasons about feature-space diversity but not
+      graph structure.
+    studied:
+      - "The Black Hole Strategy's gravity score and community-stratified pruning in detail,
+         to port it unmodified."
+      - "Spectral Greedy Coresets' k-center-vs-random comparison methodology, adapted from
+         citation/social networks to molecular similarity graphs."
+      - "A 2024 graph-reduction survey's taxonomy — confirming gravity-based scoring sits
+         outside mainstream graph-ML sparsification literature on its own terms."
+    references: [p2, p15, p16]
+    metrics:
+      "Bugs found and fixed": "2"
+      "Black Hole isolated-node rate": "24–41%"
+      "Black Hole vs. random edge retention": "lower, at matched node counts"
+
+  - id: step5
+    label: "Step 5\nModel Comparison"
+    group: pipeline
+    status: next
+    summary: "RF / MLP vs. GCN / GraphSAGE, across every graph × method × retention."
+    description: >
+      Will train Random Forest and MLP (no graph) against GCN and GraphSAGE on every
+      combination of graph type, sparsification method, and retention level, at least 5
+      seeds each, reporting MAE / RMSE / R² plus retained structure, training time, and
+      memory. This is where the thesis's central question gets answered.
+    why_chosen: null
+    studied: []
+    references: []
+    metrics: {}
+
+  - id: step6
+    label: "Step 6\nTrustworthiness"
+    group: pipeline
+    status: planned
+    summary: "SHAP, embedding ablation, calibrated confidence — once Step 5 has models to explain."
+    description: >
+      SHAP feature importance for the non-graph baseline, an embedding ablation isolating
+      how much of any semantic-graph advantage survives a degraded embedding, and a
+      calibrated confidence interval for the final selected configuration.
+    why_chosen: null
+    studied: []
+    references: []
+    metrics: {}
+
+  - id: report
+    label: "Thesis Report"
+    group: pipeline
+    status: planned
+    summary: "Final write-up and submission."
+    description: "The final thesis document and this web console's last update."
+    why_chosen: null
+    studied: []
+    references: []
+    metrics: {}
+
+edges:
+  - { from: step1, to: step5, animated: true }
+  - { from: step2, to: graph_fingerprint, animated: false }
+  - { from: step2, to: graph_semantic, animated: false }
+  - { from: step2, to: graph_hybrid, animated: false }
+  - { from: graph_fingerprint, to: step4, animated: false }
+  - { from: graph_semantic, to: step4, animated: false }
+  - { from: graph_hybrid, to: step4, animated: false }
+  - { from: step4, to: step5, animated: true }
+  - { from: step5, to: step6, animated: false }
+  - { from: step6, to: report, animated: false }

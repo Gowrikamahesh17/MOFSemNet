@@ -1,0 +1,20 @@
+title: "Step 1 — Baseline Reproduction"
+status: done
+summary: >
+  Ported the working, tested pipeline from the prior Case Study, re-run end-to-end on the
+  real 14,296-MOF dataset to re-establish the reference numbers everything else compares
+  against.
+stats:
+  - label: "Random Forest MAE"
+    value: "0.525 Å"
+  - label: "Random Forest RMSE"
+    value: "1.001 Å"
+  - label: "Random Forest R²"
+    value: "0.893"
+    emphasis: true
+  - label: "Best GNN R²"
+    value: "0.687"
+    emphasis: false
+finding: >
+  Random Forest beats the best GNN by a wide margin on R² — the exact failure mode this
+  thesis's semantic graph is meant to address.

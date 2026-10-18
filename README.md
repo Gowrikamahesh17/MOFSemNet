@@ -109,7 +109,16 @@ papers/                  Literature review PDFs + a short notes file per paper (
 reports/
   logs/                  Dated progress-log entries, one per work session (see reports/README.md)
                         — the raw material the final thesis report gets written from.
-docs/                    Generated architecture diagram source (architecture.mmd).
+docs/                    Generated architecture diagram source (architecture.mmd), plus
+                        ADDING_CONTENT.md and DEPLOYMENT.md for the web console below.
+
+content/                 YAML content for the web console — architecture.yaml, papers.yaml,
+                        plan.yaml, progress.yaml, results/step{1..4}.yaml. See "Web console".
+backend/                 FastAPI app serving the web console's API. See "Web console".
+frontend/                React/TypeScript web console UI. See "Web console".
+Dockerfile.webapp        Builds the web console (separate from the root Dockerfile, which
+                        packages the ML pipeline/test environment — see "Web console").
+docker-compose.yml       `docker compose up -d --build` runs the web console.
 ```
 
 ## Setup
@@ -192,3 +201,96 @@ it through rather than hardcoding values inline.
 
 `src/baseline/config.py` (Step 1, ported as-is) keeps its own separate dataset/task switches —
 intentionally untouched, since it predates and is independent of the new work's config.
+
+## Web console
+
+A permanent, extensible progress/architecture console for supervisor meetings — not a one-off
+presentation, meant to be extended month over month as the thesis progresses. FastAPI backend +
+React/TypeScript frontend, both under `backend/` and `frontend/`, reading from a single source of
+content: `content/*.yaml`.
+
+```
+content/
+  architecture.yaml      Nodes/edges for the interactive pipeline explorer — the one file to
+                          edit to add a new stage, graph type, or comparison method.
+  papers.yaml             Literature, clustered, cross-linked to architecture nodes.
+  plan.yaml                Research questions and scope guardrails.
+  progress.yaml            Work-package status and milestones (mirrors the expose's Gantt chart).
+  results/step{1..4}.yaml  Real, precomputed results per step. Never invented — a step with no
+                          results.yaml file 404s on /api/results/<id> rather than showing a
+                          placeholder number.
+backend/app/
+  core/config.py           Env-based settings (content dir, CORS, demo model) — see
+                          backend/.env.example.
+  models/schemas.py        Pydantic models mirroring content/*.yaml exactly.
+  services/content_loader.py  Loads + validates content/*.yaml at startup; a typo'd reference
+                          (e.g. a node citing a paper id that doesn't exist) fails loudly here,
+                          not silently in the browser.
+  services/embedding_service.py  Backs the one live demo (/implemented): embeds a submitted
+                          SMILES with the real ChemBERTa model, finds its nearest neighbours
+                          among the real cached embeddings for all 14,296 MOFs.
+  api/routes_*.py          One file per resource (architecture, papers, plan, progress,
+                          results, predict, content-reload).
+frontend/src/
+  pages/                    One file per section (Plan, Architecture, Implemented, Studied,
+                          References, Progress) — matches the nav exactly.
+  components/architecture/  The React Flow explorer: dagre auto-layout from
+                          content/architecture.yaml, hover-to-highlight-connections,
+                          click-to-open detail panel.
+  api/client.ts             Typed fetch wrappers, one per backend endpoint.
+  types/content.ts          TypeScript types mirroring backend/app/models/schemas.py.
+```
+
+**Adding a new pipeline stage, graph type, or comparison method**: edit `content/architecture.yaml`
+only — add a node and its edges. The diagram relayouts itself (dagre), no component code changes.
+See `docs/ADDING_CONTENT.md` for the full walkthrough (new architecture node, new paper, new
+result, new page).
+
+### Running it locally
+
+All commands below assume you're at the **repo root** (`MOFSemNet/`), not already inside
+`backend/` or `frontend/` — `cd` there first if a shell from an earlier session left you deeper
+in the tree.
+
+```bash
+# Terminal 1 — backend, from the repo root
+pip install -r requirements.txt -r backend/requirements.txt
+uvicorn app.main:app --reload --app-dir backend --port 8010
+
+# Terminal 2 — frontend (hot-reload dev server, proxies /api to :8010), from the repo root
+cd frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173`.
+
+### Deploying
+
+```bash
+docker compose up -d --build
+```
+
+The `-d` runs it **detached** — it keeps running in the background and gives you your terminal
+back immediately. Without `-d`, `docker compose up` stays attached and streams logs until you
+press Ctrl+C, which also stops the container (that's expected behavior, not a crash, if you see
+it shut down right after you hit Ctrl+C).
+
+```bash
+docker compose logs -f     # tail logs for a detached run
+docker compose down        # stop and remove the container
+```
+
+Single container, one process, port 8000 — `Dockerfile.webapp` builds the React app and serves
+it from the same FastAPI process that serves the API (`backend/app/main.py` mounts
+`frontend/dist` as static files when present), matching the prior Case Study web console's
+"one process, one URL" design. `data/`, `outputs/`, and `content/` are mounted as volumes, not
+baked into the image, so updating a result or adding an architecture node doesn't require a
+rebuild — restart the container (or hit `POST /api/content/reload` for `content/*.yaml` changes
+specifically).
+
+This is separate from the root `Dockerfile`, which packages the ML pipeline/test environment —
+the two don't conflict and serve different purposes.
+
+See `docs/DEPLOYMENT.md` for university-server deployment notes (reverse proxy, env vars, moving
+the embedding model's GPU/CPU choice).

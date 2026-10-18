@@ -1,0 +1,24 @@
+title: "Step 3 — Graph Construction"
+status: done
+summary: >
+  Built fingerprint, semantic, and hybrid top-k similarity graphs (k=10) for both language
+  models — six graphs total, all on the real 14,296-MOF dataset.
+stats:
+  - label: "Graphs built"
+    value: "6"
+  - label: "Nodes per graph"
+    value: "14,296"
+  - label: "Fingerprint ↔ semantic Jaccard"
+    value: "0.21"
+    emphasis: true
+  - label: "Fingerprint ↔ hybrid Jaccard"
+    value: "0.30"
+  - label: "Semantic ↔ hybrid Jaccard"
+    value: "0.26"
+headline: "0.21"
+headline_label: "Jaccard overlap, fingerprint ↔ semantic edges"
+finding: >
+  Only 21% of edges are shared between the fingerprint graph and the semantic graph built
+  from ChemBERTa embeddings — the semantic graph connects mostly different MOF pairs. Had
+  this come back near 0.9, the semantic graph would already be redundant with the
+  fingerprint graph, repeating the Case Study's negative result before Step 5 even ran.

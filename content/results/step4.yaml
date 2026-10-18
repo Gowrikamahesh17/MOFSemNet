@@ -1,0 +1,26 @@
+title: "Step 4 — Sparsification Comparison"
+status: done
+summary: >
+  Applied Black Hole, random, and k-center sampling to all three graph types at 30% and
+  50% retention, with one fixed test set held constant across every method and graph type.
+retention_shown: "30%"
+columns: ["Graph", "Method", "Nodes", "Edges", "Isolated"]
+rows:
+  - ["Fingerprint", "Black Hole", "4,114", "6,909", "24%"]
+  - ["Fingerprint", "Random", "4,289", "9,980", "—"]
+  - ["Fingerprint", "k-center", "4,289", "9,892", "—"]
+  - ["Semantic", "Black Hole", "4,155", "6,506", "39%"]
+  - ["Semantic", "Random", "4,289", "10,003", "—"]
+  - ["Semantic", "k-center", "4,289", "10,993", "—"]
+  - ["Hybrid", "Black Hole", "4,141", "6,633", "41%"]
+  - ["Hybrid", "Random", "4,289", "10,372", "—"]
+  - ["Hybrid", "k-center", "4,289", "10,599", "—"]
+finding: >
+  Two bugs found and fixed: k-center was silently returning fewer nodes than requested
+  once it ran out of genuinely distinct fingerprint vectors (only 3,047 of 14,296 MOFs
+  have one) — fixed to always honor the retention budget. Its notion of "diversity" also
+  didn't match the graph it was pruning — it now uses fingerprint space, embedding space,
+  or both, to match the graph type. Separately, Black Hole leaves 24–41% of surviving
+  nodes fully isolated and retains fewer edges than random sampling at matched node
+  counts — not necessarily worse, since it targets high-gravity nodes specifically, but
+  worth watching once Step 5 reports actual prediction accuracy.

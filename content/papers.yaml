@@ -1,0 +1,232 @@
+# Literature referenced by the architecture explorer (content/architecture.yaml) and
+# shown on /studied and /references. Clustered the way the thesis expose's own
+# state-of-the-art review clusters them (Section 2), not as a flat list.
+#
+# Add a paper by adding it here with a unique id, then reference that id from any
+# architecture.yaml node's `references` list to cross-link it.
+
+clusters:
+  - id: foundational
+    label: "Foundational work"
+    narrative: >
+      The two papers this thesis extends directly, both from the supervising research
+      group. MOFGalaxyNet established representing a MOF dataset as a similarity graph and
+      training a GCN over it; the Black Hole Strategy addressed that approach's scalability
+      by pruning the graph with a gravity-inspired centrality score. This thesis reuses
+      Black Hole unmodified and tests a new kind of graph for it to prune.
+
+  - id: language_models
+    label: "Chemical language models"
+    narrative: >
+      Choosing ChemBERTa as the embedding model meant engaging with a genuinely mixed
+      literature. MolFormer's own correlation analysis — its embeddings track Tanimoto
+      similarity more closely than ChemBERTa's do — was the deciding factor: a graph built
+      from MolFormer embeddings risked being redundant with the fingerprint graph by the
+      same mechanism that sank the Case Study. Praski et al.'s rigorous benchmark is the
+      most direct threat to the thesis premise: across 25 datasets, ChemBERTa used flatly
+      as classifier input is only equivalent to ECFP fingerprints, not better. This thesis
+      tests a different question — graph-structural use via message passing — that
+      benchmark doesn't answer.
+
+  - id: mof_fusion
+    label: "MOF-specific language & graph fusion"
+    narrative: >
+      Several recent papers fuse language representations with graph or structural models
+      for MOF or molecular property prediction, but none build an inter-MOF similarity
+      graph from a frozen embedding. MOFormer fine-tunes end-to-end within one MOF's own
+      3D graph; MolPROP fuses embeddings onto atoms within one molecule. GSL-MPP is the
+      closest methodological analogue — an inter-molecule graph from fingerprints — and
+      its own ablation, that learning graph structure from scratch without a chemically
+      grounded starting point performs worse than no graph, directly shaped this thesis's
+      choice to ground the semantic graph in cosine similarity rather than learned
+      structure. ReadMOF's strong regression results from MOF-name embeddings alone are
+      favourable indirect evidence that language-model embeddings of MOF-related text
+      carry real structure-property signal.
+
+  - id: sparsification
+    label: "Graph sparsification beyond Black Hole"
+    narrative: >
+      A 2024 survey taxonomizing graph reduction methods confirms Black Hole's
+      gravity-based scoring doesn't appear anywhere in mainstream graph-ML sparsification
+      literature — it sits on its own terms, introduced and justified within the MOF
+      research line itself. Spectral Greedy Coresets is the most directly useful empirical
+      comparator for this thesis's own random-vs-k-center baseline comparison, though on
+      citation and social networks rather than molecular graphs.
+
+papers:
+  - id: p1
+    citation_key: "[1]"
+    cluster: foundational
+    title: "MOFGalaxyNet: A social network analysis for predicting guest accessibility in metal-organic frameworks utilizing graph convolutional networks"
+    authors: "Jalali, M., Wonanke, A. D. D., & Wöll, C."
+    year: 2023
+    venue: "Journal of Cheminformatics, 15, Article 94"
+    url: "https://doi.org/10.1186/s13321-023-00764-2"
+    summary: >
+      Represents a MOF dataset as a Tanimoto fingerprint similarity graph, trains a GCN to
+      predict guest accessibility. Reports 89.62% accuracy at a similarity threshold of
+      0.9 — later found to contain an internal inconsistency and a test-set leak that
+      inflated the reported figure.
+    has_local_pdf: false
+
+  - id: p2
+    citation_key: "[2]"
+    cluster: foundational
+    title: "The Black Hole Strategy: Gravity-Based Representative Sampling for Frugal Graph Learning on Metal-Organic Framework Networks"
+    authors: "Jalali, M., Wonanke, A. D. D., Friederich, P., & Wöll, C."
+    year: 2025
+    venue: "Journal of Chemical Information and Modeling"
+    url: "https://doi.org/10.1021/acs.jcim.5c01518"
+    summary: >
+      Gravity-inspired node pruning — degree, betweenness, and edge-weight centrality,
+      equally weighted — beats random, PageRank, and k-center sampling on the same MOF
+      network, using roughly 5x less memory. Reused unmodified as this thesis's
+      sparsification method.
+    has_local_pdf: false
+
+  - id: p4
+    citation_key: "[4]"
+    cluster: language_models
+    title: "ChemBERTa: Large-Scale Self-Supervised Pretraining for Molecular Property Prediction"
+    authors: "Chithrananda, S., Grand, G., & Ramsundar, B."
+    year: 2020
+    venue: "arXiv:2010.09885"
+    url: "https://arxiv.org/abs/2010.09885"
+    summary: >
+      RoBERTa-style masked-language-model pretraining on 77M PubChem SMILES. The primary
+      embedding model used in this thesis.
+    has_local_pdf: true
+    local_pdf: "2010.09885v2.pdf"
+
+  - id: p5
+    citation_key: "[5]"
+    cluster: language_models
+    title: "Large-Scale Chemical Language Representations Capture Molecular Structure and Properties"
+    authors: "Ross, J., Belgodere, B., Chenthamarakshan, V., Padhi, I., Mroueh, Y., & Das, P."
+    year: 2022
+    venue: "arXiv:2106.09553 (MolFormer)"
+    url: "https://arxiv.org/abs/2106.09553"
+    summary: >
+      Pretrains a linear-attention transformer on 1.1B SMILES. Its own analysis found
+      embeddings correlate more strongly with Tanimoto similarity (r=0.64) than
+      ChemBERTa's do (r=0.48) — the direct reason ChemBERTa was chosen as primary: less
+      redundant with the existing fingerprint graph.
+    has_local_pdf: true
+    local_pdf: "2106.09553v3.pdf"
+
+  - id: p6
+    citation_key: "[6]"
+    cluster: language_models
+    title: "Benchmarking Pretrained Molecular Embedding Models For Molecular Representation Learning"
+    authors: "Praski, M., Adamczyk, J., & Czech, W."
+    year: 2025
+    venue: "arXiv:2508.06199"
+    url: "https://arxiv.org/abs/2508.06199"
+    summary: >
+      Across 25 datasets with rigorous Bayesian statistical testing, ChemBERTa is only
+      practically equivalent to classical ECFP fingerprints, not clearly better. This
+      thesis tests a different question — graph-structural use via message passing, not
+      flat tabular input.
+    has_local_pdf: true
+    local_pdf: "2508.06199v2.pdf"
+
+  - id: p8
+    citation_key: "[8]"
+    cluster: mof_fusion
+    title: "MOFormer: Self-Supervised Transformer Model for Metal-Organic Framework Property Prediction"
+    authors: "Cao, Z., Magar, R., Wang, Y., & Barati Farimani, A."
+    year: 2023
+    venue: "Journal of the American Chemical Society, 145(5), 2958–2967"
+    url: "https://doi.org/10.1021/jacs.2c11420"
+    summary: >
+      Fine-tunes a Transformer on MOFid strings, fused with a crystal-graph model via a
+      Barlow Twins cross-correlation loss on 400,000+ MOF structures. Closest MOF-specific
+      analogue — but fine-tunes end-to-end rather than using a fixed frozen embedding, and
+      fuses within one MOF's own 3D graph rather than building an inter-MOF similarity
+      graph.
+    has_local_pdf: true
+    local_pdf: "ja2c11420.pdf"
+
+  - id: p9
+    citation_key: "[9]"
+    cluster: mof_fusion
+    title: "MolPROP: Molecular property prediction with multimodal language and graph fusion"
+    authors: "Rollins, Z. A., Cheng, A. C., & Metwally, E."
+    year: 2024
+    venue: "Journal of Cheminformatics, 16, Article 56"
+    url: "https://doi.org/10.1186/s13321-024-00846-9"
+    summary: >
+      Fuses ChemBERTa-2 token embeddings directly onto the atom-level nodes of a molecular
+      graph before applying a GNN, reliably improving regression tasks. A favourable prior
+      for PLD-as-regression, though its fusion is intra-molecule, not an inter-molecule
+      similarity graph.
+    has_local_pdf: true
+    local_pdf: "s13321-024-00846-9.pdf"
+
+  - id: p10
+    citation_key: "[10]"
+    cluster: mof_fusion
+    title: "Molecular property prediction based on graph structure learning"
+    authors: "Zhao, B., Xu, W., Guan, J., & Zhou, S."
+    year: 2024
+    venue: "Bioinformatics, 40(5), btae304"
+    url: "https://doi.org/10.1093/bioinformatics/btae304"
+    summary: >
+      Closest methodological analogue: builds an inter-molecule similarity graph from
+      ECFP fingerprints, refines it via learned graph structure. Its own ablation found a
+      variant that learns an inter-molecule graph from scratch, without a fingerprint-based
+      initial graph, performs worse than using no graph at all — the direct justification
+      for grounding this thesis's semantic graph in cosine similarity rather than learning
+      structure end-to-end.
+    has_local_pdf: true
+    local_pdf: "btae304.pdf"
+
+  - id: p13
+    citation_key: "[13]"
+    cluster: mof_fusion
+    title: "ReadMOF: Structure-Free Semantic Embeddings from Systematic MOF Nomenclature for Machine Learning"
+    authors: "Zhu, K., Wilson, C., Mazur, B., Li, Y., Chester, A. M., & Moghadam, P. Z."
+    year: 2026
+    venue: "arXiv:2604.10568"
+    url: "https://arxiv.org/abs/2604.10568"
+    summary: >
+      Embeds systematic IUPAC-style MOF names via pretrained language models, achieving
+      R² above 0.88 for largest cavity diameter and R² above 0.90 for DFT-computed band
+      gaps from embeddings alone — strong indirect evidence that language-model embeddings
+      of MOF-related text carry genuine structure-property signal. Never builds a
+      k-nearest-neighbour graph or targets PLD specifically.
+    has_local_pdf: true
+    local_pdf: "2604.10568v1.pdf"
+
+  - id: p15
+    citation_key: "[15]"
+    cluster: sparsification
+    title: "A Comprehensive Survey on Graph Reduction: Sparsification, Coarsening, and Condensation"
+    authors: "Hashemi, M., Gong, S., Ni, J., Fan, W., Prakash, B. A., & Jin, W."
+    year: 2024
+    venue: "arXiv:2402.03358"
+    url: "https://arxiv.org/abs/2402.03358"
+    summary: >
+      Taxonomizes graph reduction methods into sparsification, coarsening, and
+      condensation. Black Hole's gravity-based scoring sits within sparsification but
+      appears nowhere in this otherwise comprehensive survey — confirming it sits outside
+      mainstream graph-ML literature on its own terms.
+    has_local_pdf: true
+    local_pdf: "2402.03358v4.pdf"
+
+  - id: p16
+    citation_key: "[16]"
+    cluster: sparsification
+    title: "Spectral Greedy Coresets for Graph Neural Networks"
+    authors: "Ding, M., He, Y., Li, J., & Huang, F."
+    year: 2024
+    venue: "arXiv:2405.17404"
+    url: "https://arxiv.org/abs/2405.17404"
+    summary: >
+      Reports k-center coreset selection head-to-head against uniform random sampling and
+      several spectral/model-based alternatives, at retention ratios bracketing this
+      thesis's own 30%/50% design. The most directly useful empirical comparator for the
+      random-vs-k-center portion of this thesis's comparison, on citation and social
+      networks rather than molecular graphs.
+    has_local_pdf: true
+    local_pdf: "2405.17404v1.pdf"

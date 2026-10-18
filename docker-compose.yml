@@ -1,0 +1,21 @@
+# MOFSemNet web console. Default (`docker compose up`) runs the single production
+# container (Dockerfile.webapp): one process serving both the API and the built frontend
+# on :8000. This does not affect or replace the root Dockerfile, which packages the
+# separate ML pipeline/test environment.
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile.webapp
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mounted, not baked into the image: embeddings/graphs/results change as the thesis
+      # progresses and shouldn't require a rebuild to pick up.
+      - ./data:/app/data
+      - ./outputs:/app/outputs
+      - ./content:/app/content
+    environment:
+      - MOFSEMNET_DEMO_MODEL=chemberta
+      - MOFSEMNET_CORS_ORIGINS=http://localhost:8000
+    restart: unless-stopped
