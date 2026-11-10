@@ -18,7 +18,7 @@ from pathlib import Path
 import numpy as np
 
 from app.core.config import settings
-from app.models.schemas import EmbeddingDemoResponse, EmbeddingNeighbor
+from app.models.schemas import EmbeddingDemoResponse, EmbeddingNeighbor, MetalOption
 
 # backend/app/services/embedding_service.py -> repo root is 4 levels up; src/ needs to be
 # importable the same way the ML pipeline's own scripts/ expect.
@@ -56,6 +56,17 @@ def _get_reference_data():
     return df, normalize_embeddings(embeddings)
 
 
+class InvalidMetalError(ValueError):
+    """The requested metal filter isn't one of the metals present in the dataset."""
+
+
+def list_metals() -> list[MetalOption]:
+    """Every metal in the dataset with how many MOFs use it, most common first."""
+    df, _ = _get_reference_data()
+    counts = df["metal"].astype(str).value_counts()
+    return [MetalOption(metal=metal, mofs=int(n)) for metal, n in counts.items()]
+
+
 def _validate_smiles(smiles: str) -> str:
     from rdkit import Chem
 
@@ -67,7 +78,9 @@ def _validate_smiles(smiles: str) -> str:
     return smiles
 
 
-def embed_and_find_neighbors(smiles: str, top_k: int | None = None) -> EmbeddingDemoResponse:
+def embed_and_find_neighbors(
+    smiles: str, metal: str | None = None, top_k: int | None = None
+) -> EmbeddingDemoResponse:
     smiles = _validate_smiles(smiles)
     top_k = top_k or settings.demo_top_k
 
@@ -77,6 +90,15 @@ def embed_and_find_neighbors(smiles: str, top_k: int | None = None) -> Embedding
     df, reference_embeddings = _get_reference_data()
     query_norm = embedding / max(np.linalg.norm(embedding), 1e-9)
     similarities = reference_embeddings @ query_norm
+
+    # The embedding encodes the linker only (metal is a separate one-hot, see
+    # src/language/metal_representation.py), so a metal choice just restricts which real MOFs
+    # are eligible as neighbours; it never changes the embedding or the similarity values.
+    if metal:
+        metal_mask = (df["metal"].astype(str) == metal).to_numpy()
+        if not metal_mask.any():
+            raise InvalidMetalError(f"'{metal}' isn't a metal in the dataset.")
+        similarities = np.where(metal_mask, similarities, -np.inf)
 
     top_indices = np.argsort(-similarities)[:top_k]
     neighbors = [
@@ -92,6 +114,7 @@ def embed_and_find_neighbors(smiles: str, top_k: int | None = None) -> Embedding
 
     return EmbeddingDemoResponse(
         smiles=smiles,
+        metal_filter=metal or None,
         model=settings.demo_language_model,
         embedding_dim=int(embedding.shape[0]),
         embedding_norm=round(float(np.linalg.norm(embedding)), 4),

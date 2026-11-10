@@ -72,8 +72,14 @@ class EmbeddingNeighbor(BaseModel):
     cosine_similarity: float
 
 
+class MetalOption(BaseModel):
+    metal: str
+    mofs: int
+
+
 class EmbeddingDemoResponse(BaseModel):
     smiles: str
+    metal_filter: str | None = None
     model: str
     embedding_dim: int
     embedding_norm: float
@@ -128,3 +134,40 @@ class StepResult(BaseModel):
     retention_shown: str | None = None
     columns: list[str] = Field(default_factory=list)
     rows: list[list[str]] = Field(default_factory=list)
+
+
+class GraphNode(BaseModel):
+    smiles: str
+    mofs: int
+    mean_pld: float
+    x: float
+    y: float
+
+
+class GraphNeighbourhood(BaseModel):
+    seed: int
+    nodes: list[GraphNode]
+    # [node_index, node_index, number of MOF-level edges that collapse into this link]
+    fingerprint: list[tuple[int, int, int]]
+    semantic: list[tuple[int, int, int]]
+    shared_edges: int
+
+
+class GraphComparisonStats(BaseModel):
+    mofs: int
+    distinct_linkers: int
+    mof_edges: dict[str, int]
+    mof_jaccard: float
+    same_linker_edge_share: dict[str, float]
+    linker_pair_edges: dict[str, int]
+    linker_pair_jaccard: float
+    components: dict[str, int]
+    mean_abs_pld_gap_between_neighbours: dict[str, float]
+    mean_abs_pld_gap_random_pair: float
+
+
+class GraphComparison(BaseModel):
+    model: str
+    k: int
+    stats: GraphComparisonStats
+    neighbourhoods: list[GraphNeighbourhood]

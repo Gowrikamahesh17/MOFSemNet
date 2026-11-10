@@ -19,6 +19,7 @@ from starlette.types import Scope
 from app.api import (
     routes_architecture,
     routes_content,
+    routes_graphs,
     routes_papers,
     routes_plan,
     routes_predict,
@@ -43,6 +44,7 @@ app.add_middleware(
 app.include_router(routes_architecture.router)
 app.include_router(routes_papers.router)
 app.include_router(routes_content.router)
+app.include_router(routes_graphs.router)
 app.include_router(routes_plan.router)
 app.include_router(routes_progress.router)
 app.include_router(routes_results.router)
@@ -74,7 +76,7 @@ class SPAStaticFiles(StaticFiles):
 
     async def get_response(self, path: str, scope: Scope) -> Response:
         try:
-            return await super().get_response(path, scope)
+            response = await super().get_response(path, scope)
         except HTTPException as exc:
             if exc.status_code != 404:
                 raise
@@ -83,7 +85,16 @@ class SPAStaticFiles(StaticFiles):
             # back to index.html, which masked a real typo'd API call as an HTTP 200.
             if path.startswith("api/") or path == "api":
                 raise
-            return FileResponse(Path(self.directory) / "index.html")
+            response = FileResponse(Path(self.directory) / "index.html")
+        # Without an explicit Cache-Control, browsers (Safari especially) heuristically reuse a
+        # stale index.html for days after a rebuild, which keeps pointing at the old JS bundle.
+        # The page itself must be revalidated every time; Vite's content-hashed files under
+        # assets/ never change for a given name, so those can be cached for good.
+        if path.startswith("assets/"):
+            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        else:
+            response.headers["Cache-Control"] = "no-cache"
+        return response
 
 
 # --- Production: serve the built frontend as static files ---
