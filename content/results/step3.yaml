@@ -11,6 +11,9 @@ stats:
   - label: "Fingerprint ↔ semantic Jaccard"
     value: "0.21"
     emphasis: true
+  - label: "Jaccard, different linkers only"
+    value: "0.14"
+    emphasis: true
   - label: "Fingerprint ↔ hybrid Jaccard"
     value: "0.30"
   - label: "Semantic ↔ hybrid Jaccard"
@@ -22,3 +25,11 @@ finding: >
   from ChemBERTa embeddings — the semantic graph connects mostly different MOF pairs. Had
   this come back near 0.9, the semantic graph would already be redundant with the
   fingerprint graph, repeating the Case Study's negative result before Step 5 even ran.
+  Caveat, checked against the cached graphs: about two thirds of edges in both graphs join
+  MOFs that share an identical linker (only 3,193 distinct linkers across 14,296 MOFs), where
+  the choice among tied neighbours is arbitrary. Counting only links between different
+  linkers, the overlap is 0.14 (0.16 for MolT5; 0.23 vs 0.21 on all edges). The graphs are
+  still clearly different, but different is not yet better: connected MOFs differ in PLD by
+  about the same amount in both graphs (1.91 Å fingerprint, 1.93 Å ChemBERTa semantic; 2.75 Å
+  for random pairs). That is a graph statistic, not a model result — Step 5 decides whether
+  the new edges help prediction. See the network comparison below.

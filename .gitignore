@@ -245,3 +245,4 @@ logs/
 papers/*.pdf
 docs/*.pdf
 docs/*.docx
+docs/*.md 
