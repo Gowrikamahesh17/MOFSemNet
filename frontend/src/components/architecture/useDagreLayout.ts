@@ -5,7 +5,12 @@ import { Position } from 'reactflow';
 import type { ArchitectureData } from '../../types/content';
 
 const NODE_WIDTH = 240;
-const NODE_HEIGHT = 92;
+// Tallest a card actually renders (cards are min-height 92px but wrap to ~144px with a long
+// summary). Dagre must reserve the real height or cards in the same column overlap.
+const NODE_HEIGHT = 144;
+// Layout-only node (never rendered) that every starting node hangs off, so nodes with no
+// incoming edge all sit in the first column instead of being pulled next to their only successor.
+const START_ID = '__start__';
 
 /**
  * Lays out architecture.yaml's nodes/edges with dagre (layered, left-to-right) so adding a
@@ -27,6 +32,13 @@ export function useDagreLayout(data: ArchitectureData | undefined): { nodes: Nod
     }
     for (const edge of data.edges) {
       graph.setEdge(edge.from, edge.to);
+    }
+    const hasIncoming = new Set(data.edges.map((edge) => edge.to));
+    graph.setNode(START_ID, { width: 1, height: 1 });
+    for (const node of data.nodes) {
+      // Heavy weight keeps these edges short; without it the layout is indifferent to where a
+      // single-successor node sits and parks it right beside that successor.
+      if (!hasIncoming.has(node.id)) graph.setEdge(START_ID, node.id, { weight: 100 });
     }
 
     dagre.layout(graph);

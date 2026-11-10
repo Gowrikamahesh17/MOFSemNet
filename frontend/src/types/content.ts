@@ -98,8 +98,14 @@ export interface EmbeddingNeighbor {
   cosine_similarity: number;
 }
 
+export interface MetalOption {
+  metal: string;
+  mofs: number;
+}
+
 export interface EmbeddingDemoResponse {
   smiles: string;
+  metal_filter: string | null;
   model: string;
   embedding_dim: number;
   embedding_norm: number;
@@ -117,4 +123,41 @@ export interface StepResult {
   retention_shown: string | null;
   columns: string[];
   rows: string[][];
+}
+
+export interface GraphNode {
+  smiles: string;
+  mofs: number;
+  mean_pld: number;
+  x: number;
+  y: number;
+}
+
+export interface GraphNeighbourhood {
+  seed: number;
+  nodes: GraphNode[];
+  // [node index, node index, number of MOF-level edges collapsed into this link]
+  fingerprint: [number, number, number][];
+  semantic: [number, number, number][];
+  shared_edges: number;
+}
+
+export interface GraphComparisonStats {
+  mofs: number;
+  distinct_linkers: number;
+  mof_edges: Record<string, number>;
+  mof_jaccard: number;
+  same_linker_edge_share: Record<string, number>;
+  linker_pair_edges: Record<string, number>;
+  linker_pair_jaccard: number;
+  components: Record<string, number>;
+  mean_abs_pld_gap_between_neighbours: Record<string, number>;
+  mean_abs_pld_gap_random_pair: number;
+}
+
+export interface GraphComparison {
+  model: string;
+  k: number;
+  stats: GraphComparisonStats;
+  neighbourhoods: GraphNeighbourhood[];
 }

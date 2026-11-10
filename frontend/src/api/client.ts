@@ -1,6 +1,8 @@
 import type {
   ArchitectureData,
   EmbeddingDemoResponse,
+  GraphComparison,
+  MetalOption,
   PapersData,
   PlanData,
   ProgressData,
@@ -40,6 +42,14 @@ export function getProgress(): Promise<ProgressData> {
   return getJSON<ProgressData>('/api/progress');
 }
 
+export function getGraphComparison(model: string): Promise<GraphComparison> {
+  return getJSON<GraphComparison>(`/api/graphs/comparison?model=${encodeURIComponent(model)}`);
+}
+
+export function graphStructureUrl(smiles: string): string {
+  return `${API_BASE}/api/graphs/structure?smiles=${encodeURIComponent(smiles)}`;
+}
+
 export async function getStepResult(stepId: string): Promise<StepResult | null> {
   const response = await fetch(`${API_BASE}/api/results/${stepId}`);
   if (response.status === 404) return null;
@@ -49,11 +59,15 @@ export async function getStepResult(stepId: string): Promise<StepResult | null> 
   return response.json() as Promise<StepResult>;
 }
 
-export async function embedDemo(smiles: string): Promise<EmbeddingDemoResponse> {
+export function getDemoMetals(): Promise<MetalOption[]> {
+  return getJSON<MetalOption[]>('/api/demo/metals');
+}
+
+export async function embedDemo(smiles: string, metal: string | null): Promise<EmbeddingDemoResponse> {
   const response = await fetch(`${API_BASE}/api/demo/embed`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ smiles }),
+    body: JSON.stringify({ smiles, metal: metal || null }),
   });
   if (!response.ok) {
     const body = (await response.json().catch(() => null)) as { detail?: string } | null;

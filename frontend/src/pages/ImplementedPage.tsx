@@ -1,7 +1,9 @@
+import { Fragment } from 'react';
 import { getStepResult } from '../api/client';
 import { useFetch } from '../api/useFetch';
 import { ErrorState, LoadingState } from '../components/common/AsyncState';
 import { EmbeddingDemo } from '../components/demo/EmbeddingDemo';
+import { GraphComparison } from '../components/graphs/GraphComparison';
 import { StepResultCard } from '../components/results/StepResultCard';
 
 const STEP_IDS = ['step1', 'step2', 'step3', 'step4'];
@@ -29,7 +31,12 @@ export function ImplementedPage() {
       {error && <ErrorState message={error} />}
 
       {data?.map((result, index) =>
-        result ? <StepResultCard key={STEP_IDS[index]} result={result} /> : null,
+        result ? (
+          <Fragment key={STEP_IDS[index]}>
+            <StepResultCard result={result} />
+            {STEP_IDS[index] === 'step3' && <GraphComparison />}
+          </Fragment>
+        ) : null,
       )}
     </div>
   );

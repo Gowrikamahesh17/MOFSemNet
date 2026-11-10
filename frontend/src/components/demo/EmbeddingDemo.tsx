@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { embedDemo } from '../../api/client';
+import { embedDemo, getDemoMetals } from '../../api/client';
+import { useFetch } from '../../api/useFetch';
 import type { EmbeddingDemoResponse } from '../../types/content';
 import styles from './EmbeddingDemo.module.css';
 
@@ -11,6 +12,8 @@ const EXAMPLES = [
 
 export function EmbeddingDemo() {
   const [smiles, setSmiles] = useState('');
+  const [metal, setMetal] = useState('');
+  const { data: metals } = useFetch(getDemoMetals, []);
   const [result, setResult] = useState<EmbeddingDemoResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -19,7 +22,7 @@ export function EmbeddingDemo() {
     setLoading(true);
     setError(null);
     try {
-      const response = await embedDemo(input);
+      const response = await embedDemo(input, metal || null);
       setResult(response);
     } catch (err) {
       setError((err as Error).message);
@@ -56,6 +59,19 @@ export function EmbeddingDemo() {
           spellCheck={false}
           aria-label="Linker SMILES"
         />
+        <select
+          value={metal}
+          onChange={(event) => setMetal(event.target.value)}
+          className={styles.select}
+          aria-label="Filter nearest MOFs by metal"
+        >
+          <option value="">Any metal{metals ? ` (${metals.length})` : ''}</option>
+          {metals?.map((option) => (
+            <option key={option.metal} value={option.metal}>
+              {option.metal} &middot; {option.mofs.toLocaleString()} MOFs
+            </option>
+          ))}
+        </select>
         <button type="submit" className={styles.submit} disabled={loading || !smiles.trim()}>
           {loading ? 'Embedding…' : 'Embed it'}
         </button>
@@ -68,16 +84,18 @@ export function EmbeddingDemo() {
             key={example.smiles}
             type="button"
             className={styles.exampleChip}
-            onClick={() => {
-              setSmiles(example.smiles);
-              runDemo(example.smiles);
-            }}
+            onClick={() => setSmiles(example.smiles)}
             disabled={loading}
           >
             {example.label}
           </button>
         ))}
       </div>
+
+      <p className={styles.hint}>
+        The embedding reads the linker only; metal is a separate one-hot code. Picking a metal just limits which real MOFs
+        can appear as nearest matches.
+      </p>
 
       {error && <p className={styles.error}>{error}</p>}
 
@@ -94,7 +112,9 @@ export function EmbeddingDemo() {
               Vector norm: <strong>{result.embedding_norm}</strong>
             </span>
           </div>
-          <p className={styles.resultLabel}>Nearest real MOFs by cosine similarity</p>
+          <p className={styles.resultLabel}>
+            Nearest real MOFs by cosine similarity{result.metal_filter ? ` · metal: ${result.metal_filter}` : ''}
+          </p>
           <table className={styles.table}>
             <thead>
               <tr>
