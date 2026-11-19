@@ -32,7 +32,7 @@ def main() -> None:
     config = RuntimeConfig(language_model=args.model)
     df = load_dataset("large")
 
-    features, _metadata = build_features(df, scheme="fingerprint")
+    features, _metadata = build_features(df, feature_scheme="fingerprint")
     embeddings = cached_embed(df["linker_smiles"].tolist(), config)
 
     graphs = {

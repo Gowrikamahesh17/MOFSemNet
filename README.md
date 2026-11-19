@@ -78,7 +78,8 @@ src/
                         feature engineering, fingerprint graph, Black Hole sparsification,
                         GCN/GraphSAGE/GAT training loop, RF/k-NN baselines).
   common/               Central config (RuntimeConfig), device resolution, shared logging,
-                        exceptions — everything Steps 2-6 read from instead of hardcoding.
+                        exceptions — everything Steps 2-6 read from instead of hardcoding —
+                        plus structure_svg.py (RDKit linker drawings for the web console).
   language/             Step 2 — ChemBERTa/MolT5 embedders, disk-cached embedding factory,
                         separate metal one-hot representation.
   graphs/                Step 3 — fingerprint / semantic / hybrid graph builders.
@@ -86,7 +87,8 @@ src/
                         (Black Hole itself lives in src/baseline/, reused unmodified).
   evaluation/            Step 5 — seed aggregation, efficiency tracking, the full
                         RF/MLP/GCN/GraphSAGE x graph type x sparsification x retention sweep.
-  models/                Non-graph baselines that aren't part of the Step 1 port (MLP).
+  models/                Non-graph baselines that aren't part of the Step 1 port (MLP), plus
+                        gnn_residual.py (residual GCN used in the Step 5b diagnostics).
   explainability/        Step 6 — SHAP, embedding ablation, confidence calibration. Stubbed
                         (raise NotImplementedError) until Step 5 has trained models to explain.
 tests/                   Mirrors src/. tests/baseline/ was ported alongside its source; every
@@ -94,7 +96,8 @@ tests/                   Mirrors src/. tests/baseline/ was ported alongside its 
                         network-gated tests for the two pretrained models, and stub tests
                         documenting Step 6's current NotImplementedError contract.
 scripts/                 One runnable entry point per step (run_step1_baseline.py ...
-                        run_step6_explainability.py), plus generate_architecture_diagram.py.
+                        run_step6_explainability.py), plus generate_architecture_diagram.py and
+                        export_graph_comparison.py (data for the web console's network view).
 notebooks/               colab_setup.ipynb — Colab-only setup (Drive mount, dependency install),
                         kept out of src/ so core library code stays platform-agnostic.
 data/
@@ -112,8 +115,9 @@ reports/
 docs/                    Generated architecture diagram source (architecture.mmd), plus
                         ADDING_CONTENT.md and DEPLOYMENT.md for the web console below.
 
-content/                 YAML content for the web console — architecture.yaml, papers.yaml,
-                        plan.yaml, progress.yaml, results/step{1..4}.yaml. See "Web console".
+content/                 Content for the web console — architecture.yaml, papers.yaml,
+                        plan.yaml, progress.yaml, results/step{1..4}.yaml, and the generated
+                        graph_comparison_<model>.json. See "Web console".
 backend/                 FastAPI app serving the web console's API. See "Web console".
 frontend/                React/TypeScript web console UI. See "Web console".
 Dockerfile.webapp        Builds the web console (separate from the root Dockerfile, which
@@ -173,11 +177,65 @@ python scripts/run_step3_build_graphs.py --model chemberta     # needs Step 2's 
 python scripts/run_step4_sparsification.py --model chemberta --graph-type semantic
 python scripts/run_step5_comparison.py --model chemberta       # the full RF/MLP/GCN/GraphSAGE sweep
 python scripts/run_step6_explainability.py                     # raises until Step 5 has trained models
+PYTHONPATH=. python scripts/run_step5b_ablations.py --model chemberta   # Step 5b: no-edge GNN, CS2 graph, small k,
+                                                               # ChemBERTa as input, residual GNN (5 seeds)
+```
+
+After Step 3, regenerate the web console's fingerprint-vs-semantic network data (reads the cached
+graphs; run once per language model):
+
+```bash
+PYTHONPATH=. python scripts/export_graph_comparison.py --model chemberta
+PYTHONPATH=. python scripts/export_graph_comparison.py --model molt5
 ```
 
 Swap `--model chemberta` for `--model molt5` to compare language representations directly (both
 are wired into `src/common/config.py`'s `LANGUAGE_MODEL_CHOICES`, since one goal of this thesis
 is comparing them, not just picking one upfront).
+
+## Results so far
+
+All numbers are test-set R² (mean of seeds 0-4) on the 14,296-MOF dataset, ChemBERTa only. Per-run CSVs
+sit in `outputs/results/`; the dated entries in `reports/logs/` explain each run.
+
+| Finding | Evidence |
+|---|---|
+| Random Forest on fingerprints is the best model | R² 0.883 (random test set), 0.888 (Case Study 2 hub test set); Case Study 2 reported 0.893 (1 seed) |
+| A GNN with **no edges** beats every GNN with a graph | no edges 0.84; fingerprint / semantic / hybrid graphs 0.46-0.57; CS2 graph 0.52-0.65 |
+| Fewer neighbours are better | CS2 graph, GCN: k=3 0.622, k=5 0.575, k=10 0.527 |
+| ChemBERTa adds no clear benefit over fingerprints | Random Forest 0.883 vs 0.876 (random test set), 0.888 vs 0.897 (hub test set): the sign flips between test sets |
+| Black Hole vs random pruning depends on the test set | random test set: +0.009 R² (no clear difference); hub test set: +0.060, better in 81% of comparisons (the hub set uses the same gravity ranking, so this may be biased in Black Hole's favour) |
+| GNN vs Case Study 2 | GraphSAGE, CS2 graph, Black Hole 30%, hub test set: 0.751 (5 seeds) vs 0.687 (1 seed) |
+
+Two test sets are used and their numbers are not interchangeable: Step 5 uses 2,144 random MOFs
+(`split_random_state=42`); Case Study 2 and the `cs2_hubs` runs use about 664-680 high-gravity MOFs
+(hub nodes per Louvain community), which are harder for graph models.
+
+### Experiment runs
+
+| Run | Script / notebook | Output |
+|---|---|---|
+| Step 5 sweep (RF/MLP vs GCN/GraphSAGE x graph x pruning) | `scripts/run_step5_comparison.py` | `outputs/results/step5_comparison_chemberta.csv` |
+| Step 5b diagnostics | `scripts/run_step5b_ablations.py` | `outputs/results/step5b_ablations_chemberta*.csv` |
+| Server run, random test set (990 runs) | server notebook, profile `standard` | `outputs/results/server_standard_2026-11-19/` |
+| Server run, Case Study 2 hub test set (990 runs) | same notebook, `CFG["test_sets"] = ["cs2_hubs"]` | `outputs/results/server_cs2hubs_2026-11-19/` |
+
+Every result row carries its seed, test set, data fingerprint (`MOFCSD.csv` SHA-256 starts
+`e23a42e742099b4c`) and either the script name or the run configuration (`run_metadata.json`).
+
+### Server notebook (GPU runs)
+
+`MOFSemNet_server_experiments.ipynb` is a single self-contained notebook (no imports from `src/`) for a
+GPU server. Upload it next to `MOFCSD.csv` (and optionally `chemberta_embeddings.npz`); it writes
+`mofsemnet_results/` with `per_run_results.csv` (one row per run, resumable), `aggregated_results.csv`,
+`graph_vs_no_graph.csv`, an Excel workbook, `run_metadata.json` and a zip. Choose the scale with
+`PROFILE` ("smoke" / "quick" / "standard" / "full") and adjust `CFG` in the Configuration cell, for example
+`CFG["test_sets"] = ["cs2_hubs"]` for Case Study 2's test set. Finished runs are skipped when it is run again.
+The `standard` profile took 6 h on the first run and about 1 h 25 min after k-center selections were cached
+(training itself is about 17 min). Re-running with the same seeds reproduces results to within 0.008 R² per run.
+
+To regenerate the results: use the notebook with the profile and `CFG` overrides recorded in each
+`run_metadata.json`, or run the scripts above from the repo root with `PYTHONPATH=.`.
 
 ## Testing
 
@@ -219,6 +277,9 @@ content/
   results/step{1..4}.yaml  Real, precomputed results per step. Never invented — a step with no
                           results.yaml file 404s on /api/results/<id> rather than showing a
                           placeholder number.
+  graph_comparison_<model>.json  Generated by scripts/export_graph_comparison.py (chemberta,
+                          molt5): real linker neighbourhoods from the cached fingerprint and
+                          semantic graphs, plus summary statistics on how their edges differ.
 backend/app/
   core/config.py           Env-based settings (content dir, CORS, demo model) — see
                           backend/.env.example.
@@ -226,17 +287,22 @@ backend/app/
   services/content_loader.py  Loads + validates content/*.yaml at startup; a typo'd reference
                           (e.g. a node citing a paper id that doesn't exist) fails loudly here,
                           not silently in the browser.
-  services/embedding_service.py  Backs the one live demo (/implemented): embeds a submitted
+  services/embedding_service.py  Backs the live demo (/implemented): embeds a submitted
                           SMILES with the real ChemBERTa model, finds its nearest neighbours
-                          among the real cached embeddings for all 14,296 MOFs.
+                          among the real cached embeddings for all 14,296 MOFs, optionally
+                          limited to one of the dataset's 53 metals (the embedding itself reads
+                          the linker only; metal is a separate one-hot code).
   api/routes_*.py          One file per resource (architecture, papers, plan, progress,
-                          results, predict, content-reload).
+                          results, predict/demo, graphs, content-reload).
 frontend/src/
   pages/                    One file per section (Plan, Architecture, Implemented, Studied,
                           References, Progress) — matches the nav exactly.
   components/architecture/  The React Flow explorer: dagre auto-layout from
                           content/architecture.yaml, hover-to-highlight-connections,
                           click-to-open detail panel.
+  components/graphs/        Fingerprint-vs-semantic network comparison on /implemented, with a
+                          ChemBERTa/MolT5 toggle. Drawn at the linker level (about two thirds of
+                          MOF-level edges join MOFs that share an identical linker).
   api/client.ts             Typed fetch wrappers, one per backend endpoint.
   types/content.ts          TypeScript types mirroring backend/app/models/schemas.py.
 ```
@@ -264,6 +330,12 @@ npm run dev
 ```
 
 Open `http://localhost:5173`.
+
+**Serving the built frontend instead:** when `frontend/dist` exists, the backend serves it itself
+(`http://localhost:8010`). That build does not update on its own, so after any frontend change run
+`npm run build` in `frontend/` and reload. The page is sent with `Cache-Control: no-cache`, so
+browsers pick up a rebuild on the next load; only the content-hashed files under `assets/` are
+cached long-term.
 
 ### Deploying
 
