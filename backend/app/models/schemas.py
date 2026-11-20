@@ -89,6 +89,7 @@ class EmbeddingDemoResponse(BaseModel):
 class ResearchQuestion(BaseModel):
     id: str
     text: str
+    answer: str | None = None
 
 
 class PlanData(BaseModel):

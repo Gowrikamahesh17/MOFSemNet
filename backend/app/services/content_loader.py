@@ -104,7 +104,7 @@ def load_progress() -> ProgressData:
         raise ContentError(f"progress.yaml failed validation: {exc}") from exc
 
 
-_VALID_STEP_IDS = {"step1", "step2", "step3", "step4"}
+_VALID_STEP_IDS = {"step1", "step2", "step3", "step4", "step5", "step6"}
 
 
 @lru_cache(maxsize=None)
