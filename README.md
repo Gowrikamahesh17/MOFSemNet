@@ -214,10 +214,11 @@ Two test sets are used and their numbers are not interchangeable: Step 5 uses 2,
 (`split_random_state=42`); Case Study 2 and the `cs2_hubs` runs use about 664-680 high-gravity MOFs
 (hub nodes per Louvain community), which are harder for graph models.
 
-**Decision tree:** open `docs/decision_tree.html` in a browser (the web console also serves it at
-`/decision_tree.html`) for a clickable picture of every choice tried (graph type, k, pruning method and
-retention, model, ChemBERTa / MolT5 as input or not), the R² each gave, and what has not been tried yet.
-It includes the Step 6 trustworthiness checks (open them directly with `decision_tree.html#step6`). Rebuild it from new results with `python scripts/build_decision_tree.py [aggregated_results.csv]`.
+**Decision tree:** the web console serves a clickable picture of every choice tried (graph type, k, pruning method and
+retention, model, ChemBERTa / MolT5 as input or not, the Step 6 checks), the R² each gave, and what has not been tried yet, at
+`/decision_tree.html` (`#step6` opens the Step 6 branch). The page is `frontend/public/decision_tree.html`; its numbers are
+`frontend/public/decision_tree_data.json`. After new results, run `python scripts/build_decision_tree.py [aggregated_results.csv]`
+and `npm run build` in `frontend/`. It must be opened through the console, not by double-clicking the file.
 
 ### Experiment runs
 
