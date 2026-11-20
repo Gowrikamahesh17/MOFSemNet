@@ -217,7 +217,7 @@ Two test sets are used and their numbers are not interchangeable: Step 5 uses 2,
 **Decision tree:** open `docs/decision_tree.html` in a browser (the web console also serves it at
 `/decision_tree.html`) for a clickable picture of every choice tried (graph type, k, pruning method and
 retention, model, ChemBERTa / MolT5 as input or not), the R² each gave, and what has not been tried yet.
-Rebuild it from new results with `python scripts/build_decision_tree.py [aggregated_results.csv]`.
+It includes the Step 6 trustworthiness checks (open them directly with `decision_tree.html#step6`). Rebuild it from new results with `python scripts/build_decision_tree.py [aggregated_results.csv]`.
 
 ### Experiment runs
 
