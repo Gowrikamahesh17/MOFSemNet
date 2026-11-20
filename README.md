@@ -89,12 +89,11 @@ src/
                         RF/MLP/GCN/GraphSAGE x graph type x sparsification x retention sweep.
   models/                Non-graph baselines that aren't part of the Step 1 port (MLP), plus
                         gnn_residual.py (residual GCN used in the Step 5b diagnostics).
-  explainability/        Step 6 — SHAP, embedding ablation, confidence calibration. Stubbed
-                        (raise NotImplementedError) until Step 5 has trained models to explain.
+  explainability/        Step 6 — SHAP (with an additivity check), embedding ablation, split-conformal
+                        confidence intervals.
 tests/                   Mirrors src/. tests/baseline/ was ported alongside its source; every
                         other directory has real tests where the module is testable offline,
-                        network-gated tests for the two pretrained models, and stub tests
-                        documenting Step 6's current NotImplementedError contract.
+                        and network-gated tests for the two pretrained models.
 scripts/                 One runnable entry point per step (run_step1_baseline.py ...
                         run_step6_explainability.py), plus generate_architecture_diagram.py and
                         export_graph_comparison.py (data for the web console's network view).
@@ -176,7 +175,7 @@ python scripts/run_step2_language_embeddings.py --model chemberta
 python scripts/run_step3_build_graphs.py --model chemberta     # needs Step 2's cache
 python scripts/run_step4_sparsification.py --model chemberta --graph-type semantic
 python scripts/run_step5_comparison.py --model chemberta       # the full RF/MLP/GCN/GraphSAGE sweep
-python scripts/run_step6_explainability.py                     # raises until Step 5 has trained models
+PYTHONPATH=. python scripts/run_step6_explainability.py --model chemberta [--test-set hubs]   # SHAP, column groups, ablation, conformal intervals
 PYTHONPATH=. python scripts/run_step5b_ablations.py --model chemberta   # Step 5b: no-edge GNN, CS2 graph, small k,
                                                                # ChemBERTa as input, residual GNN (5 seeds)
 ```
@@ -195,21 +194,30 @@ is comparing them, not just picking one upfront).
 
 ## Results so far
 
-All numbers are test-set R² (mean of seeds 0-4) on the 14,296-MOF dataset, ChemBERTa only. Per-run CSVs
-sit in `outputs/results/`; the dated entries in `reports/logs/` explain each run.
+All numbers are test-set R² (mean of seeds 0-4) on the 14,296-MOF dataset. Per-run CSVs sit in
+`outputs/results/`; the dated entries in `reports/logs/` explain each run.
 
 | Finding | Evidence |
 |---|---|
 | Random Forest on fingerprints is the best model | R² 0.883 (random test set), 0.888 (Case Study 2 hub test set); Case Study 2 reported 0.893 (1 seed) |
 | A GNN with **no edges** beats every GNN with a graph | no edges 0.84; fingerprint / semantic / hybrid graphs 0.46-0.57; CS2 graph 0.52-0.65 |
 | Fewer neighbours are better | CS2 graph, GCN: k=3 0.622, k=5 0.575, k=10 0.527 |
-| ChemBERTa adds no clear benefit over fingerprints | Random Forest 0.883 vs 0.876 (random test set), 0.888 vs 0.897 (hub test set): the sign flips between test sets |
+| Neither ChemBERTa nor MolT5 adds a reliable benefit over fingerprints | Random Forest: fingerprint 0.883 / 0.888, + ChemBERTa 0.876 / 0.897, + MolT5 0.882 / 0.895 (random / hub test set); the sign flips between test sets |
 | Black Hole vs random pruning depends on the test set | random test set: +0.009 R² (no clear difference); hub test set: +0.060, better in 81% of comparisons (the hub set uses the same gravity ranking, so this may be biased in Black Hole's favour) |
 | GNN vs Case Study 2 | GraphSAGE, CS2 graph, Black Hole 30%, hub test set: 0.751 (5 seeds) vs 0.687 (1 seed) |
+| The model is mostly a pore-geometry model (Step 6) | SHAP: 2 pore-geometry columns carry 74% of the reliance; they alone give R² 0.72, linker fingerprint + metal alone 0.60 |
+| Embeddings carry real chemistry but no usable gain (Step 6) | semantic graph from real ChemBERTa 0.55 vs 0.35-0.39 from shuffled / random vectors; real embeddings in Random Forest 0.874 (ChemBERTa) / 0.884 (MolT5) vs 0.883 without |
+| Calibrated confidence works (Step 6) | adaptive conformal 90% intervals cover 90.8% of random-test MOFs and 89.9% of Case Study 2's hub test set; width tracks the error (rank correlation 0.72) |
+| MolT5 behaves like ChemBERTa in Step 6 | SHAP shares, ablation (real 0.554 vs random 0.376 / shuffled 0.346, GCN) and Random Forest input (0.884 vs 0.883) match |
 
 Two test sets are used and their numbers are not interchangeable: Step 5 uses 2,144 random MOFs
 (`split_random_state=42`); Case Study 2 and the `cs2_hubs` runs use about 664-680 high-gravity MOFs
 (hub nodes per Louvain community), which are harder for graph models.
+
+**Decision tree:** open `docs/decision_tree.html` in a browser (the web console also serves it at
+`/decision_tree.html`) for a clickable picture of every choice tried (graph type, k, pruning method and
+retention, model, ChemBERTa / MolT5 as input or not), the R² each gave, and what has not been tried yet.
+Rebuild it from new results with `python scripts/build_decision_tree.py [aggregated_results.csv]`.
 
 ### Experiment runs
 
@@ -219,6 +227,8 @@ Two test sets are used and their numbers are not interchangeable: Step 5 uses 2,
 | Step 5b diagnostics | `scripts/run_step5b_ablations.py` | `outputs/results/step5b_ablations_chemberta*.csv` |
 | Server run, random test set (990 runs) | server notebook, profile `standard` | `outputs/results/server_standard_2026-11-19/` |
 | Server run, Case Study 2 hub test set (990 runs) | same notebook, `CFG["test_sets"] = ["cs2_hubs"]` | `outputs/results/server_cs2hubs_2026-11-19/` |
+| Server run, MolT5 on both test sets (1,020 runs) | same notebook, `CFG["language_models"] = ["molt5"]` | `outputs/results/server_molt5_2026-11-20/` |
+| Step 6: SHAP, column groups, embedding ablation, conformal intervals (ChemBERTa, MolT5; `--test-set hubs` for the hub test set) | `scripts/run_step6_explainability.py` | `outputs/results/step6_*.csv` (`*_chemberta*`, `*_molt5*`, `*_hubs*`), `outputs/figures/step6_*.png` |
 
 Every result row carries its seed, test set, data fingerprint (`MOFCSD.csv` SHA-256 starts
 `e23a42e742099b4c`) and either the script name or the run configuration (`run_metadata.json`).

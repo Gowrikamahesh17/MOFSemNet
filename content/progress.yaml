@@ -21,19 +21,19 @@ work_packages:
   - id: wp5
     label: "WP5 · Step 5, comparison sweep"
     window: "Dec 2026–Feb 2027"
-    status: next
+    status: done
   - id: wp6
     label: "WP6 · Step 6, trustworthiness analysis"
     window: "Jan–Mar 2027"
-    status: planned
+    status: done
   - id: wp7
     label: "WP7 · MolT5 secondary comparison"
     window: "Jan–Mar 2027"
-    status: planned
+    status: done
   - id: wp8
     label: "WP8 · Web console update"
     window: "Jan–Mar 2027"
-    status: planned
+    status: next
   - id: wp9
     label: "WP9 · Thesis writing"
     window: "Feb–Mar 2027"
@@ -52,6 +52,8 @@ milestones:
     label: "ChemBERTa embeddings complete for all 14,296 MOFs; Step 3 graphs begin"
   - date: "2026-12-15"
     label: "All three graph types and all sparsification variants built and cached"
+  - date: "2026-11-20"
+    label: "Step 5 sweeps (ChemBERTa and MolT5, two test sets) and Step 6 analysis (ChemBERTa and MolT5) complete"
   - date: "2027-02-28"
     label: "Full Step 5 comparison sweep complete for ChemBERTa; Step 6 trustworthiness analysis begins"
   - date: "2027-03-10"
@@ -64,3 +66,5 @@ ahead_of_schedule_note: >
   and all graph types built by mid-December 2026. Both landed in the same working session,
   along with Step 4's full sparsification sweep — roughly a month ahead of the registered
   plan.
+  Step 5 (both language models, two test sets, about 3,000 runs) and the Step 6
+  analysis (both language models) then finished on 2026-11-20, one to three months ahead of their registered windows.

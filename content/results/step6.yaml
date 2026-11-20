@@ -1,0 +1,44 @@
+title: "Step 6 — Trustworthiness Analysis"
+status: done
+summary: >
+  SHAP for the final model (Random Forest), an embedding ablation that rebuilds the semantic
+  graph from shuffled, random and truncated embeddings (ChemBERTa and MolT5), and conformal
+  prediction intervals with measured coverage. Random test set (2,144 MOFs) throughout, plus
+  Case Study 2's hub test set (664 MOFs) for the intervals. Seeds 0 to 4.
+headline: "74%"
+headline_label: "of the Random Forest's reliance (SHAP) sits on just two pore-geometry columns"
+stats:
+  - label: "Two pore columns alone, R²"
+    value: "0.72"
+    emphasis: true
+  - label: "Linker fingerprint + metal alone, R²"
+    value: "0.60"
+  - label: "90% intervals: coverage (random / hub test set)"
+    value: "90.8% / 89.9%"
+  - label: "Semantic graph from real vs random vectors (GCN R², ChemBERTa)"
+    value: "0.55 vs 0.39"
+columns: ["Analysis", "Setting", "Result"]
+rows:
+  - ["SHAP share of reliance", "Fingerprint-only forest", "pore geometry 74%, linker fingerprint 23%, metal 3%"]
+  - ["SHAP share of reliance", "Fingerprint + ChemBERTa / + MolT5", "pore geometry 64% / 64%, embedding 34% / 34%, fingerprint 0.7% / 0.8%"]
+  - ["Columns used alone (R²)", "All / pore only / fingerprint + metal", "0.883 / 0.721 / 0.596"]
+  - ["Semantic graph, ChemBERTa (GCN R²)", "Real / shuffled / random / 64 dims", "0.553 / 0.353 / 0.392 / 0.553"]
+  - ["Semantic graph, MolT5 (GCN R²)", "Real / shuffled / random / 64 dims", "0.554 / 0.346 / 0.376 / 0.552"]
+  - ["Random Forest input, ChemBERTa (R²)", "No embedding / real / shuffled / random", "0.883 / 0.874 / 0.838 / 0.846"]
+  - ["Random Forest input, MolT5 (R²)", "No embedding / real / shuffled / random", "0.883 / 0.884 / 0.855 / 0.845"]
+  - ["Interval coverage at 90%, random test set", "Fixed width / adaptive width", "91.5% / 90.8%"]
+  - ["Interval coverage at 90%, hub test set", "Fixed width / adaptive width", "90.5% / 89.9%"]
+  - ["Coverage on large pores (PLD 8 or more), random / hub set", "Fixed width", "60% / 68%"]
+  - ["Coverage on large pores (PLD 8 or more), random / hub set", "Adaptive width", "91% / 89%"]
+finding: >
+  The model is mostly a pore-geometry model: two columns give R² 0.72 and the linker chemistry
+  adds the rest, which is why the language models add so little. Both embeddings carry real
+  chemistry (a graph from real embeddings beats one from random vectors by 0.16 to 0.19 R² for
+  ChemBERTa and 0.18 to 0.19 for MolT5), but even correct neighbours do not beat a GNN with no
+  edges, and real embeddings do not improve Random Forest (0.874 and 0.884 against 0.883 without).
+  MolT5 behaves like ChemBERTa in every analysis. Adaptive conformal intervals reach the 90% target
+  on both test sets (90.8% random, 89.9% on Case Study 2's hub set) and widen where the model is
+  uncertain (width tracks the error, rank correlation 0.72), which a fixed width does not do for
+  large pores. The explained forest uses min_samples_leaf=5 (R² 0.858) because TreeSHAP is
+  numerically unreliable on fully grown trees. The intervals and column groups use fingerprint
+  features only, so they do not depend on the language model.

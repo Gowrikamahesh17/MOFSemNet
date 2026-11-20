@@ -22,12 +22,16 @@ thesis_statement: >
 research_questions:
   - id: rq1
     text: "Do pretrained chemical-language representations add predictive signal beyond conventional molecular fingerprints, for MOF linker chemistry specifically?"
+    answer: "No, on current evidence. Neither ChemBERTa nor MolT5 adds a reliable gain over fingerprints: Random Forest scores 0.883 / 0.888 on fingerprints, 0.876 / 0.897 with ChemBERTa and 0.882 / 0.895 with MolT5 (random / hub test set), and the sign flips between test sets. Embeddings alone score 0.42 to 0.48. They do carry real chemistry (a graph from them beats one from random vectors), but nothing usable beyond the fingerprint."
   - id: rq2
     text: "Do semantic or hybrid similarity graphs built from such representations improve PLD prediction compared with the original fingerprint graph and with non-graph baselines?"
+    answer: "No. Semantic and hybrid graphs score within about 0.01 to 0.03 of the fingerprint graph, and every graph scores below a GNN with no edges (0.84) and below Random Forest (0.88 to 0.89)."
   - id: rq3
     text: "Can Black Hole sparsification preserve the predictive performance of fingerprint, semantic, and hybrid graphs while reducing their computational cost?"
+    answer: "Only partly. Pruning raises the score of a weak graph (Case Study 2 graph, GCN: 0.622 to 0.703 at 30% retention), but random pruning does about as well on a random test set, so the gain comes from removing edges. No pruned graph beats a GNN with no edges."
   - id: rq4
     text: "Does Black Hole sparsification outperform random and k-center sampling at matched retention levels, on these new graph types, as it does on the original fingerprint graph?"
+    answer: "Depends on the test set. On a random test set Black Hole is not clearly better than random pruning (+0.009 R²). On Case Study 2's hub test set it is better by +0.06 (81% of comparisons), but that set is built from the same gravity ranking, so the advantage may be biased. k-center is the weakest and least stable."
 
 guardrails:
   - "One dataset: the large, 14,296-MOF set"

@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOFSemNet Decision Tree</title>
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#1c2430; --muted:#667085; --line:#c7cdd6; --grid:#e6e9ee;
+  --done:#1f8a5b; --partial:#c98a00; --todo:#8a93a0; --bar:#2f6fb5; --barbg:#e6eaf0; --best:#d6336c;
+  --node:#ffffff; --nodeline:#cfd5de; --shadow:0 1px 2px rgba(16,24,40,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10151c; --panel:#181f29; --ink:#e7ebf1; --muted:#9aa5b4; --line:#3a4555; --grid:#232c38;
+    --done:#4cc38a; --partial:#e5b13a; --todo:#7c8796; --bar:#6aa8f0; --barbg:#2a3441; --best:#ff6f9f;
+    --node:#1d2530; --nodeline:#364253; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --panel:#181f29; --ink:#e7ebf1; --muted:#9aa5b4; --line:#3a4555; --grid:#232c38;
+  --done:#4cc38a; --partial:#e5b13a; --todo:#7c8796; --bar:#6aa8f0; --barbg:#2a3441; --best:#ff6f9f;
+  --node:#1d2530; --nodeline:#364253; --shadow:none;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{padding:20px 24px 8px}
+h1{margin:0 0 4px;font-size:22px}
+header p{margin:0;color:var(--muted);max-width:900px}
+.bar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:10px 24px;position:sticky;top:0;background:var(--bg);z-index:5;border-bottom:1px solid var(--grid)}
+.seg{display:inline-flex;border:1px solid var(--nodeline);border-radius:8px;overflow:hidden;background:var(--panel)}
+.seg button{border:0;background:transparent;color:var(--ink);padding:6px 12px;font:inherit;cursor:pointer}
+.seg button.on{background:var(--bar);color:#fff}
+.btn{border:1px solid var(--nodeline);background:var(--panel);color:var(--ink);padding:6px 12px;border-radius:8px;font:inherit;cursor:pointer}
+.btn:hover{border-color:var(--bar)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;color:var(--muted);font-size:13px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:4px;border:2px solid;display:inline-block}
+.wrap{padding:8px 24px 24px}
+.canvas{overflow:auto;background:var(--panel);border:1px solid var(--grid);border-radius:12px;box-shadow:var(--shadow);height:72vh;min-height:420px}
+svg{display:block}
+.node rect.box{fill:var(--node);stroke-width:2;rx:8}
+.node.done rect.box{stroke:var(--done)} .node.partial rect.box{stroke:var(--partial)}
+.node.untried rect.box{stroke:var(--todo);stroke-dasharray:5 4;fill:transparent}
+.node.untried text.t{fill:var(--muted)}
+.node{cursor:default} .node.has{cursor:pointer}
+.node:hover rect.box{filter:brightness(.97)}
+text{font-family:inherit}
+text.t{font-size:12.5px;font-weight:600;fill:var(--ink)}
+text.s{font-size:11px;fill:var(--muted)}
+text.v{font-size:11.5px;font-weight:600;fill:var(--ink)}
+text.q{font-size:10.5px;fill:var(--muted);font-style:italic}
+.bargrp rect.bg{fill:var(--barbg)} .bargrp rect.fg{fill:var(--bar)}
+.link{fill:none;stroke:var(--line);stroke-width:1.4}
+.link.untried{stroke-dasharray:4 4}
+.tog{font-size:12px;font-weight:700;fill:var(--muted)}
+.best rect.box{stroke:var(--best)!important;stroke-width:3}
+.starlbl{fill:var(--best);font-size:11px;font-weight:700}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);padding:8px 10px;border-radius:8px;font-size:12px;max-width:340px;z-index:20;display:none;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#tip b{display:block;margin-bottom:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--grid);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
+.card h2{margin:0 0 8px;font-size:15px}
+.card ul{margin:0;padding-left:18px} .card li{margin:3px 0}
+.path{color:var(--muted);font-size:12px}
+.set{display:grid;grid-template-columns:150px 1fr;gap:6px 10px;align-items:start}
+.chip{display:inline-block;border:1px solid;border-radius:999px;padding:1px 9px;margin:0 6px 4px 0;font-size:12px}
+.chip.done{color:var(--done);border-color:var(--done)} .chip.todo{color:var(--todo);border-color:var(--todo);border-style:dashed}
+.note{color:var(--muted);font-size:12.5px;margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>MOFSemNet: every decision, what it scored, what is left</h1>
+  <p>Read left to right. Each box is one choice; the small grey line under it names the next choice. Click a box to open or close its branch.
+  Green outline = tried. Amber = partly tried below. Dashed grey = not tried yet. The bar and number show test R&sup2; (higher is better, mean of 5 seeds).</p>
+</header>
+
+<div class="bar">
+  <div class="seg" id="tsSeg" role="group" aria-label="Test set">
+    <button data-ts="random15" class="on">Random test set</button>
+    <button data-ts="cs2_hubs">Case Study 2 hub test set</button>
+  </div>
+  <button class="btn" id="expandAll">Expand all</button>
+  <button class="btn" id="collapseAll">Collapse</button>
+  <button class="btn" id="themeBtn">Light / dark</button>
+  <div class="legend">
+    <span><i class="sw" style="border-color:var(--done)"></i>tried</span>
+    <span><i class="sw" style="border-color:var(--partial)"></i>partly tried</span>
+    <span><i class="sw" style="border-color:var(--todo);border-style:dashed"></i>not tried</span>
+    <span><i class="sw" style="border-color:var(--best)"></i>best result</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="canvas" id="canvas"><svg id="svg"></svg></div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Choices that apply to every branch</h2>
+      <div class="set" id="settings"></div>
+      <p class="note">These are fixed for a whole run, so they are shown here instead of repeating them in the tree.</p>
+    </div>
+    <div class="card">
+      <h2>Not tried yet (<span id="ucount">0</span>)</h2>
+      <ul id="ulist"></ul>
+    </div>
+  </div>
+  <p class="note">Source: server run aggregated results (standard profile, both test sets) &middot; regenerate with
+  <code>python scripts/build_decision_tree.py</code>. The two test sets are not interchangeable: the hub set is harder for graph models.</p>
+</div>
+<div id="tip"></div>
+
+<script>
+const TREE = __TREE__;
+const SETTINGS = __SETTINGS__;
+let TS = "random15";
+
+const W = 224, H = 46, COLW = 268, VGAP = 10;
+let uid = 0;
+(function init(n, depth, path){
+  n.id = uid++; n.depth = depth; n.path = path.concat(n.name);
+  n.open = depth < 2;
+  (n.children||[]).forEach(c => init(c, depth+1, n.path));
+})(TREE, 0, []);
+
+function leaves(n){ return (n.children||[]).length ? n.children.flatMap(leaves) : [n]; }
+function stat(n){
+  if (n.status === "untried") return "untried";
+  if (!(n.children||[]).length) return "done";
+  const s = n.children.map(stat);
+  return s.every(x => x === "done") ? "done" : (s.every(x => x === "untried") ? "untried" : "partial");
+}
+function best(n){
+  const v = leaves(n).filter(l => l.res && l.res[TS]).map(l => l.res[TS][0]);
+  return v.length ? Math.max(...v) : null;
+}
+function overallBest(){ return best(TREE); }
+
+const svg = document.getElementById("svg");
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent){
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function clip(s, n){ return s.length > n ? s.slice(0, n-1) + "…" : s; }
+
+function layout(){
+  let y = 20;
+  function go(n){
+    const kids = n.open ? (n.children||[]) : [];
+    if (!kids.length){ n.y = y; y += H + VGAP; }
+    else { kids.forEach(go); n.y = (kids[0].y + kids[kids.length-1].y)/2; }
+    n.x = 20 + n.depth*COLW;
+  }
+  go(TREE);
+  return y;
+}
+
+function draw(){
+  const total = layout();
+  svg.innerHTML = "";
+  let maxX = 0;
+  const gLinks = el("g", {}, svg), gNodes = el("g", {}, svg);
+  const ob = overallBest();
+  (function walk(n){
+    maxX = Math.max(maxX, n.x + W + 30);
+    const kids = n.open ? (n.children||[]) : [];
+    kids.forEach(c => {
+      const x1 = n.x + W, y1 = n.y + H/2, x2 = c.x, y2 = c.y + H/2, mx = (x1 + x2)/2;
+      el("path", {d:`M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`,
+        class:"link" + (c.status==="untried" ? " untried":"")}, gLinks);
+      walk(c);
+    });
+    const s = stat(n);
+    const hasKids = (n.children||[]).length > 0;
+    const isBest = n.res && n.res[TS] && ob !== null && n.res[TS][0] === ob;
+    const g = el("g", {class:`node ${s}${hasKids?" has":""}${isBest?" best":""}`, transform:`translate(${n.x},${n.y})`}, gNodes);
+    el("rect", {class:"box", width:W, height:H}, g);
+    el("text", {class:"t", x:10, y:17}, g).textContent = clip(n.name, 31);
+    if (n.res && n.res[TS]){
+      const [r2, sd] = n.res[TS];
+      el("text", {class:"v", x:10, y:34}, g).textContent = "R² " + r2.toFixed(3) + "  ±" + sd.toFixed(3);
+      const bg = el("g", {class:"bargrp"}, g);
+      el("rect", {class:"bg", x:128, y:28, width:76, height:7, rx:3}, bg);
+      el("rect", {class:"fg", x:128, y:28, width:Math.max(0, Math.min(1, r2))*76, height:7, rx:3}, bg);
+      if (isBest) el("text", {class:"starlbl", x:W-8, y:14, "text-anchor":"end"}, g).textContent = "★ best";
+    } else if (n.status === "untried"){
+      el("text", {class:"s", x:10, y:34}, g).textContent = "not tried yet";
+    } else {
+      const b = best(n);
+      const sub = hasKids ? (n.open ? "next: " + (n.q||"") : (b!==null ? "best below: R² " + b.toFixed(3) : "") ) : "";
+      el("text", {class:"q", x:10, y:34}, g).textContent = clip(sub, 36);
+      if (hasKids) el("text", {class:"tog", x:W-18, y:17}, g).textContent = n.open ? "−" : "+";
+    }
+    g.addEventListener("click", () => { if (hasKids){ n.open = !n.open; draw(); } });
+    g.addEventListener("mousemove", ev => tip(ev, n));
+    g.addEventListener("mouseleave", () => document.getElementById("tip").style.display = "none");
+  })(TREE);
+  svg.setAttribute("width", maxX + 20);
+  svg.setAttribute("height", total + 20);
+}
+
+function tip(ev, n){
+  const t = document.getElementById("tip");
+  let html = "<b>" + n.path.join(" › ") + "</b>";
+  if (n.note) html += n.note + "<br>";
+  if (n.res){
+    ["random15","cs2_hubs"].forEach(k => {
+      if (n.res[k]) html += (k==="random15" ? "Random test set" : "Hub test set") +
+        ": R² " + n.res[k][0].toFixed(3) + " ±" + n.res[k][1].toFixed(3) + ", MAE " + n.res[k][2].toFixed(2) + " Å<br>";
+    });
+  } else if (n.status === "untried") html += "Not tried yet.";
+  else {
+    const b = best(n), cnt = leaves(n).filter(l => l.res).length, un = leaves(n).filter(l => l.status==="untried").length;
+    html += cnt + " results below" + (un ? ", " + un + " untried options" : "") + (b!==null ? "<br>best R² " + b.toFixed(3) : "");
+  }
+  t.innerHTML = html; t.style.display = "block";
+  t.style.left = Math.min(ev.clientX + 14, window.innerWidth - 360) + "px";
+  t.style.top = (ev.clientY + 14) + "px";
+}
+
+function setAll(n, open){ if ((n.children||[]).length){ n.open = open; n.children.forEach(c => setAll(c, open)); } }
+document.getElementById("expandAll").onclick = () => { setAll(TREE, true); draw(); };
+document.getElementById("collapseAll").onclick = () => { setAll(TREE, false); TREE.open = true; TREE.children.forEach(c => c.open = false); draw(); };
+document.querySelectorAll("#tsSeg button").forEach(b => b.onclick = () => {
+  TS = b.dataset.ts; document.querySelectorAll("#tsSeg button").forEach(x => x.classList.toggle("on", x === b)); draw();
+});
+document.getElementById("themeBtn").onclick = () => {
+  const r = document.documentElement, cur = r.getAttribute("data-theme");
+  const dark = cur ? cur === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  r.setAttribute("data-theme", dark ? "light" : "dark");
+};
+
+// settings panel
+const sp = document.getElementById("settings");
+SETTINGS.forEach(s => {
+  const a = document.createElement("div"); a.textContent = s.group; a.style.fontWeight = "600"; sp.appendChild(a);
+  const b = document.createElement("div");
+  s.items.forEach(([label, st]) => { const c = document.createElement("span"); c.className = "chip " + st; c.textContent = (st==="done" ? "✓ " : "○ ") + label; b.appendChild(c); });
+  sp.appendChild(b);
+});
+
+// untried list
+const ul = document.getElementById("ulist");
+const seen = [];
+(function collect(n){
+  if (n.status === "untried") seen.push(n);
+  (n.children||[]).forEach(collect);
+})(TREE);
+const groups = new Map();
+seen.forEach(n => {
+  const key = n.name + "|" + (n.note || "");
+  if (!groups.has(key)) groups.set(key, {n: n, count: 0, where: new Set()});
+  const g = groups.get(key); g.count++; g.where.add(n.path.slice(0, -1).join(" › "));
+});
+document.getElementById("ucount").textContent = groups.size;
+groups.forEach(g => {
+  const n = g.n, li = document.createElement("li");
+  const where = g.count === 1 ? [...g.where][0] : "appears in " + g.count + " places in the tree";
+  li.innerHTML = "<b>" + n.name + "</b>" + (n.note ? " — " + n.note : "") + "<div class='path'>" + where + "</div>";
+  ul.appendChild(li);
+});
+
+draw();
+</script>
+</body>
+</html>

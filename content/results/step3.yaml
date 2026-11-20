@@ -31,5 +31,6 @@ finding: >
   linkers, the overlap is 0.14 (0.16 for MolT5; 0.23 vs 0.21 on all edges). The graphs are
   still clearly different, but different is not yet better: connected MOFs differ in PLD by
   about the same amount in both graphs (1.91 Å fingerprint, 1.93 Å ChemBERTa semantic; 2.75 Å
-  for random pairs). That is a graph statistic, not a model result — Step 5 decides whether
-  the new edges help prediction. See the network comparison below.
+  for random pairs). That is a graph statistic, not a model result — Step 5 tested whether the
+  new edges help prediction, and they did not (see the Step 5 results below). See the network
+  comparison below.

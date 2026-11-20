@@ -1,0 +1,42 @@
+title: "Step 5 — Model Comparison"
+status: done
+summary: >
+  Compared Random Forest, MLP and k-NN (no graph) against GCN, GraphSAGE and a residual GCN
+  (graph) on every combination of graph type, neighbours (k), sparsification method and
+  retention, with ChemBERTa and MolT5 embeddings, 5 seeds each (0 to 4). Two test sets: a
+  random 15% (2,144 MOFs) and Case Study 2's harder hub set (680 MOFs). About 3,000 runs.
+headline: "0.883"
+headline_label: "Best model: Random Forest on fingerprint features (test R², random test set; 0.888 on the hub set)"
+stats:
+  - label: "Random Forest R² (hub set)"
+    value: "0.888"
+    emphasis: true
+  - label: "GNN with no edges R²"
+    value: "0.840"
+  - label: "Best GNN with a graph R²"
+    value: "0.745"
+  - label: "Case Study 2 best GNN R²"
+    value: "0.687"
+columns: ["Model and setting", "Random test set R²", "Hub test set R²"]
+rows:
+  - ["Random Forest, fingerprint", "0.883", "0.888"]
+  - ["Random Forest, fingerprint + ChemBERTa", "0.876", "0.897"]
+  - ["Random Forest, fingerprint + MolT5", "0.882", "0.895"]
+  - ["MLP, fingerprint", "0.865", "0.873"]
+  - ["GCN, no edges", "0.840", "0.827"]
+  - ["GraphSAGE, no edges", "0.830", "0.819"]
+  - ["GCN, Case Study 2 graph, k=3, no pruning", "0.622", "0.289"]
+  - ["GraphSAGE, Case Study 2 graph, k=3, no pruning", "0.651", "0.581"]
+  - ["GraphSAGE, Case Study 2 graph, k=3, Black Hole 30%", "0.697", "0.751"]
+  - ["GraphSAGE, same graph, random pruning 30%", "0.676", "0.620"]
+  - ["GCN, fingerprint graph, k=10, no pruning", "0.469", "0.402"]
+finding: >
+  Random Forest on plain fingerprints is the best model, and it reproduces Case Study 2
+  (0.888 against 0.893, same hub test set). A GNN with no edges (0.84) beats every GNN with a
+  graph, so the graphs lower accuracy. Fewer neighbours help (GCN on the Case Study 2 graph:
+  k=3 0.622, k=5 0.575, k=10 0.527). Neither ChemBERTa nor MolT5 improves on fingerprints
+  (Random Forest rows differ by under 0.01, and the sign flips between test sets). Black Hole
+  beats random pruning on the hub test set (+0.06 R², better in 81% of comparisons) but not on
+  a random one (+0.009); the hub set is built from the same gravity ranking, so that advantage
+  may be biased in its favour. The GNN result against Case Study 2 improved from 0.687 (one
+  seed) to 0.751 (five seeds). Not run: GAT, feature scaling, other Black Hole weights, 10 seeds.

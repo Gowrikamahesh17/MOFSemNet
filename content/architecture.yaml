@@ -30,10 +30,10 @@ nodes:
       - "The Black Hole Strategy's gravity-score formula and its community-stratified pruning."
     references: [p1, p2]
     metrics:
-      "Random Forest MAE": "0.525 Å"
-      "Random Forest RMSE": "1.001 Å"
-      "Random Forest R²": "0.893"
-      "Best GNN R²": "0.687"
+      "Random Forest R² (Case Study 2, 1 seed)": "0.893"
+      "Random Forest R² (reproduced, 5 seeds)": "0.888"
+      "Best GNN R² (Case Study 2, 1 seed)": "0.687"
+      "Same GNN (reproduced, 5 seeds)": "0.751"
 
   - id: step2
     label: "Step 2\nLanguage Embeddings"
@@ -154,31 +154,47 @@ nodes:
   - id: step5
     label: "Step 5\nModel Comparison"
     group: pipeline
-    status: next
-    summary: "RF / MLP vs. GCN / GraphSAGE, across every graph × method × retention."
+    status: done
+    summary: "RF / MLP vs. GCN / GraphSAGE, across graph, k, pruning and retention, with ChemBERTa and MolT5."
     description: >
-      Will train Random Forest and MLP (no graph) against GCN and GraphSAGE on every
-      combination of graph type, sparsification method, and retention level, at least 5
-      seeds each, reporting MAE / RMSE / R² plus retained structure, training time, and
-      memory. This is where the thesis's central question gets answered.
-    why_chosen: null
+      Trained Random Forest, MLP and k-NN (no graph) against GCN, GraphSAGE and a residual GCN on
+      every combination of graph type, neighbours (k = 3, 5, 10), sparsification method and
+      retention, with both language models, 5 seeds each, on a random test set and on Case Study 2's
+      hub test set, reporting MAE / RMSE / R². Random Forest on fingerprints is the best model, and a
+      GNN with no edges beats every GNN with a graph.
+    why_chosen: >
+      A no-edge GNN and the Case Study 2 graph were added as reference rows, so the comparison shows
+      what each graph adds or removes, not only which graph is best.
     studied: []
     references: []
-    metrics: {}
+    metrics:
+      "Best model": "Random Forest, R² 0.883 / 0.888"
+      "GNN with no edges": "R² 0.84"
+      "Best GNN with a graph": "R² 0.745 / 0.751"
+      "Runs": "about 3,000"
 
   - id: step6
     label: "Step 6\nTrustworthiness"
     group: pipeline
-    status: planned
-    summary: "SHAP, embedding ablation, calibrated confidence — once Step 5 has models to explain."
+    status: done
+    summary: "SHAP, embedding ablation (ChemBERTa and MolT5), calibrated confidence intervals."
     description: >
-      SHAP feature importance for the non-graph baseline, an embedding ablation isolating
-      how much of any semantic-graph advantage survives a degraded embedding, and a
-      calibrated confidence interval for the final selected configuration.
-    why_chosen: null
-    studied: []
-    references: []
-    metrics: {}
+      SHAP feature importance for the Random Forest, an embedding ablation that rebuilds the semantic
+      graph from shuffled, random and truncated embeddings, and conformal prediction intervals with
+      measured coverage. Two pore-geometry columns carry 74% of the model's reliance, the embeddings
+      carry real chemistry but no usable gain (same for ChemBERTa and MolT5), and adaptive 90% intervals
+      cover 90.8% of random test MOFs and 89.9% of Case Study 2's hub test set.
+    why_chosen: >
+      Conformal prediction gives a measured, distribution-free coverage guarantee instead of a
+      qualitative claim about trust.
+    studied:
+      - "SHAP and TreeSHAP, and why fully grown forests break TreeSHAP's additivity."
+      - "Split conformal prediction and normalised conformity scores for adaptive interval width."
+    references: [p17, p18, p19, p20]
+    metrics:
+      "Pore columns' SHAP share": "74%"
+      "Two pore columns alone": "R² 0.72"
+      "90% interval coverage (random / hub set)": "90.8% / 89.9%"
 
   - id: report
     label: "Thesis Report"

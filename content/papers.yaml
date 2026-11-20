@@ -53,6 +53,17 @@ clusters:
       comparator for this thesis's own random-vs-k-center baseline comparison, though on
       citation and social networks rather than molecular graphs.
 
+  - id: explainability
+    label: "Explainability and calibrated confidence"
+    narrative: >
+      Step 6 uses two established tools rather than new methods. SHAP assigns each input
+      column a signed contribution to every prediction, and its tree-ensemble version is exact
+      for Random Forests. Split conformal prediction turns a point prediction into an interval
+      with a distribution-free coverage guarantee, which is what makes "how much to trust this
+      prediction" a measured number instead of a qualitative claim. One practical finding from this
+      thesis: TreeSHAP's contributions stopped adding up to the predictions on fully grown forests,
+      so the explained forest is regularised and the additivity is checked.
+
 papers:
   - id: p1
     citation_key: "[1]"
@@ -230,3 +241,55 @@ papers:
       networks rather than molecular graphs.
     has_local_pdf: true
     local_pdf: "2405.17404v1.pdf"
+
+  - id: p17
+    citation_key: "[17]"
+    cluster: explainability
+    title: "A Unified Approach to Interpreting Model Predictions"
+    authors: "Lundberg, S. M., & Lee, S.-I."
+    year: 2017
+    venue: "NeurIPS 2017 (arXiv:1705.07874)"
+    url: "https://arxiv.org/abs/1705.07874"
+    summary: >
+      Introduces SHAP: feature attributions with additivity (contributions plus a base value
+      equal the prediction). Step 6 uses it to show which kinds of input the Random Forest relies on.
+    has_local_pdf: false
+
+  - id: p18
+    citation_key: "[18]"
+    cluster: explainability
+    title: "From local explanations to global understanding with explainable AI for trees"
+    authors: "Lundberg, S. M., Erion, G., Chen, H., DeGrave, A., Prutkin, J. M., Nair, B., Katz, R., Himmelfarb, J., Bansal, N., & Lee, S.-I."
+    year: 2020
+    venue: "Nature Machine Intelligence 2, 56-67"
+    url: "https://doi.org/10.1038/s42256-019-0138-9"
+    summary: >
+      Describes TreeSHAP, the tree-ensemble algorithm used for the Random Forest. Step 6 found that
+      its contributions stop adding up to the predictions on fully grown forests, hence the added check.
+    has_local_pdf: false
+
+  - id: p19
+    citation_key: "[19]"
+    cluster: explainability
+    title: "Distribution-Free Predictive Inference for Regression"
+    authors: "Lei, J., G'Sell, M., Rinaldo, A., Tibshirani, R. J., & Wasserman, L."
+    year: 2018
+    venue: "Journal of the American Statistical Association 113(523), 1094-1111 (arXiv:1604.04173)"
+    url: "https://arxiv.org/abs/1604.04173"
+    summary: >
+      Split conformal prediction for regression: intervals with guaranteed finite-sample coverage from
+      a held-out calibration set, with no assumption on the model. The basis of Step 6's intervals.
+    has_local_pdf: false
+
+  - id: p20
+    citation_key: "[20]"
+    cluster: explainability
+    title: "A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification"
+    authors: "Angelopoulos, A. N., & Bates, S."
+    year: 2021
+    venue: "arXiv:2107.07511"
+    url: "https://arxiv.org/abs/2107.07511"
+    summary: >
+      Practical guide to conformal prediction, including score functions normalised by a per-example
+      uncertainty estimate, the idea behind the adaptive-width intervals in Step 6.
+    has_local_pdf: false
