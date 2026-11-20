@@ -56,6 +56,7 @@ export interface PapersData {
 export interface ResearchQuestion {
   id: string;
   text: string;
+  answer?: string | null;
 }
 
 export interface PlanData {

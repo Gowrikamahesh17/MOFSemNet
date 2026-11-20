@@ -201,8 +201,8 @@ export function GraphComparison() {
         neighbours. But connected MOFs differ in PLD by about the same amount in both graphs
         ({stats.mean_abs_pld_gap_between_neighbours.fingerprint.toFixed(2)} Å fingerprint vs{' '}
         {stats.mean_abs_pld_gap_between_neighbours.semantic.toFixed(2)} Å semantic; random pairs{' '}
-        {stats.mean_abs_pld_gap_random_pair.toFixed(2)} Å). That is a graph statistic, not a model result &mdash; Step 5 decides whether the new
-        edges help prediction.
+        {stats.mean_abs_pld_gap_random_pair.toFixed(2)} Å). That is a graph statistic, not a model result &mdash; Step 5 tested whether the new
+        edges help prediction, and they did not (see the Step 5 results below).
       </FindingCallout>
     </div>
   );

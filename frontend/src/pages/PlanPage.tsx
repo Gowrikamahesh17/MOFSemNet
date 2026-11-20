@@ -35,6 +35,12 @@ export function PlanPage() {
                 <div key={rq.id} className={`card ${styles.questionCard}`}>
                   <span className={styles.questionNumber}>RQ{index + 1}</span>
                   <p>{rq.text}</p>
+                  {rq.answer && (
+                    <div className={styles.answer}>
+                      <span className={styles.answerLabel}>Answer so far</span>
+                      <p>{rq.answer}</p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
