@@ -34,7 +34,11 @@ networkx==3.5
 scikit-learn==1.7.2
 
 # Explainability (Step 6)
-shap==0.48.0
+shap==0.54.1
+lime==0.2.0.1
+
+# Gradient-boosted baseline (Step 5 extras) that Step 6 also explains
+xgboost==3.4.1
 
 # Data handling / numerics
 pandas==2.3.3

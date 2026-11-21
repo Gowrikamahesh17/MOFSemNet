@@ -1,0 +1,284 @@
+{
+  "created": "2026-11-20T22:47:30",
+  "profile": "extra_final",
+  "config": {
+    "language_models": [],
+    "test_sets": [
+      "random15",
+      "cs2_hubs"
+    ],
+    "scalings": [
+      "none"
+    ],
+    "feature_sets": [],
+    "node_features": [],
+    "non_graph_models": [],
+    "gnn_models": [],
+    "graph_types": [],
+    "k_values": [],
+    "hybrid_betas": [
+      0.5
+    ],
+    "sparsify_graphs": [],
+    "sparsify_k_values": [],
+    "sparsify_methods": [],
+    "retentions": [],
+    "bh_weights": [
+      [
+        0.33,
+        0.33,
+        0.33
+      ]
+    ],
+    "n_subsample": null,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "epochs": 200,
+    "block_non_graph": false,
+    "block_no_edge": false,
+    "block_graph_full": false,
+    "block_sparsify": false,
+    "hidden": 64,
+    "lr": 0.005,
+    "weight_decay": 0.001,
+    "patience": 20,
+    "rf_trees": 100,
+    "knn_neighbors": 5,
+    "mlp_hidden": [
+      128,
+      64
+    ],
+    "split_state": 42,
+    "test_frac": 0.15,
+    "val_frac": 0.15,
+    "max_hours": null,
+    "block_extra": true,
+    "extra_groups": [
+      "g1_baselines",
+      "g2_log",
+      "g3_nopore",
+      "g7_rich",
+      "g8_ensemble"
+    ],
+    "extra_nongraph_models": [
+      "random_forest",
+      "mlp",
+      "xgboost",
+      "lightgbm"
+    ],
+    "extra_tuned_models": [
+      "xgboost_tuned",
+      "lightgbm_tuned"
+    ],
+    "extra_gnn_models": [
+      "gcn",
+      "graphsage",
+      "residual_gcn"
+    ],
+    "extra_graph_configs": [
+      [
+        "cs2",
+        3,
+        "none",
+        1.0
+      ],
+      [
+        "fingerprint",
+        3,
+        "none",
+        1.0
+      ],
+      [
+        "cs2",
+        3,
+        "black_hole",
+        0.3
+      ]
+    ],
+    "extra_g4_graphs": [
+      [
+        "cs2",
+        3,
+        "none",
+        1.0
+      ]
+    ],
+    "extra_g5_graphs": [
+      [
+        "dedup_cs2",
+        3,
+        "none",
+        1.0
+      ],
+      [
+        "desc",
+        3,
+        "none",
+        1.0
+      ],
+      [
+        "desc_dedup",
+        3,
+        "none",
+        1.0
+      ]
+    ],
+    "extra_stack_graphs": [
+      "cs2",
+      "dedup_cs2"
+    ],
+    "best_feature_set": null,
+    "gbm_early_stopping": 50,
+    "extra_gnn_only": true,
+    "extra_rich": true,
+    "ens_gnn": "gcn",
+    "gnn_train_setup": "v2"
+  },
+  "data_file": "MOFCSD.csv",
+  "data_sha256": "e23a42e742099b4c94ae55fb29f51678fa5d9f4a91923ca753143d60638451e8",
+  "n_mofs": 14296,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "device": "cuda",
+  "gpu": "NVIDIA RTX A6000",
+  "python": "3.11.13",
+  "platform": "Linux-6.8.0-146-generic-x86_64-with-glibc2.35",
+  "packages": {
+    "torch": "2.9.1+cu128",
+    "torch_geometric": "2.8.1",
+    "networkx": "3.6.1",
+    "sklearn": "1.8.0",
+    "pandas": "2.3.3",
+    "numpy": "2.3.2",
+    "rdkit": "2026.09.2",
+    "xgboost": "3.2.0",
+    "lightgbm": "4.7.0",
+    "pymatgen": "?"
+  },
+  "embedding_files": {},
+  "runs_total": 820,
+  "runs_in_csv": 820,
+  "extra": {
+    "descriptor_info": {
+      "n_distinct_linkers": 3193,
+      "n_unparseable_smiles": 1,
+      "n_no_conformer_rg_asphericity_imputed": 7,
+      "fallback": "column median over distinct linkers",
+      "conformer_seed": 61453,
+      "metal_descriptor_source": "pymatgen",
+      "n_metals": 53,
+      "metal_descriptor_columns": [
+        "atomic_number",
+        "atomic_mass",
+        "atomic_radius",
+        "electronegativity_pauling",
+        "ionic_radius",
+        "valence_electrons"
+      ],
+      "linker_descriptor_columns": [
+        "mol_weight",
+        "heavy_atoms",
+        "ring_count",
+        "aromatic_rings",
+        "rotatable_bonds",
+        "tpsa",
+        "logp",
+        "frac_csp3",
+        "radius_of_gyration",
+        "asphericity"
+      ],
+      "rich_unparseable_linkers": 1,
+      "rdkit_descriptors_total": 217,
+      "rdkit_descriptors_kept": 206,
+      "maccs_bits": 167,
+      "count_fp_bits": 1024
+    },
+    "best_feature_sets": null,
+    "gbm_default": {
+      "xgboost": {
+        "n_estimators": 2000,
+        "learning_rate": 0.05,
+        "max_depth": 6,
+        "subsample": 0.8,
+        "colsample_bytree": 0.5,
+        "min_child_weight": 1,
+        "reg_lambda": 1.0
+      },
+      "lightgbm": {
+        "n_estimators": 2000,
+        "learning_rate": 0.05,
+        "num_leaves": 31,
+        "subsample": 0.8,
+        "subsample_freq": 1,
+        "colsample_bytree": 0.5,
+        "min_child_samples": 20,
+        "reg_lambda": 0.0
+      }
+    },
+    "gbm_search_grid": {
+      "xgboost": [
+        {
+          "max_depth": 4,
+          "colsample_bytree": 0.3
+        },
+        {
+          "max_depth": 4,
+          "colsample_bytree": 0.6
+        },
+        {
+          "max_depth": 6,
+          "colsample_bytree": 0.3
+        },
+        {
+          "max_depth": 6,
+          "colsample_bytree": 0.6
+        },
+        {
+          "max_depth": 8,
+          "colsample_bytree": 0.3
+        },
+        {
+          "max_depth": 8,
+          "colsample_bytree": 0.6
+        }
+      ],
+      "lightgbm": [
+        {
+          "num_leaves": 15,
+          "colsample_bytree": 0.3
+        },
+        {
+          "num_leaves": 15,
+          "colsample_bytree": 0.6
+        },
+        {
+          "num_leaves": 31,
+          "colsample_bytree": 0.3
+        },
+        {
+          "num_leaves": 31,
+          "colsample_bytree": 0.6
+        },
+        {
+          "num_leaves": 63,
+          "colsample_bytree": 0.3
+        },
+        {
+          "num_leaves": 63,
+          "colsample_bytree": 0.6
+        }
+      ]
+    },
+    "tuned_hparams": {}
+  }
+}

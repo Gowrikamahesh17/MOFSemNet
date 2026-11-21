@@ -1,5 +1,6 @@
 import { FindingCallout } from '../common/FindingCallout';
 import { StatTile } from '../common/StatTile';
+import { SubstructureGallery } from './SubstructureGallery';
 import type { StepResult } from '../../types/content';
 import styles from './StepResultCard.module.css';
 
@@ -52,6 +53,19 @@ export function StepResultCard({ result }: { result: StepResult }) {
           </table>
         </div>
       )}
+
+      {result.figures.length > 0 && (
+        <div className={styles.figures}>
+          {result.figures.map((fig) => (
+            <figure key={fig.src} className={styles.figure}>
+              <img src={fig.src} alt={fig.alt} loading="lazy" />
+              <figcaption>{fig.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+
+      {result.gallery_url && <SubstructureGallery url={result.gallery_url} title={result.gallery_title} />}
 
       {result.finding && <FindingCallout>{result.finding}</FindingCallout>}
     </div>

@@ -67,7 +67,7 @@ def meta_cols(args, config, data_sha, test_nodes):
             "split_random_state": config.split_random_state, "n_test": len(test_nodes)}
 
 
-def run_shap(args, config, X, E, meta, labels, test_nodes, base):
+def run_shap(args, config, X, E, meta, labels, test_nodes, base, df):
     from src.explainability.shap_analysis import fingerprint_feature_names  # noqa: F811
     tr, _va, _te = make_splits(len(X), test_nodes, seed=0)
     feats = {"fingerprint": (X, fingerprint_feature_names(meta)),
@@ -78,6 +78,8 @@ def run_shap(args, config, X, E, meta, labels, test_nodes, base):
         model = forest(0, min_samples_leaf=args.shap_min_leaf).fit(M[tr], labels[tr])
         te = np.array(sorted(test_nodes))
         out = compute_shap_values(model, M[te], names, max_samples=args.shap_samples, seed=0)
+        if name == "fingerprint":
+            fp_out, fp_X, fp_names = out, M[te], names
         test_r2 = r2(labels[te], model.predict(M[te]))
         for fname, v in sorted(out["mean_abs_shap"].items(), key=lambda kv: -kv[1]):
             feat_rows.append({"features": name, "feature": fname, "mean_abs_shap": v, "n_explained": len(out["row_index"]),
@@ -91,6 +93,7 @@ def run_shap(args, config, X, E, meta, labels, test_nodes, base):
     feat_df.to_csv(os.path.join(config.results_dir, f"step6_shap_features_{args.tag}.csv"), index=False)
     group_df.to_csv(os.path.join(config.results_dir, f"step6_shap_groups_{args.tag}.csv"), index=False)
     print(group_df.round(3).to_string())
+    write_substructures(args, config, feat_df, fp_out, fp_X, fp_names, meta, df, base)
     try:
         import matplotlib
         matplotlib.use("Agg")
@@ -103,9 +106,45 @@ def run_shap(args, config, X, E, meta, labels, test_nodes, base):
         ax.set_title("Random Forest, fingerprint features: top 15 columns")
         fig.tight_layout()
         fig.savefig(os.path.join(config.figures_dir, f"step6_shap_top_features_{args.tag}.png"), dpi=150)
+        os.makedirs(UI_DIR, exist_ok=True)
+        fig.savefig(os.path.join(UI_DIR, f"shap_top_features_{args.tag}.png"), dpi=110)
         plt.close(fig)
     except Exception as exc:  # plotting is optional
         logger.warning(f"figure skipped: {exc}")
+
+
+UI_DIR = os.path.join("frontend", "public", "step6")
+
+
+def write_substructures(args, config, feat_df, fp_out, fp_X, fp_names, meta, df, base, top_n=12):
+    """Map the most important fingerprint bits to chemical fragments (CSV for the thesis, JSON + SVGs for the web console)."""
+    import json
+    from src.explainability.shap_analysis import bit_substructures
+    fp_feats = feat_df[(feat_df.features == "fingerprint") & feat_df.feature.str.startswith("fp_bit_")].head(top_n)
+    bits = [int(f.split("_")[-1]) for f in fp_feats.feature]
+    ui_tag = args.tag == "chemberta"  # the fingerprint-only forest does not depend on the language model: write the UI files once
+    svg_dir = os.path.join(UI_DIR, "bits") if ui_tag else None
+    subs = bit_substructures(df["linker_smiles"].tolist(), bits, radius=meta["morgan_radius"], n_bits=meta["morgan_bits"], svg_dir=svg_dir)
+    total = float(feat_df[feat_df.features == "fingerprint"].mean_abs_shap.sum())
+    rows = []
+    for rank, (sub, (_, f)) in enumerate(zip(subs, fp_feats.iterrows()), start=1):
+        col = fp_names.index(f.feature)
+        present = fp_X[fp_out["row_index"], col] > 0
+        signed = float(fp_out["shap_values"][present, col].mean()) if present.any() else float("nan")
+        rows.append({"rank": rank, "feature": f.feature, **sub, "mean_abs_shap": float(f.mean_abs_shap),
+                     "share_of_total_shap": float(f.mean_abs_shap) / total, "n_explained_with_bit": int(present.sum()),
+                     "mean_shap_when_present": signed, "direction": "raises PLD" if signed >= 0.1 else ("lowers PLD" if signed <= -0.1 else "small effect (under 0.1 A)"), **base})
+    pd.DataFrame(rows).to_csv(os.path.join(config.results_dir, f"step6_shap_substructures_{args.tag}.csv"), index=False)
+    print(pd.DataFrame(rows)[["rank", "feature", "fragment_smiles", "radius", "n_mofs_with_bit", "n_distinct_fragments", "fragment_share", "mean_abs_shap", "mean_shap_when_present"]].round(3).to_string())
+    if ui_tag:
+        os.makedirs(UI_DIR, exist_ok=True)
+        keep = ("rank", "feature", "bit", "fragment_smiles", "radius", "n_linkers_with_bit", "n_mofs_with_bit", "n_distinct_fragments",
+                "fragment_share", "example_linker", "mean_abs_shap", "share_of_total_shap", "mean_shap_when_present", "direction")
+        items = [{**{k: r[k] for k in keep}, "svg": f"/step6/bits/{r['svg']}" if r["svg"] else ""} for r in rows]
+        with open(os.path.join(UI_DIR, "substructures.json"), "w") as fh:
+            json.dump({"note": "Morgan bits are hashed, so several fragments can share one bit; the fragment shown is the most common one "
+                               "among the distinct linkers. Importance is mean |SHAP| of the Random Forest on fingerprint features "
+                               "(random test set, 500 MOFs explained).", "items": items}, fh, indent=1)
 
 
 def run_columns(args, config, X, labels, test_nodes, base):
@@ -241,7 +280,7 @@ def main() -> None:
     logger.info(f"X={X.shape} E={E.shape} test={len(test_nodes)} data_sha256[:16]={data_sha} parts={sorted(parts)}")
     t = time.time()
     if "shap" in parts:
-        run_shap(args, config, X, E, meta, labels, test_nodes, base)
+        run_shap(args, config, X, E, meta, labels, test_nodes, base, df)
     if "columns" in parts:
         run_columns(args, config, X, labels, test_nodes, base)
     if "confidence" in parts:

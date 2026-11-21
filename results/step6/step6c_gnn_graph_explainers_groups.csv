@@ -1,0 +1,22 @@
+model,method,group,share,test_r2,n_explained,note,script,data_sha256_16,split_random_state,seed
+"GCN, no edges",LIME (own features),linker fingerprint,0.8714577401773878,0.8727280497550964,30,mean local R2 0.20,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GCN, no edges",LIME (own features),pore geometry,0.07188201140204646,0.8727280497550964,30,mean local R2 0.20,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GCN, no edges",LIME (own features),metal,0.056660248420565856,0.8727280497550964,30,mean local R2 0.20,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GCN, CS2 graph k=3",SHAP (own features),linker fingerprint,0.6834017140118136,0.6602987051010132,30,81% of the attribution sits on neighbours' features; additivity gap 0.13 A (approximate),scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GCN, CS2 graph k=3",SHAP (own features),pore geometry,0.2569826510829871,0.6602987051010132,30,81% of the attribution sits on neighbours' features; additivity gap 0.13 A (approximate),scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GCN, CS2 graph k=3",SHAP (own features),metal,0.05961563490519931,0.6602987051010132,30,81% of the attribution sits on neighbours' features; additivity gap 0.13 A (approximate),scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GCN, CS2 graph k=3",LIME (own features),linker fingerprint,0.8687621925724721,0.6602987051010132,30,mean local R2 0.19,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GCN, CS2 graph k=3",LIME (own features),pore geometry,0.07968687072102568,0.6602987051010132,30,mean local R2 0.19,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GCN, CS2 graph k=3",LIME (own features),metal,0.051550936706502286,0.6602987051010132,30,mean local R2 0.19,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GraphSAGE, CS2 graph k=3",SHAP (own features),linker fingerprint,0.6121996048942289,0.8716735243797302,30,46% of the attribution sits on neighbours' features; additivity gap 0.33 A (approximate),scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GraphSAGE, CS2 graph k=3",SHAP (own features),pore geometry,0.3443760830009202,0.8716735243797302,30,46% of the attribution sits on neighbours' features; additivity gap 0.33 A (approximate),scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GraphSAGE, CS2 graph k=3",SHAP (own features),metal,0.04342431210485098,0.8716735243797302,30,46% of the attribution sits on neighbours' features; additivity gap 0.33 A (approximate),scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GraphSAGE, CS2 graph k=3",LIME (own features),linker fingerprint,0.900999221327836,0.8716735243797302,30,mean local R2 0.20,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GraphSAGE, CS2 graph k=3",LIME (own features),pore geometry,0.0833964158398189,0.8716735243797302,30,mean local R2 0.20,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"GraphSAGE, CS2 graph k=3",LIME (own features),metal,0.01560436283234501,0.8716735243797302,30,mean local R2 0.20,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"Residual GCN, CS2 graph k=3",SHAP (own features),linker fingerprint,0.6375773902380023,0.8726341128349304,30,15% of the attribution sits on neighbours' features; additivity gap 0.28 A (approximate); learned gate 0.278,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"Residual GCN, CS2 graph k=3",SHAP (own features),pore geometry,0.3185475426986995,0.8726341128349304,30,15% of the attribution sits on neighbours' features; additivity gap 0.28 A (approximate); learned gate 0.278,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"Residual GCN, CS2 graph k=3",SHAP (own features),metal,0.0438750670632982,0.8726341128349304,30,15% of the attribution sits on neighbours' features; additivity gap 0.28 A (approximate); learned gate 0.278,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"Residual GCN, CS2 graph k=3",LIME (own features),linker fingerprint,0.9163446374052633,0.8726341128349304,30,mean local R2 0.20,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"Residual GCN, CS2 graph k=3",LIME (own features),pore geometry,0.06877358492777558,0.8726341128349304,30,mean local R2 0.20,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0
+"Residual GCN, CS2 graph k=3",LIME (own features),metal,0.014881777666961197,0.8726341128349304,30,mean local R2 0.20,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0

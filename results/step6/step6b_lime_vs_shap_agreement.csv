@@ -1,0 +1,201 @@
+model,node,top5_overlap,lime_top_feature,shap_top_feature,lime_r2_local,true_pld,script,data_sha256_16,split_random_state,seed,n_test
+Random Forest,390,0.2,fp_bit_991,pore_Largest Free Sphere,0.11769083338606601,1.7610900402069092,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,675,0.2,fp_bit_460,pore_Largest Free Sphere,0.11680211604317758,1.9732600450515747,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,761,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7795260921094492,9.621720314025879,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,769,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7806293895581959,4.718870162963867,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,780,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7833078869350687,5.549829959869385,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,885,0.0,fp_bit_597,pore_Largest Free Sphere,0.0040630062915151255,4.505499839782715,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,967,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.26983915194939423,0.9709699749946594,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,1056,0.0,fp_bit_28,fp_bit_945,0.003590574904325794,3.9514598846435547,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,1153,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7858068438820685,5.228079795837402,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,1275,0.0,fp_bit_933,pore_Largest Free Sphere,0.003283884321871544,4.456940174102783,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,1663,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.12034750118477533,2.1509299278259277,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,2021,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2729946610544355,1.4918099641799927,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,2094,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7806467191193247,6.683259963989258,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,2255,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2712157011365389,1.3107399940490723,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,2318,0.0,fp_bit_933,fp_bit_446,0.004262077366009143,3.9878499507904053,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,2340,0.0,fp_bit_634,pore_Largest Free Sphere,0.004306031701713953,3.245609998703003,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,2433,0.0,fp_bit_82,pore_Largest Free Sphere,0.003809140272742928,2.0667901039123535,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,2592,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7751764770684655,7.868690013885498,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,2640,0.2,fp_bit_388,pore_Largest Free Sphere,0.11969029442932988,1.4528199434280396,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,2648,0.0,fp_bit_124,fp_bit_61,0.003698184362419088,2.0840799808502197,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,2670,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7746669519608562,4.003119945526123,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,2770,0.2,fp_bit_682,pore_Largest Free Sphere,0.27798226766000544,1.7239700555801392,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,3150,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7791421369138029,4.6167497634887695,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,3206,0.0,fp_bit_868,pore_Largest Cavity Diameter,0.0027965158017824177,4.059919834136963,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,3662,0.2,fp_bit_338,pore_Largest Free Sphere,0.12012199802278423,2.3719398975372314,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,3833,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7786964444036311,4.2439799308776855,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,3978,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.11434833258937793,2.08705997467041,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,4050,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2675095902758239,0.8901399970054626,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,4176,0.0,fp_bit_853,pore_Largest Free Sphere,0.003920658881484296,2.1515400409698486,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,4400,0.0,fp_bit_658,pore_Largest Free Sphere,0.0031052435726843797,1.693079948425293,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,4446,0.2,fp_bit_752,pore_Largest Free Sphere,0.11227959713750602,1.1761200428009033,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,4862,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.11923246635890705,1.8472599983215332,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,5143,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2675376855196181,0.8948799967765808,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,5189,0.0,fp_bit_353,pore_Largest Free Sphere,0.003826385546185196,5.271520137786865,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,5202,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2763852048119524,1.0810099840164185,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,5215,0.0,fp_bit_554,pore_Largest Free Sphere,0.003925786057561331,5.248610019683838,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,5218,0.2,fp_bit_821,pore_Largest Free Sphere,0.11154492851190922,1.4141099452972412,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,5511,0.0,fp_bit_682,pore_Largest Free Sphere,0.00364980372917878,4.233109951019287,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,5700,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2748281609334827,0.9652699828147888,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,5781,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.1179095085185331,1.1755199432373047,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,5785,0.0,fp_bit_109,pore_Largest Free Sphere,0.004138793172786648,4.046309947967529,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,6395,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7847820608766484,7.532780170440674,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,6492,0.2,fp_bit_234,pore_Largest Free Sphere,0.11779865816669965,2.301330089569092,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,6517,0.2,fp_bit_766,pore_Largest Free Sphere,0.11971167281682271,3.0737600326538086,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,6625,0.2,fp_bit_789,pore_Largest Free Sphere,0.2633823823000847,1.3472199440002441,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,6762,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7836655653909415,7.966800212860107,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,6929,0.2,fp_bit_933,pore_Largest Free Sphere,0.1130658996637911,0.7047299742698669,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,7139,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2702215724740863,0.7384200096130371,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,7306,0.2,fp_bit_174,pore_Largest Free Sphere,0.11412117357402896,3.3357999324798584,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,7532,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7818430337018143,3.7015600204467773,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,7816,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2784017720820726,1.377869963645935,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,7859,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.27756561931572654,0.9532600045204163,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,7875,0.0,fp_bit_582,pore_Largest Free Sphere,0.0038009738267753557,2.482599973678589,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,8004,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7802035678255483,1.6040400266647339,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,8026,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2703129718173575,0.5549499988555908,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,8195,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7773462298039358,13.404769897460938,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,8242,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.11557768119511613,1.7567600011825562,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,8547,0.2,fp_bit_465,pore_Largest Free Sphere,0.11575915307826834,3.474869966506958,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,8588,0.0,metal_Sn,pore_Largest Free Sphere,0.003625417764230199,4.086569786071777,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,8804,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7822139584938397,8.370800018310547,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,8918,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.27148195606977576,0.9261599779129028,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,8991,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.1161012978432121,3.0868399143218994,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,9185,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.27707000367453183,0.9402899742126465,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,9276,0.0,fp_bit_502,fp_bit_820,0.005588213381156115,4.716989994049072,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,9424,0.0,fp_bit_569,fp_bit_701,0.004502422917404769,4.165019989013672,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,9516,0.0,fp_bit_51,pore_Largest Free Sphere,0.004569381377747983,1.654710054397583,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,9578,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.26679115602395553,1.036270022392273,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,9586,0.2,fp_bit_424,pore_Largest Free Sphere,0.12225325713071344,3.970319986343384,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,9757,0.0,fp_bit_132,pore_Largest Free Sphere,0.003994367227845519,4.685579776763916,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,9920,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.11538317181339108,1.9407099485397339,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,10105,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7770622344626648,3.6638898849487305,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,10120,0.2,fp_bit_682,pore_Largest Free Sphere,0.11869242826785731,0.8963299989700317,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,10383,0.0,fp_bit_1015,pore_Largest Free Sphere,0.0033025846086675026,4.668280124664307,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,10394,0.0,fp_bit_1015,pore_Largest Free Sphere,0.004330146297561455,5.399960041046143,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,10507,0.2,fp_bit_231,pore_Largest Free Sphere,0.11791254808981266,1.2533600330352783,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,10584,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.27328499748930124,0.991159975528717,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,10829,0.0,fp_bit_353,fp_bit_695,0.003991672173433991,3.9226200580596924,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,10880,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.26900853933544777,1.358839988708496,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,11017,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7802945064136428,9.794919967651367,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,11075,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.11536124754136379,1.284749984741211,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,11301,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7843599969192143,6.0291900634765625,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,11310,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7812700566883221,9.791179656982422,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,11417,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7776780791973408,6.814420223236084,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,11479,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7771608758749897,8.543549537658691,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,11562,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7809745339650431,6.754640102386475,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,11590,0.0,fp_bit_89,pore_Largest Free Sphere,0.004696646522084125,2.1652801036834717,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,11730,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7832117678978674,3.2378299236297607,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,11896,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7828302299861396,4.69773006439209,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,12195,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2688575869868197,0.951259970664978,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,12353,0.0,metal_Sn,pore_Largest Free Sphere,0.0038769032772743017,3.531599998474121,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,12451,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7849791239721315,6.700870037078857,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,12958,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7759897608157844,8.409029960632324,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,13035,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2644326622956833,1.2776800394058228,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,13304,0.2,fp_bit_150,pore_Largest Free Sphere,0.12256571721106002,2.368299961090088,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,13788,0.0,fp_bit_174,pore_Largest Free Sphere,0.004610969834814127,3.1664600372314453,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,13804,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.26870528077140177,0.9792900085449219,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,13970,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.11780673216336035,1.4239599704742432,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,14045,0.0,metal_Be,pore_Largest Free Sphere,0.003918533326792817,3.345550060272217,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,14186,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2742476308485685,0.9354199767112732,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+Random Forest,14264,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2689341613647628,1.386620044708252,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,390,0.0,fp_bit_766,pore_Largest Free Sphere,0.09635715409311185,1.7610900402069092,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,675,0.2,fp_bit_460,pore_Largest Free Sphere,0.09378035697659948,1.9732600450515747,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,761,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.741316583710212,9.621720314025879,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,769,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7492014932843022,4.718870162963867,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,780,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.750095830041816,5.549829959869385,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,885,0.0,fp_bit_597,pore_Largest Free Sphere,0.004568921539294557,4.505499839782715,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,967,0.2,fp_bit_141,pore_Largest Free Sphere,0.19499544833634175,0.9709699749946594,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,1056,0.0,fp_bit_28,metal_In,0.006794088109911778,3.9514598846435547,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,1153,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7488394490755885,5.228079795837402,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,1275,0.0,fp_bit_933,pore_Largest Free Sphere,0.006485968643316076,4.456940174102783,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,1663,0.0,fp_bit_321,pore_Largest Free Sphere,0.09567818190059019,2.1509299278259277,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,2021,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.27073174145980006,1.4918099641799927,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,2094,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7493402932157063,6.683259963989258,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,2255,0.4,fp_bit_141,pore_Largest Free Sphere,0.2674128626656058,1.3107399940490723,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,2318,0.0,fp_bit_933,fp_bit_446,0.0049767055274807515,3.9878499507904053,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,2340,0.2,fp_bit_634,fp_bit_474,0.15497276580551567,3.245609998703003,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,2433,0.0,fp_bit_866,pore_Largest Cavity Diameter,0.006491495370863132,2.0667901039123535,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,2592,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7473464964335659,7.868690013885498,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,2640,0.0,fp_bit_388,pore_Largest Free Sphere,0.09351024194929969,1.4528199434280396,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,2648,0.0,fp_bit_124,fp_bit_61,0.006257603962819491,2.0840799808502197,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,2670,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7473591496957503,4.003119945526123,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,2770,0.2,fp_bit_682,pore_Largest Free Sphere,0.27852654672195465,1.7239700555801392,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,3150,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7447936337482111,4.6167497634887695,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,3206,0.0,fp_bit_569,pore_Largest Free Sphere,0.0038029685505649446,4.059919834136963,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,3662,0.0,fp_bit_338,pore_Largest Free Sphere,0.09690164451954919,2.3719398975372314,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,3833,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7439216068491916,4.2439799308776855,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,3978,0.2,fp_bit_682,pore_Largest Free Sphere,0.08979763170250876,2.08705997467041,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,4050,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2678402730236302,0.8901399970054626,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,4176,0.0,fp_bit_658,fp_bit_541,0.006059806466322759,2.1515400409698486,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,4400,0.0,fp_bit_572,pore_Largest Free Sphere,0.005122803792048436,1.693079948425293,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,4446,0.2,fp_bit_752,pore_Largest Free Sphere,0.09300309363858805,1.1761200428009033,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,4862,0.2,fp_bit_637,pore_Largest Free Sphere,0.09799480900760493,1.8472599983215332,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,5143,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.26502766598545924,0.8948799967765808,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,5189,0.0,fp_bit_51,fp_bit_362,0.008771549077911778,5.271520137786865,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,5202,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2701615677377339,1.0810099840164185,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,5215,0.0,fp_bit_554,pore_Largest Free Sphere,0.004038007754161521,5.248610019683838,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,5218,0.0,fp_bit_385,pore_Largest Free Sphere,0.09424914234313397,1.4141099452972412,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,5511,0.0,fp_bit_682,pore_Largest Cavity Diameter,0.003937749849030947,4.233109951019287,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,5700,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.27020103917796756,0.9652699828147888,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,5781,0.2,fp_bit_460,pore_Largest Free Sphere,0.09526050708079803,1.1755199432373047,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,5785,0.0,fp_bit_154,pore_Largest Free Sphere,0.004520918080307079,4.046309947967529,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,6395,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7506864289371494,7.532780170440674,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,6492,0.0,fp_bit_51,pore_Largest Free Sphere,0.09623110061264761,2.301330089569092,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,6517,0.2,metal_Lu,pore_Largest Free Sphere,0.09157207044835325,3.0737600326538086,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,6625,0.2,fp_bit_789,pore_Largest Free Sphere,0.2597109480189538,1.3472199440002441,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,6762,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7430388462900075,7.966800212860107,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,6929,0.2,fp_bit_766,pore_Largest Free Sphere,0.0925144412129637,0.7047299742698669,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,7139,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2639950373803901,0.7384200096130371,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,7306,0.0,fp_bit_853,pore_Largest Free Sphere,0.09030609373979714,3.3357999324798584,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,7532,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7453836464626216,3.7015600204467773,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,7816,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.28033867029276494,1.377869963645935,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,7859,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2789153411550829,0.9532600045204163,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,7875,0.0,fp_bit_100,pore_Largest Free Sphere,0.005589891452381868,2.482599973678589,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,8004,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7450807320276545,1.6040400266647339,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,8026,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.27012437170950576,0.5549499988555908,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,8195,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7433693499153345,13.404769897460938,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,8242,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.08937511128372033,1.7567600011825562,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,8547,0.0,fp_bit_85,pore_Largest Free Sphere,0.08875520428433603,3.474869966506958,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,8588,0.0,metal_V,pore_Largest Cavity Diameter,0.00682307648881908,4.086569786071777,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,8804,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7452341337921281,8.370800018310547,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,8918,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2673738774104364,0.9261599779129028,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,8991,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.09018381766753658,3.0868399143218994,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,9185,0.2,fp_bit_338,pore_Largest Free Sphere,0.20882242098418025,0.9402899742126465,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,9276,0.0,fp_bit_597,fp_bit_859,0.004881369395402402,4.716989994049072,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,9424,0.0,fp_bit_990,fp_bit_701,0.005382004607546342,4.165019989013672,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,9516,0.0,fp_bit_658,fp_bit_2,0.006599832281864115,1.654710054397583,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,9578,0.2,fp_bit_338,pore_Largest Free Sphere,0.26718631719898267,1.036270022392273,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,9586,0.2,fp_bit_353,pore_Largest Free Sphere,0.09808100246529405,3.970319986343384,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,9757,0.0,fp_bit_502,fp_bit_840,0.006193107729929648,4.685579776763916,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,9920,0.2,fp_bit_234,pore_Largest Free Sphere,0.09164368297381598,1.9407099485397339,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,10105,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7444507953314528,3.6638898849487305,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,10120,0.0,fp_bit_572,pore_Largest Free Sphere,0.09377213315382793,0.8963299989700317,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,10383,0.0,fp_bit_1015,pore_Largest Free Sphere,0.006065144482818918,4.668280124664307,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,10394,0.0,metal_Be,pore_Largest Free Sphere,0.006337005682190422,5.399960041046143,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,10507,0.0,fp_bit_231,pore_Largest Free Sphere,0.09351900221420228,1.2533600330352783,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,10584,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.26711245381330295,0.991159975528717,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,10829,0.0,fp_bit_353,pore_Largest Cavity Diameter,0.005655178920393356,3.9226200580596924,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,10880,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.272113457703859,1.358839988708496,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,11017,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7453582925677951,9.794919967651367,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,11075,0.2,fp_bit_408,pore_Largest Free Sphere,0.09302166323554695,1.284749984741211,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,11301,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7469274559830792,6.0291900634765625,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,11310,0.6,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7451692678456758,9.791179656982422,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,11417,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7455606908452328,6.814420223236084,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,11479,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7429001977723766,8.543549537658691,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,11562,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7433688892617476,6.754640102386475,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,11590,0.0,fp_bit_82,pore_Largest Free Sphere,0.005952554829991019,2.1652801036834717,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,11730,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7490074474181571,3.2378299236297607,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,11896,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7487811319248159,4.69773006439209,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,12195,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2684279391857012,0.951259970664978,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,12353,0.0,metal_Sn,pore_Largest Free Sphere,0.005458478445709902,3.531599998474121,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,12451,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7501914198218527,6.700870037078857,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,12958,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.7449827141591701,8.409029960632324,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,13035,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2585192018423069,1.2776800394058228,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,13304,0.2,fp_bit_582,pore_Largest Free Sphere,0.09905143429426444,2.368299961090088,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,13788,0.0,fp_bit_174,pore_Largest Free Sphere,0.005317002391253323,3.1664600372314453,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,13804,0.2,fp_bit_554,pore_Largest Free Sphere,0.26329816695262065,0.9792900085449219,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,13970,0.2,fp_bit_509,pore_Largest Free Sphere,0.09280805928955393,1.4239599704742432,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,14045,0.0,fp_bit_321,pore_Largest Free Sphere,0.0053139403691016,3.345550060272217,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,14186,0.4,pore_Largest Free Sphere,pore_Largest Free Sphere,0.26730153990142236,0.9354199767112732,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+XGBoost,14264,0.2,pore_Largest Free Sphere,pore_Largest Free Sphere,0.2673967742031864,1.386620044708252,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144

@@ -113,6 +113,12 @@ export interface EmbeddingDemoResponse {
   neighbors: EmbeddingNeighbor[];
 }
 
+export interface ResultFigure {
+  src: string;
+  caption: string;
+  alt: string;
+}
+
 export interface StepResult {
   title: string;
   status: NodeStatus;
@@ -124,6 +130,9 @@ export interface StepResult {
   retention_shown: string | null;
   columns: string[];
   rows: string[][];
+  figures: ResultFigure[];
+  gallery_url: string | null;
+  gallery_title: string | null;
 }
 
 export interface GraphNode {

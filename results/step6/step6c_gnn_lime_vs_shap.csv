@@ -1,0 +1,121 @@
+model,node,lime_local_r2,script,data_sha256_16,split_random_state,seed,top5_overlap,lime_top_is_pore,shap_top_is_pore
+"GCN, no edges",38,0.6828381821782097,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",229,0.6825078167170938,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",527,0.0069055771136185,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",605,0.6829639537304224,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",1154,0.1893724824289772,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",2413,0.6830952013320541,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",3880,0.006896853312675422,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",3985,0.015336651410202684,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",4354,0.015350762932869966,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",5781,0.006903292737004296,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",7170,0.0068978996617488075,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",7236,0.1895258298849446,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",7750,0.015382532466975962,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",7947,0.015363559493672407,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",8024,0.18953026760841274,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",8675,0.015396587408979867,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",9075,0.015348208159421617,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",9287,0.18936014053566064,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",9636,0.006902849945645051,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",10484,0.6814557879097123,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",10540,0.015358731441442397,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",11021,0.0068888254019764394,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",11464,0.015357711002812913,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",11563,0.6827996268612215,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",11938,0.015368683240758907,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",12231,0.01537571100969981,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",12978,0.6825775895773009,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",13304,0.00689782053588639,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",13829,0.006885362226437097,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, no edges",14209,0.18805387793725126,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,,,
+"GCN, CS2 graph k=3",38,0.6821838783618944,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"GCN, CS2 graph k=3",229,0.6819314770048206,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"GCN, CS2 graph k=3",527,0.00621196302099869,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GCN, CS2 graph k=3",605,0.6757041692507739,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"GCN, CS2 graph k=3",1154,0.15916114014728433,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True
+"GCN, CS2 graph k=3",2413,0.6579597632287576,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,False
+"GCN, CS2 graph k=3",3880,0.006017936458128315,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"GCN, CS2 graph k=3",3985,0.007038544204957087,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"GCN, CS2 graph k=3",4354,0.006845290006054383,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"GCN, CS2 graph k=3",5781,0.006373838065472426,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GCN, CS2 graph k=3",7170,0.006547890477324958,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GCN, CS2 graph k=3",7236,0.1643592512627614,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True
+"GCN, CS2 graph k=3",7750,0.006383632934105488,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GCN, CS2 graph k=3",7947,0.010975865724024536,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"GCN, CS2 graph k=3",8024,0.15387110300677387,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True
+"GCN, CS2 graph k=3",8675,0.006901459185096326,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GCN, CS2 graph k=3",9075,0.006477751824925493,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GCN, CS2 graph k=3",9287,0.1674484715230956,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True
+"GCN, CS2 graph k=3",9636,0.006261554138331515,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GCN, CS2 graph k=3",10484,0.6927080458944095,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"GCN, CS2 graph k=3",10540,0.006700063019159153,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"GCN, CS2 graph k=3",11021,0.006818557542899395,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GCN, CS2 graph k=3",11464,0.006746645082468361,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GCN, CS2 graph k=3",11563,0.7046515433364413,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"GCN, CS2 graph k=3",11938,0.006709141447955758,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"GCN, CS2 graph k=3",12231,0.006771824870522636,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GCN, CS2 graph k=3",12978,0.6575199578974287,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,True,False
+"GCN, CS2 graph k=3",13304,0.006206070942046837,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GCN, CS2 graph k=3",13829,0.006043046888914438,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"GCN, CS2 graph k=3",14209,0.15725652685265634,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True
+"GraphSAGE, CS2 graph k=3",38,0.7219254980430705,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"GraphSAGE, CS2 graph k=3",229,0.7257637992694184,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"GraphSAGE, CS2 graph k=3",527,0.007006881230082862,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"GraphSAGE, CS2 graph k=3",605,0.72527664826327,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"GraphSAGE, CS2 graph k=3",1154,0.15094515962995692,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True
+"GraphSAGE, CS2 graph k=3",2413,0.7202092267943252,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"GraphSAGE, CS2 graph k=3",3880,0.006609920284451176,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"GraphSAGE, CS2 graph k=3",3985,0.007083540671304456,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"GraphSAGE, CS2 graph k=3",4354,0.007119304525934567,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"GraphSAGE, CS2 graph k=3",5781,0.006497005487933638,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GraphSAGE, CS2 graph k=3",7170,0.007087666770112855,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GraphSAGE, CS2 graph k=3",7236,0.16929461458451478,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True
+"GraphSAGE, CS2 graph k=3",7750,0.007614142405049318,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GraphSAGE, CS2 graph k=3",7947,0.009263113899124154,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GraphSAGE, CS2 graph k=3",8024,0.30481112216098194,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,False,True
+"GraphSAGE, CS2 graph k=3",8675,0.009841987192774515,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GraphSAGE, CS2 graph k=3",9075,0.0069862825088014,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GraphSAGE, CS2 graph k=3",9287,0.1556033976258674,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True
+"GraphSAGE, CS2 graph k=3",9636,0.006544303186935885,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GraphSAGE, CS2 graph k=3",10484,0.7073135096746308,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"GraphSAGE, CS2 graph k=3",10540,0.007180569836249817,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"GraphSAGE, CS2 graph k=3",11021,0.007005348334072847,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GraphSAGE, CS2 graph k=3",11464,0.007305355717995621,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GraphSAGE, CS2 graph k=3",11563,0.7231741464265918,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"GraphSAGE, CS2 graph k=3",11938,0.006819851386184461,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"GraphSAGE, CS2 graph k=3",12231,0.007472389621781983,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GraphSAGE, CS2 graph k=3",12978,0.7169877160773601,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"GraphSAGE, CS2 graph k=3",13304,0.0069707832381668,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GraphSAGE, CS2 graph k=3",13829,0.0067480963886735745,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"GraphSAGE, CS2 graph k=3",14209,0.16983216360787035,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True
+"Residual GCN, CS2 graph k=3",38,0.6933377376799399,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"Residual GCN, CS2 graph k=3",229,0.6947182878733609,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"Residual GCN, CS2 graph k=3",527,0.011219028984203794,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",605,0.6953175205138316,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"Residual GCN, CS2 graph k=3",1154,0.1707345361756838,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True
+"Residual GCN, CS2 graph k=3",2413,0.6924890653250331,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"Residual GCN, CS2 graph k=3",3880,0.011217155901366738,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"Residual GCN, CS2 graph k=3",3985,0.010786147684830771,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",4354,0.010837879664571948,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"Residual GCN, CS2 graph k=3",5781,0.01122174483703331,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",7170,0.011235856715219539,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",7236,0.17110276845935513,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True
+"Residual GCN, CS2 graph k=3",7750,0.0107670542350633,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",7947,0.010798154134899485,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",8024,0.170747043101533,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True
+"Residual GCN, CS2 graph k=3",8675,0.010823823880532824,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,False
+"Residual GCN, CS2 graph k=3",9075,0.0108031807347021,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",9287,0.17131719046377647,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True
+"Residual GCN, CS2 graph k=3",9636,0.011233315167323177,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",10484,0.6931610577657361,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"Residual GCN, CS2 graph k=3",10540,0.01074536174169105,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",11021,0.011212755934046914,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",11464,0.010771199214597571,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",11563,0.6953720161219082,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"Residual GCN, CS2 graph k=3",11938,0.010773214027187672,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",12231,0.01096240447041763,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",12978,0.6876853179693991,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.4,True,True
+"Residual GCN, CS2 graph k=3",13304,0.011212482222090592,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",13829,0.011211447454847034,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.0,False,True
+"Residual GCN, CS2 graph k=3",14209,0.17431280361243684,scripts/run_step6c_gnn_explainers.py,e23a42e742099b4c,42,0,0.2,False,True

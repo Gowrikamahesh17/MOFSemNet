@@ -124,6 +124,12 @@ class ResultStat(BaseModel):
     emphasis: bool = False
 
 
+class ResultFigure(BaseModel):
+    src: str
+    caption: str
+    alt: str
+
+
 class StepResult(BaseModel):
     title: str
     status: NodeStatus
@@ -135,6 +141,9 @@ class StepResult(BaseModel):
     retention_shown: str | None = None
     columns: list[str] = Field(default_factory=list)
     rows: list[list[str]] = Field(default_factory=list)
+    figures: list[ResultFigure] = Field(default_factory=list)
+    gallery_url: str | None = None
+    gallery_title: str | None = None
 
 
 class GraphNode(BaseModel):

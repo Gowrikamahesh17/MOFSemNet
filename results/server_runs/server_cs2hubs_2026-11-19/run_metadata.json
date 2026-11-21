@@ -1,0 +1,126 @@
+{
+  "created": "2026-11-19T13:18:41",
+  "profile": "standard",
+  "config": {
+    "n_subsample": null,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "language_models": [
+      "chemberta"
+    ],
+    "test_sets": [
+      "cs2_hubs"
+    ],
+    "scalings": [
+      "none"
+    ],
+    "feature_sets": [
+      "fingerprint",
+      "embedding",
+      "fingerprint+embedding"
+    ],
+    "node_features": [
+      "fingerprint"
+    ],
+    "non_graph_models": [
+      "random_forest",
+      "mlp",
+      "knn"
+    ],
+    "gnn_models": [
+      "gcn",
+      "graphsage",
+      "residual_gcn"
+    ],
+    "graph_types": [
+      "cs2",
+      "fingerprint",
+      "semantic",
+      "hybrid"
+    ],
+    "k_values": [
+      3,
+      5,
+      10
+    ],
+    "hybrid_betas": [
+      0.5
+    ],
+    "sparsify_graphs": [
+      "cs2",
+      "fingerprint",
+      "semantic",
+      "hybrid"
+    ],
+    "sparsify_k_values": [
+      3,
+      10
+    ],
+    "sparsify_methods": [
+      "black_hole",
+      "random",
+      "k_center"
+    ],
+    "retentions": [
+      0.3,
+      0.5
+    ],
+    "bh_weights": [
+      [
+        0.33,
+        0.33,
+        0.33
+      ]
+    ],
+    "epochs": 200,
+    "block_non_graph": true,
+    "block_no_edge": true,
+    "block_graph_full": true,
+    "block_sparsify": true,
+    "hidden": 64,
+    "lr": 0.005,
+    "weight_decay": 0.001,
+    "patience": 20,
+    "rf_trees": 100,
+    "knn_neighbors": 5,
+    "mlp_hidden": [
+      128,
+      64
+    ],
+    "split_state": 42,
+    "test_frac": 0.15,
+    "val_frac": 0.15,
+    "max_hours": null
+  },
+  "data_file": "MOFCSD.csv",
+  "data_sha256": "e23a42e742099b4c94ae55fb29f51678fa5d9f4a91923ca753143d60638451e8",
+  "n_mofs": 14296,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "device": "cuda",
+  "gpu": "NVIDIA RTX A6000",
+  "python": "3.11.13",
+  "platform": "Linux-5.15.0-191-generic-x86_64-with-glibc2.35",
+  "packages": {
+    "torch": "2.9.1+cu128",
+    "torch_geometric": "2.8.1",
+    "networkx": "3.6.1",
+    "sklearn": "1.8.0",
+    "pandas": "2.3.3",
+    "numpy": "2.3.2",
+    "rdkit": "2026.09.2"
+  },
+  "embedding_files": {},
+  "runs_total": 990,
+  "runs_in_csv": 1980
+}

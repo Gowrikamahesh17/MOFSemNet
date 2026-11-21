@@ -70,7 +70,7 @@ def compute_shap_values(model, X: np.ndarray, feature_names: list[str], max_samp
         raise ValueError(f"X has {X.shape[1]} columns but {len(feature_names)} feature names were given")
 
     rng = np.random.default_rng(seed)
-    is_tree = hasattr(model, "estimators_")
+    is_tree = hasattr(model, "estimators_") or type(model).__module__.startswith(("xgboost", "lightgbm"))
     n_used = min(len(X), max_samples if is_tree else min(max_samples, 100))
     rows = np.sort(rng.choice(len(X), size=n_used, replace=False))
     X_used = X[rows]
@@ -95,3 +95,73 @@ def compute_shap_values(model, X: np.ndarray, feature_names: list[str], max_samp
     mean_abs = {n: float(v) for n, v in zip(feature_names, np.abs(values).mean(axis=0))}
     return {"shap_values": values, "feature_names": list(feature_names), "mean_abs_shap": mean_abs,
             "row_index": rows, "groups": group_importance(mean_abs), "max_additivity_error": gap}
+
+
+def bit_substructures(smiles: list[str], bit_indices: list[int], radius: int = 2, n_bits: int = 1024,
+                      svg_dir: str | None = None) -> list[dict]:
+    """Translate hashed Morgan fingerprint bits into the chemical fragment that sets them.
+
+    A Morgan bit is a hash of an atom and its neighbourhood out to `radius` bonds, so several different fragments can
+    land on one bit (a collision). For each wanted bit this finds, over the distinct linkers, the fragment that sets it
+    most often (fragment SMILES + radius), how many linkers / MOFs contain the bit, how many different fragments share
+    it, and the smallest linker containing the main fragment as an example. If `svg_dir` is given, that example is
+    drawn with the fragment highlighted as `bit_<index>.svg`.
+    """
+    import os
+    from collections import Counter
+
+    from rdkit import Chem
+    from rdkit.Chem import rdFingerprintGenerator
+    from rdkit.Chem.Draw import rdMolDraw2D
+
+    gen = rdFingerprintGenerator.GetMorganGenerator(radius=radius, fpSize=n_bits)
+    wanted = set(int(b) for b in bit_indices)
+    mof_count = Counter(smiles)
+    frag_counts = {b: Counter() for b in wanted}
+    n_linkers, n_mofs = Counter(), Counter()
+    example = {}  # (bit, fragment key) -> (n_atoms, smiles, atoms)
+    for smi in mof_count:
+        mol = Chem.MolFromSmiles(smi)
+        if mol is None or mol.GetNumAtoms() == 0:
+            continue
+        ao = rdFingerprintGenerator.AdditionalOutput()
+        ao.AllocateBitInfoMap()
+        gen.GetFingerprint(mol, additionalOutput=ao)
+        info = ao.GetBitInfoMap()
+        for bit in wanted & set(info):
+            n_linkers[bit] += 1
+            n_mofs[bit] += mof_count[smi]
+            atom, rad = info[bit][0]
+            env = Chem.FindAtomEnvironmentOfRadiusN(mol, rad, atom)
+            atoms = {atom}
+            for b_idx in env:
+                bond = mol.GetBondWithIdx(b_idx)
+                atoms.update((bond.GetBeginAtomIdx(), bond.GetEndAtomIdx()))
+            frag = Chem.MolFragmentToSmiles(mol, atomsToUse=sorted(atoms), bondsToUse=list(env), canonical=True)
+            key = (frag, rad)
+            frag_counts[bit][key] += 1
+            if (bit, key) not in example or mol.GetNumAtoms() < example[(bit, key)][0]:
+                example[(bit, key)] = (mol.GetNumAtoms(), smi, sorted(atoms))
+
+    out = []
+    for bit in bit_indices:
+        bit = int(bit)
+        if not frag_counts[bit]:
+            out.append({"bit": bit, "fragment_smiles": "", "radius": None, "n_linkers_with_bit": 0, "n_mofs_with_bit": 0,
+                        "n_distinct_fragments": 0, "fragment_share": 0.0, "example_linker": "", "svg": ""})
+            continue
+        (frag, rad), count = frag_counts[bit].most_common(1)[0]
+        _n, ex_smi, ex_atoms = example[(bit, (frag, rad))]
+        svg_name = ""
+        if svg_dir:
+            os.makedirs(svg_dir, exist_ok=True)
+            drawer = rdMolDraw2D.MolDraw2DSVG(320, 240)
+            drawer.DrawMolecule(Chem.MolFromSmiles(ex_smi), highlightAtoms=ex_atoms)
+            drawer.FinishDrawing()
+            svg_name = f"bit_{bit}.svg"
+            with open(os.path.join(svg_dir, svg_name), "w") as fh:
+                fh.write(drawer.GetDrawingText())
+        out.append({"bit": bit, "fragment_smiles": frag, "radius": int(rad), "n_linkers_with_bit": int(n_linkers[bit]),
+                    "n_mofs_with_bit": int(n_mofs[bit]), "n_distinct_fragments": len(frag_counts[bit]),
+                    "fragment_share": count / n_linkers[bit], "example_linker": ex_smi, "svg": svg_name})
+    return out

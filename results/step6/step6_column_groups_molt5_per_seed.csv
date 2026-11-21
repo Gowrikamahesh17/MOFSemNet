@@ -1,0 +1,21 @@
+columns,n_columns,seed,r2,mae,language_model,script,data_sha256_16,split_random_state,n_test
+all columns,1079,0,0.8804493890901359,0.5250815887166423,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+all columns,1079,1,0.8785384592339003,0.5229897988596306,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+all columns,1079,2,0.8861333557113238,0.5166752820704635,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+all columns,1079,3,0.8861029194474737,0.5231570715476009,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+all columns,1079,4,0.8814570018337748,0.5202308684786167,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+pore geometry only (2 columns),2,0,0.7152142931070721,0.8753799815784018,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+pore geometry only (2 columns),2,1,0.7222111009095126,0.869602520851708,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+pore geometry only (2 columns),2,2,0.7205530600258503,0.8662231794663746,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+pore geometry only (2 columns),2,3,0.7282788623652272,0.8636298242759015,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+pore geometry only (2 columns),2,4,0.7187529780691984,0.8647135503460365,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+Largest Free Sphere only,1,0,0.6780480377546896,0.9435894304644903,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+Largest Free Sphere only,1,1,0.6883551866547819,0.9405013628661326,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+Largest Free Sphere only,1,2,0.689030790661488,0.9316165881003158,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+Largest Free Sphere only,1,3,0.6900302426487666,0.9396457704923757,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+Largest Free Sphere only,1,4,0.6835816363002141,0.938963947503439,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+linker fingerprint + metal (no pore columns),1077,0,0.5995827562386232,1.1403757773432928,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+linker fingerprint + metal (no pore columns),1077,1,0.6002627275957289,1.1379589472035745,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+linker fingerprint + metal (no pore columns),1077,2,0.5932699346379489,1.1439550390470323,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+linker fingerprint + metal (no pore columns),1077,3,0.5904497622520128,1.156660432812596,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+linker fingerprint + metal (no pore columns),1077,4,0.598906525286217,1.1406748962075974,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144

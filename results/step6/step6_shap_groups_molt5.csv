@@ -1,0 +1,8 @@
+features,group,n_features,mean_abs_shap_sum,share,test_r2,min_samples_leaf,max_additivity_error,language_model,script,data_sha256_16,split_random_state,n_test
+fingerprint,pore geometry,2,1.7100663223675816,0.7358381698930165,0.8576691648809099,5,5.8904057187447734e-08,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+fingerprint,linker fingerprint,1024,0.5380821818845543,0.23153570290875736,0.8576691648809099,5,5.8904057187447734e-08,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+fingerprint,metal,53,0.07582216258104593,0.0326261271982262,0.8576691648809099,5,5.8904057187447734e-08,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+fingerprint+embedding,pore geometry,2,1.6846199871443388,0.643923672941544,0.8721720320001001,5,1.8030021919912542e-13,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+fingerprint+embedding,language-model embedding,768,0.8819371002486542,0.33710877303444353,0.8721720320001001,5,1.8030021919912542e-13,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+fingerprint+embedding,metal,53,0.028963919628041204,0.011071074575867527,0.8721720320001001,5,1.8030021919912542e-13,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+fingerprint+embedding,linker fingerprint,1024,0.020658608567147844,0.007896479448144953,0.8721720320001001,5,1.8030021919912542e-13,molt5,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144

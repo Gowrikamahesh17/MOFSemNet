@@ -1,0 +1,5 @@
+test_set,pore,best_non_graph,best_non_graph_r2,best_no_edge_gnn_r2,best_graph_gnn,best_graph_gnn_r2,gap,within_0_02
+cs2_hubs,without LCD/LFS,xgboost [fp+m1h+mdesc+ldesc],0.6493852734565735,0.6051059484481811,residual_gcn | desc_dedup k=3 full [fp+m1h+mdesc+ldesc],0.5875272154808044,0.06185805797576904,False
+cs2_hubs,with LCD/LFS,random_forest [fp+pore+m1h+mdesc+ldesc],0.9049734062103603,0.8536234021186828,residual_gcn | desc k=3 full [fp+pore+m1h+ldesc],0.8503574848175048,0.05461592139285543,False
+random15,without LCD/LFS,xgboost [fp+m1h+mdesc+ldesc],0.6134054899215698,0.5903189778327942,residual_gcn | cs2 k=3 full [fp+m1h+mdesc+ldesc],0.5944089412689209,0.018996548652648992,True
+random15,with LCD/LFS,xgboost [fp+pore+mdesc],0.8943819046020508,0.8594500064849854,residual_gcn | cs2 k=3 full [fp+pore+m1h+ldesc],0.8573839783668518,0.03699792623519904,False

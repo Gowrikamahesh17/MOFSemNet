@@ -1,0 +1,19 @@
+method,model,group,share,test_r2,n_explained,note,script,data_sha256_16,split_random_state,seed,n_test
+SHAP (TreeSHAP),XGBoost,pore geometry,0.5601302272575098,0.8937157392501831,500,additivity error 0.0000,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+SHAP (TreeSHAP),XGBoost,linker fingerprint,0.3879851883660547,0.8937157392501831,500,additivity error 0.0000,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+SHAP (TreeSHAP),XGBoost,metal,0.051884584376435436,0.8937157392501831,500,additivity error 0.0000,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+SHAP (TreeSHAP),Random Forest,pore geometry,0.7358381698930165,0.8576691648809099,500,"500 MOFs, same setting as Step 6a",scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+SHAP (TreeSHAP),Random Forest,linker fingerprint,0.23153570290875736,0.8576691648809099,500,"500 MOFs, same setting as Step 6a",scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+SHAP (TreeSHAP),Random Forest,metal,0.0326261271982262,0.8576691648809099,500,"500 MOFs, same setting as Step 6a",scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+SHAP (expected gradients),"GCN, no edges (training fix)",linker fingerprint,0.5892486959226877,0.8727280497550964,300,"additivity gap mean 0.248 A, max 1.033 A (approximate method)",scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+SHAP (expected gradients),"GCN, no edges (training fix)",pore geometry,0.3651789828388391,0.8727280497550964,300,"additivity gap mean 0.248 A, max 1.033 A (approximate method)",scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+SHAP (expected gradients),"GCN, no edges (training fix)",metal,0.04557232123847311,0.8727280497550964,300,"additivity gap mean 0.248 A, max 1.033 A (approximate method)",scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+"GNNExplainer (feature mask, own row)","GCN, CS2 graph k=3 (training fix)",linker fingerprint,0.8324565291404724,0.6602987051010132,40,share of mask on the node's own features 9.9%; mean neighbourhood 15.8 nodes,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+"GNNExplainer (feature mask, own row)","GCN, CS2 graph k=3 (training fix)",pore geometry,0.1253339648246765,0.6602987051010132,40,share of mask on the node's own features 9.9%; mean neighbourhood 15.8 nodes,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+"GNNExplainer (feature mask, own row)","GCN, CS2 graph k=3 (training fix)",metal,0.0422094501554966,0.6602987051010132,40,share of mask on the node's own features 9.9%; mean neighbourhood 15.8 nodes,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+LIME (15 features per MOF),Random Forest,linker fingerprint,0.8357787770823764,0.8576691648809099,100,mean local-model R2 0.29,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+LIME (15 features per MOF),Random Forest,pore geometry,0.12468605450780607,0.8576691648809099,100,mean local-model R2 0.29,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+LIME (15 features per MOF),Random Forest,metal,0.03953516840981765,0.8576691648809099,100,mean local-model R2 0.29,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+LIME (15 features per MOF),XGBoost,linker fingerprint,0.7745716438423024,0.8937157392501831,100,mean local-model R2 0.28,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+LIME (15 features per MOF),XGBoost,pore geometry,0.13865563654919108,0.8937157392501831,100,mean local-model R2 0.28,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
+LIME (15 features per MOF),XGBoost,metal,0.0867727196085069,0.8937157392501831,100,mean local-model R2 0.28,scripts/run_step6b_explainers.py,e23a42e742099b4c,42,0,2144
