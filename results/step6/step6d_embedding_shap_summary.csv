@@ -1,0 +1,3 @@
+language_model,test_r2,embedding_share_sum_of_columns,embedding_share_net,top_dims_share_of_embedding_importance,r2_net_embedding_shap_from_descriptors_cv,spearman_net_embedding_shap_vs_true_pld,n_explained,script,data_sha256_16,split_random_state,seed
+chemberta,0.8689269020980577,0.33908284353442614,0.13602697357305826,0.1576423641605128,-0.011198834131198154,0.253397051669736,500,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+molt5,0.8721720320001001,0.33710877303444353,0.12805035823197758,0.1467592184484009,-0.008416403250281812,0.3160063916097199,500,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0

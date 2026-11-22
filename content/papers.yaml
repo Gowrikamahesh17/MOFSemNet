@@ -53,6 +53,13 @@ clusters:
       comparator for this thesis's own random-vs-k-center baseline comparison, though on
       citation and social networks rather than molecular graphs.
 
+  - id: boosting
+    label: "Gradient-boosted tree baselines"
+    narrative: >
+      Step 5's follow-up asked whether a stronger non-graph model closes or widens the gap to the GNNs.
+      XGBoost and LightGBM are the standard gradient-boosting libraries for tabular data; both were
+      run on the same fingerprint features, splits and seeds as the Random Forest.
+
   - id: explainability
     label: "Explainability and calibrated confidence"
     narrative: >
@@ -62,7 +69,8 @@ clusters:
       with a distribution-free coverage guarantee, which is what makes "how much to trust this
       prediction" a measured number instead of a qualitative claim. One practical finding from this
       thesis: TreeSHAP's contributions stopped adding up to the predictions on fully grown forests,
-      so the explained forest is regularised and the additivity is checked.
+      so the explained forest is regularised and the additivity is checked. LIME and GNNExplainer were
+      added as comparisons: LIME disagreed with SHAP (and fitted poorly), so SHAP is the method relied on.
 
 papers:
   - id: p1
@@ -292,4 +300,70 @@ papers:
     summary: >
       Practical guide to conformal prediction, including score functions normalised by a per-example
       uncertainty estimate, the idea behind the adaptive-width intervals in Step 6.
+    has_local_pdf: false
+
+  - id: p21
+    citation_key: "[21]"
+    cluster: boosting
+    title: "XGBoost: A Scalable Tree Boosting System"
+    authors: "Chen, T., & Guestrin, C."
+    year: 2016
+    venue: "KDD 2016, 785-794 (arXiv:1603.02754)"
+    url: "https://arxiv.org/abs/1603.02754"
+    summary: >
+      Regularised gradient-boosted trees with a histogram-based fast algorithm. Used in Step 5's follow-up as
+      the strongest non-graph baseline, with validation-set early stopping.
+    has_local_pdf: false
+
+  - id: p22
+    citation_key: "[22]"
+    cluster: boosting
+    title: "LightGBM: A Highly Efficient Gradient Boosting Decision Tree"
+    authors: "Ke, G., Meng, Q., Finley, T., Wang, T., Chen, W., Ma, W., Ye, Q., & Liu, T.-Y."
+    year: 2017
+    venue: "NeurIPS 2017, 3146-3154"
+    url: "https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree"
+    summary: >
+      Leaf-wise gradient boosting with histogram binning and feature bundling. The second boosted baseline in
+      Step 5's follow-up; it never clearly beat the Random Forest.
+    has_local_pdf: false
+
+  - id: p23
+    citation_key: "[23]"
+    cluster: explainability
+    title: "\"Why Should I Trust You?\": Explaining the Predictions of Any Classifier"
+    authors: "Ribeiro, M. T., Singh, S., & Guestrin, C."
+    year: 2016
+    venue: "KDD 2016, 1135-1144 (arXiv:1602.04938)"
+    url: "https://arxiv.org/abs/1602.04938"
+    summary: >
+      LIME: fits a sparse linear model to a model's predictions on perturbed copies of one input. Step 6 uses it as
+      a comparison; with about a thousand sparse binary inputs it fitted poorly (local R² about 0.2-0.3) and agreed
+      with SHAP on only 11-19% of the top-5 features.
+    has_local_pdf: false
+
+  - id: p24
+    citation_key: "[24]"
+    cluster: explainability
+    title: "GNNExplainer: Generating Explanations for Graph Neural Networks"
+    authors: "Ying, R., Bourgeois, D., You, J., Zitnik, M., & Leskovec, J."
+    year: 2019
+    venue: "NeurIPS 2019 (arXiv:1903.03894)"
+    url: "https://arxiv.org/abs/1903.03894"
+    summary: >
+      Learns a feature mask and an edge mask that preserve a GNN's prediction for one node. Used in Step 6 to see
+      how much of a graph model's explanation sits on a node's own features versus its neighbours'.
+    has_local_pdf: false
+
+  - id: p25
+    citation_key: "[25]"
+    cluster: explainability
+    title: "Improving performance of deep learning models with axiomatic attribution priors and expected gradients"
+    authors: "Erion, G., Janizek, J. D., Sturmfels, P., Lundberg, S. M., & Lee, S.-I."
+    year: 2021
+    venue: "Nature Machine Intelligence 3, 620-631 (arXiv:1906.10670)"
+    url: "https://arxiv.org/abs/1906.10670"
+    summary: >
+      Expected gradients, the sampling-based Shapley approximation behind SHAP's gradient explainer. Step 6 applies it
+      to the GNNs and checks it against an exact Shapley calculation over the three input groups (correlation 0.92-0.99).
     has_local_pdf: false

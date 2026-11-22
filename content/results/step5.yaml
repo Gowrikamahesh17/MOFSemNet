@@ -4,17 +4,20 @@ summary: >
   Compared Random Forest, MLP and k-NN (no graph) against GCN, GraphSAGE and a residual GCN
   (graph) on every combination of graph type, neighbours (k), sparsification method and
   retention, with ChemBERTa and MolT5 embeddings, 5 seeds each (0 to 4). Two test sets: a
-  random 15% (2,144 MOFs) and Case Study 2's harder hub set (680 MOFs). About 3,000 runs.
-headline: "0.883"
-headline_label: "Best model: Random Forest on fingerprint features (test R², random test set; 0.888 on the hub set)"
+  random 15% (2,144 MOFs) and Case Study 2's harder hub set (680 MOFs). About 3,000 runs. A follow-up added
+  XGBoost and LightGBM, richer inputs (RDKit descriptors, count fingerprints), a log target, a pore-column
+  ablation, graph variants, ensembles and a fix to the GNN training (a further 2,500 runs), and a regression
+  MOFGalaxyNet baseline for the comparison with MOFSemNet.
+headline: "0.897"
+headline_label: "Best single score (test R², random test set): LightGBM with count fingerprints, MACCS keys and RDKit descriptors. Plain Random Forest 0.883, plain XGBoost 0.893"
 stats:
   - label: "Random Forest R² (hub set)"
     value: "0.888"
     emphasis: true
-  - label: "GNN with no edges R²"
-    value: "0.840"
-  - label: "Best GNN with a graph R²"
-    value: "0.745"
+  - label: "GNN with no edges R² (after the training fix; 0.84 before)"
+    value: "0.874"
+  - label: "Best GNN with a graph R² (random / hub set)"
+    value: "0.873 / 0.883"
   - label: "Case Study 2 best GNN R²"
     value: "0.687"
 columns: ["Model and setting", "Random test set R²", "Hub test set R²"]
@@ -23,20 +26,39 @@ rows:
   - ["Random Forest, fingerprint + ChemBERTa", "0.876", "0.897"]
   - ["Random Forest, fingerprint + MolT5", "0.882", "0.895"]
   - ["MLP, fingerprint", "0.865", "0.873"]
-  - ["GCN, no edges", "0.840", "0.827"]
-  - ["GraphSAGE, no edges", "0.830", "0.819"]
+  - ["XGBoost, fingerprint", "0.893", "0.877"]
+  - ["LightGBM, fingerprint", "0.885", "0.868"]
+  - ["Best tree model with count fingerprints, MACCS and RDKit descriptors", "0.897 (LightGBM)", "0.905 (Random Forest)"]
+  - ["Ensemble: Random Forest + XGBoost + no-edge GNN", "0.894", "0.906"]
+  - ["GCN, no edges (old training)", "0.840", "0.827"]
+  - ["GCN, no edges (training fix)", "0.874", "0.867"]
+  - ["GraphSAGE, no edges (old training / fix)", "0.830 / 0.872", "0.819 / 0.869"]
+  - ["Without the pore columns: best tree / best graph GNN", "0.613 / 0.594", "0.651 / 0.588"]
   - ["GCN, Case Study 2 graph, k=3, no pruning", "0.622", "0.289"]
   - ["GraphSAGE, Case Study 2 graph, k=3, no pruning", "0.651", "0.581"]
   - ["GraphSAGE, Case Study 2 graph, k=3, Black Hole 30%", "0.697", "0.751"]
   - ["GraphSAGE, same graph, random pruning 30%", "0.676", "0.620"]
   - ["GCN, fingerprint graph, k=10, no pruning", "0.469", "0.402"]
+  - ["GCN, CS2 graph, k=3 (training fix): full / Black Hole 30%", "0.64 / 0.72", "0.43 / 0.78"]
+  - ["Residual GCN, CS2 graph, k=3 (training fix): full / Black Hole 30%", "0.873 / 0.867", "0.860 / 0.883"]
+  - ["MOFGalaxyNet (regression) vs MOFSemNet, GCN: mean R² difference over all paired settings", "-0.053", "+0.028"]
+  - ["MOFGalaxyNet (regression) vs MOFSemNet, GraphSAGE: mean R² difference", "+0.054", "+0.028"]
 finding: >
-  Random Forest on plain fingerprints is the best model, and it reproduces Case Study 2
-  (0.888 against 0.893, same hub test set). A GNN with no edges (0.84) beats every GNN with a
-  graph, so the graphs lower accuracy. Fewer neighbours help (GCN on the Case Study 2 graph:
+  Random Forest on plain fingerprints reproduces Case Study 2 (0.888 against 0.893, same hub test
+  set). Gradient boosting is not a consistent improvement (XGBoost beats it on the random test set,
+  0.893 against 0.883, and loses on the hub set), richer inputs add at most a few thousandths, and the
+  best single scores (0.897 and 0.905) are within a few hundredths of the plain forest. The first GNN
+  results were under-trained: every run used all 200 epochs because the target was on the wrong scale.
+  Standardising the target and the continuous inputs lifts the no-edge GNN from 0.84 to 0.874 and
+  leaves the conclusion unchanged: a GNN with no edges is as good as any GNN with a graph, and
+  the plain GCN on a graph still scores 0.64. Without the two pore columns every model falls to about
+  0.6 and no graph variant (de-duplicated, descriptor-space, Black Hole pruned) beats the same GNN
+  with no edges. Against the regression MOFGalaxyNet baseline, the semantic layer gives no consistent
+  gain (GCN worse in 59 of 60 random-set comparisons, GraphSAGE better on average). The GNN accuracy
+  gap to the best tree model shrank from about 0.05 to 0.023. Fewer neighbours help (GCN on the Case Study 2 graph:
   k=3 0.622, k=5 0.575, k=10 0.527). Neither ChemBERTa nor MolT5 improves on fingerprints
   (Random Forest rows differ by under 0.01, and the sign flips between test sets). Black Hole
   beats random pruning on the hub test set (+0.06 R², better in 81% of comparisons) but not on
   a random one (+0.009); the hub set is built from the same gravity ranking, so that advantage
   may be biased in its favour. The GNN result against Case Study 2 improved from 0.687 (one
-  seed) to 0.751 (five seeds). Not run: GAT, feature scaling, other Black Hole weights, 10 seeds.
+  seed) to 0.751 (five seeds). Not run: GAT, other Black Hole weights, 10 seeds, a formal significance test.

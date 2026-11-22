@@ -44,3 +44,55 @@ def test_additivity_guard_reports_a_small_gap_and_rejects_a_bad_one():
     assert out["max_additivity_error"] < 1e-3
     with pytest.raises(ValueError):
         compute_shap_values(model, X, names, max_samples=50, additivity_tolerance=-1.0)
+
+
+def test_bit_substructures_maps_bit_to_fragment(tmp_path):
+    from rdkit import Chem
+    from rdkit.Chem import rdFingerprintGenerator
+    from src.explainability.shap_analysis import bit_substructures
+
+    smiles = ["OC(=O)c1ccccc1", "OC(=O)c1ccc(cc1)C(=O)O", "c1ccccc1"]
+    gen = rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=1024)
+    bits = [int(i) for i in gen.GetFingerprintAsNumPy(Chem.MolFromSmiles(smiles[0])).nonzero()[0][:3]]
+    out = bit_substructures(smiles, bits, svg_dir=str(tmp_path))
+    assert [o["bit"] for o in out] == bits
+    for o in out:
+        assert o["fragment_smiles"] and o["n_linkers_with_bit"] >= 1 and 0 < o["fragment_share"] <= 1
+        assert (tmp_path / o["svg"]).read_text().startswith("<?xml") or "<svg" in (tmp_path / o["svg"]).read_text()
+
+
+def test_group_shares_sum_to_one():
+    import numpy as np
+    from src.explainability.model_explainers import group_shares
+    v = np.array([[1.0, -1.0, 2.0], [1.0, 1.0, -2.0]])
+    shares = group_shares(v, ["a", "a", "b"])
+    assert abs(sum(shares.values()) - 1.0) < 1e-9 and shares["b"] == 0.5
+
+
+def test_xgboost_shap_is_additive():
+    import numpy as np
+    import xgboost as xgb
+    from src.explainability.shap_analysis import compute_shap_values
+    rng = np.random.default_rng(0)
+    X = rng.normal(size=(300, 6)).astype(np.float32)
+    y = (2 * X[:, 0] + X[:, 1]).astype(np.float32)
+    m = xgb.XGBRegressor(n_estimators=40, max_depth=3, base_score=float(y.mean()), verbosity=0).fit(X, y)
+    out = compute_shap_values(m, X, [f"f{i}" for i in range(6)], max_samples=100)
+    assert out["max_additivity_error"] < 1e-3
+    assert max(out["mean_abs_shap"], key=out["mean_abs_shap"].get) == "f0"
+
+
+def test_graph_predict_fn_matches_direct_forward():
+    import numpy as np
+    import torch
+    from src.explainability.model_explainers import _build_model, graph_predict_fn
+    torch.manual_seed(0)
+    n, f = 12, 5
+    X = np.random.default_rng(0).normal(size=(n, f)).astype(np.float32)
+    ei = np.array([[0, 1, 1, 2, 2, 3, 3, 4], [1, 0, 2, 1, 3, 2, 4, 3]])
+    model = _build_model("gcn", f).eval()
+    fn = graph_predict_fn(model, X, ei, None, node=2, hops=2, y_mean=0.0, y_std=1.0)
+    direct = model(torch.tensor(X), torch.tensor(ei)).squeeze(-1)[2].item()
+    assert abs(fn(X[2:3])[0] - direct) < 1e-4
+    other = X[2:3] + 1.0
+    assert abs(fn(other)[0] - direct) > 1e-6

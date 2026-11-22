@@ -86,7 +86,7 @@ def run_shap(args, config, X, E, meta, labels, test_nodes, base, df):
                               "test_r2": test_r2, "min_samples_leaf": args.shap_min_leaf, **base})
         for g, d in out["groups"].items():
             group_rows.append({"features": name, "group": g, "n_features": d["n_features"],
-                               "mean_abs_shap_sum": d["mean_abs_shap_sum"], "share": d["share"], "test_r2": test_r2,
+                               "mean_abs_shap_sum": d["mean_abs_shap_sum"], "share": d["share"], "net_share": d.get("net_share"), "test_r2": test_r2,
                                "min_samples_leaf": args.shap_min_leaf, "max_additivity_error": out["max_additivity_error"], **base})
         logger.info(f"SHAP {name}: test R2 {test_r2:.3f}, additivity error {out['max_additivity_error']:.4f}, groups " + ", ".join(f"{g} {d['share']:.1%}" for g, d in out["groups"].items()))
     feat_df, group_df = pd.DataFrame(feat_rows), pd.DataFrame(group_rows)

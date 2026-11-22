@@ -1,0 +1,25 @@
+language_model,descriptor,spearman_with_net_embedding_shap,script,data_sha256_16,split_random_state,seed
+chemberta,molecular weight,0.013030468601026522,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+chemberta,heavy atoms,0.025885908020935117,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+chemberta,rings,0.011773933200385498,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+chemberta,aromatic rings,0.035766780622073606,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+chemberta,rotatable bonds,0.0032611068046254866,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+chemberta,TPSA,-0.04516790247997091,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+chemberta,logP,0.08121244833935291,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+chemberta,fraction sp3,-0.052626934440003215,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+chemberta,H-bond donors,-0.009191268765756678,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+chemberta,H-bond acceptors,-0.07679726984493733,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+chemberta,heteroatoms,-0.07447662114885914,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+chemberta,formal charge,,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+molt5,molecular weight,0.07329267730569504,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+molt5,heavy atoms,0.08432077891267681,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+molt5,rings,0.08322091062100512,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+molt5,aromatic rings,0.09363419976659412,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+molt5,rotatable bonds,0.034463895650724496,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+molt5,TPSA,0.007499136351931423,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+molt5,logP,0.11748331827259408,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+molt5,fraction sp3,-0.05064713097796361,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+molt5,H-bond donors,0.02006536586102036,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+molt5,H-bond acceptors,-0.01984368704933256,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+molt5,heteroatoms,-0.013725214142666115,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0
+molt5,formal charge,,scripts/run_step6d_embedding_shap.py,e23a42e742099b4c,42,0

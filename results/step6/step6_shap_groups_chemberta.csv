@@ -1,8 +1,8 @@
-features,group,n_features,mean_abs_shap_sum,share,test_r2,min_samples_leaf,max_additivity_error,test_set,language_model,script,data_sha256_16,split_random_state,n_test
-fingerprint,pore geometry,2,1.7100663223675816,0.7358381698930165,0.8576691648809099,5,5.8904057631536944e-08,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
-fingerprint,linker fingerprint,1024,0.5380821818845543,0.23153570290875736,0.8576691648809099,5,5.8904057631536944e-08,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
-fingerprint,metal,53,0.07582216258104593,0.0326261271982262,0.8576691648809099,5,5.8904057631536944e-08,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
-fingerprint+embedding,pore geometry,2,1.6849285545433732,0.6419244565320369,0.8689269020980577,5,1.9806378759312793e-12,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
-fingerprint+embedding,language-model embedding,768,0.8900274161752608,0.33908284353442614,0.8689269020980577,5,1.9806378759312793e-12,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
-fingerprint+embedding,metal,53,0.031002817241494632,0.01181146022782072,0.8689269020980577,5,1.9806378759312793e-12,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
-fingerprint+embedding,linker fingerprint,1024,0.018849376611308494,0.007181239705716211,0.8689269020980577,5,1.9806378759312793e-12,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+features,group,n_features,mean_abs_shap_sum,share,net_share,test_r2,min_samples_leaf,max_additivity_error,test_set,language_model,script,data_sha256_16,split_random_state,n_test
+fingerprint,pore geometry,2,1.7100663223675816,0.7358381698930165,0.8817026833818183,0.8576691648809099,5,5.8904057187447734e-08,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+fingerprint,linker fingerprint,1024,0.5380821818845543,0.23153570290875736,0.0971909393353733,0.8576691648809099,5,5.8904057187447734e-08,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+fingerprint,metal,53,0.07582216258104593,0.0326261271982262,0.02110637728280841,0.8576691648809099,5,5.8904057187447734e-08,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+fingerprint+embedding,pore geometry,2,1.6849285545433732,0.6419244565320369,0.8512348034496745,0.8689269020980577,5,1.9806378759312793e-12,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+fingerprint+embedding,language-model embedding,768,0.8900274161752608,0.33908284353442614,0.13602697357305826,0.8689269020980577,5,1.9806378759312793e-12,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+fingerprint+embedding,metal,53,0.031002817241494632,0.01181146022782072,0.008613366601409,0.8689269020980577,5,1.9806378759312793e-12,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144
+fingerprint+embedding,linker fingerprint,1024,0.018849376611308494,0.007181239705716211,0.004124856375858258,0.8689269020980577,5,1.9806378759312793e-12,random,chemberta,scripts/run_step6_explainability.py,e23a42e742099b4c,42,2144

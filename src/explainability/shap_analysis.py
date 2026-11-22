@@ -35,8 +35,12 @@ def feature_group(name: str) -> str:
     return "other"
 
 
-def group_importance(mean_abs_shap: dict[str, float]) -> dict[str, dict]:
-    """Sum of mean |SHAP| per feature group, with each group's share of the total."""
+def group_importance(mean_abs_shap: dict[str, float], shap_values: np.ndarray | None = None,
+                     feature_names: list[str] | None = None) -> dict[str, dict]:
+    """Per feature group: `share` = group's share of the summed per-column mean |SHAP|, and (when the SHAP matrix is given)
+    `net_share` = share of the mean over MOFs of |sum of the group's SHAP values| (the group's NET contribution to each
+    prediction). `share` adds up column-wise magnitudes, so a group with ~1,000 columns (fingerprint bits) is inflated when
+    its columns push in opposite directions; `net_share` is the MOF-level contribution of the group as a whole."""
     totals: dict[str, float] = {}
     counts: dict[str, int] = {}
     for name, value in mean_abs_shap.items():
@@ -44,7 +48,13 @@ def group_importance(mean_abs_shap: dict[str, float]) -> dict[str, dict]:
         totals[g] = totals.get(g, 0.0) + float(value)
         counts[g] = counts.get(g, 0) + 1
     grand = sum(totals.values()) or 1.0
-    return {g: {"n_features": counts[g], "mean_abs_shap_sum": totals[g], "share": totals[g] / grand}
+    net: dict[str, float] = {}
+    if shap_values is not None and feature_names is not None:
+        names_g = np.array([feature_group(n) for n in feature_names])
+        net = {g: float(np.abs(shap_values[:, names_g == g].sum(axis=1)).mean()) for g in totals}
+    net_grand = sum(net.values()) or 1.0
+    return {g: {"n_features": counts[g], "mean_abs_shap_sum": totals[g], "share": totals[g] / grand,
+                **({"net_mean_abs": net[g], "net_share": net[g] / net_grand} if net else {})}
             for g in sorted(totals, key=totals.get, reverse=True)}
 
 
@@ -94,7 +104,7 @@ def compute_shap_values(model, X: np.ndarray, feature_names: list[str], max_samp
 
     mean_abs = {n: float(v) for n, v in zip(feature_names, np.abs(values).mean(axis=0))}
     return {"shap_values": values, "feature_names": list(feature_names), "mean_abs_shap": mean_abs,
-            "row_index": rows, "groups": group_importance(mean_abs), "max_additivity_error": gap}
+            "row_index": rows, "groups": group_importance(mean_abs, values, feature_names), "max_additivity_error": gap}
 
 
 def bit_substructures(smiles: list[str], bit_indices: list[int], radius: int = 2, n_bits: int = 1024,

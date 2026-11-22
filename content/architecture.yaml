@@ -165,34 +165,42 @@ nodes:
     why_chosen: >
       A no-edge GNN and the Case Study 2 graph were added as reference rows, so the comparison shows
       what each graph adds or removes, not only which graph is best.
-    studied: []
-    references: []
+    studied:
+      - "Gradient boosting (XGBoost, LightGBM) as stronger non-graph baselines."
+    references: [p21, p22]
     metrics:
-      "Best model": "Random Forest, R² 0.883 / 0.888"
-      "GNN with no edges": "R² 0.84"
-      "Best GNN with a graph": "R² 0.745 / 0.751"
-      "Runs": "about 3,000"
+      "Best model": "Random Forest R² 0.883 / 0.888; best single score 0.897 / 0.905"
+      "GNN with no edges": "R² 0.874 (0.84 before the training fix)"
+      "Best GNN with a graph": "R² 0.873 / 0.883"
+      "Runs": "about 5,500 (incl. boosted trees, ensembles, GNN fix)"
 
   - id: step6
     label: "Step 6\nTrustworthiness"
     group: pipeline
     status: done
-    summary: "SHAP, embedding ablation (ChemBERTa and MolT5), calibrated confidence intervals."
+    summary: "SHAP (trees and GNNs), LIME, embedding ablation (ChemBERTa and MolT5), calibrated confidence intervals."
     description: >
       SHAP feature importance for the Random Forest, an embedding ablation that rebuilds the semantic
       graph from shuffled, random and truncated embeddings, and conformal prediction intervals with
-      measured coverage. Two pore-geometry columns carry 74% of the model's reliance, the embeddings
-      carry real chemistry but no usable gain (same for ChemBERTa and MolT5), and adaptive 90% intervals
-      cover 90.8% of random test MOFs and 89.9% of Case Study 2's hub test set.
+      measured coverage. SHAP was also run for XGBoost and for GNNs (expected gradients and GNNExplainer
+      for GCN, GraphSAGE and a residual GCN on four graphs), with LIME as a comparison, a mapping of the top
+      fingerprint bits to chemical fragments, and SHAP over the 768 embedding dimensions. Two pore-geometry
+      columns carry 74% of the Random Forest's reliance summed over columns and 88% as a net contribution per
+      MOF; a plain GCN with a graph puts over 80% of its attribution on neighbours; LIME disagrees with SHAP and
+      is unreliable here; the embeddings carry real chemistry but no usable gain (same for ChemBERTa and MolT5);
+      adaptive 90% intervals cover 90.8% of random test MOFs and 89.9% of Case Study 2's hub test set.
     why_chosen: >
       Conformal prediction gives a measured, distribution-free coverage guarantee instead of a
       qualitative claim about trust.
     studied:
+      - "LIME, GNNExplainer and expected-gradients SHAP, and why LIME is unstable with about a thousand sparse binary inputs."
       - "SHAP and TreeSHAP, and why fully grown forests break TreeSHAP's additivity."
       - "Split conformal prediction and normalised conformity scores for adaptive interval width."
-    references: [p17, p18, p19, p20]
+    references: [p17, p18, p19, p20, p23, p24, p25]
     metrics:
-      "Pore columns' SHAP share": "74%"
+      "Pore columns' SHAP share (summed / net per MOF)": "74% / 88%"
+      "GCN attribution on neighbours (CS2 graph)": "81%"
+      "LIME top-5 overlap with SHAP": "11-19%"
       "Two pore columns alone": "R² 0.72"
       "90% interval coverage (random / hub set)": "90.8% / 89.9%"
 

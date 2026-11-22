@@ -25,7 +25,7 @@ SERVER_NOTEBOOKS = {"server_standard_2026-11-19": "MOFSemNet_server_experiments.
                     "server_extra_2026-11-20": "MOFSemNet_server_molt5_extra.ipynb",
                     "server_extra_final_2026-11-20": "MOFSemNet_server_extra_v2.ipynb"}
 STEP_SCRIPT = {"step5_": "scripts/run_step5_comparison.py", "step5b_": "scripts/run_step5b_ablations.py",
-               "step6c_": "scripts/run_step6c_gnn_explainers.py", "step6b_": "scripts/run_step6b_explainers.py", "step6_": "scripts/run_step6_explainability.py", "cs2_hub_test_nodes": "scripts/run_step6_explainability.py"}
+               "step6d_": "scripts/run_step6d_embedding_shap.py", "step6c_": "scripts/run_step6c_gnn_explainers.py", "step6b_": "scripts/run_step6b_explainers.py", "step6_": "scripts/run_step6_explainability.py", "cs2_hub_test_nodes": "scripts/run_step6_explainability.py"}
 
 
 def git(*args: str) -> str:

@@ -62,9 +62,9 @@ def main() -> None:
     rng = np.random.default_rng(SEED)
     rows = []  # one row per (method, group)
 
-    def add_groups(method, model_name, r2_test, shares, n_explained, note=""):
+    def add_groups(method, model_name, r2_test, shares, n_explained, note="", net=None):
         for g, s in shares.items():
-            rows.append({"method": method, "model": model_name, "group": g, "share": s, "test_r2": r2_test,
+            rows.append({"method": method, "model": model_name, "group": g, "share": s, "share_net": (net or {}).get(g), "test_r2": r2_test,
                          "n_explained": n_explained, "note": note, **base})
         logger.info(f"{method}: " + ", ".join(f"{g} {s:.1%}" for g, s in shares.items()))
 
@@ -85,13 +85,13 @@ def main() -> None:
     if "xgb" in parts:
         out = compute_shap_values(xgbm, X[te], names, max_samples=500, seed=SEED)
         add_groups("SHAP (TreeSHAP)", "XGBoost", xgb_r2, {g: d["share"] for g, d in out["groups"].items()}, len(out["row_index"]),
-                   f"additivity error {out['max_additivity_error']:.4f}")
+                   f"additivity error {out['max_additivity_error']:.4f}", net={g: d["net_share"] for g, d in out["groups"].items()})
         pd.DataFrame([{"feature": f, "mean_abs_shap": v, "test_r2": xgb_r2, **base}
                       for f, v in sorted(out["mean_abs_shap"].items(), key=lambda kv: -kv[1])]).to_csv(
             os.path.join(config.results_dir, "step6b_xgboost_shap_features.csv"), index=False)
         rf_out = compute_shap_values(rf, X[te], names, max_samples=500, seed=SEED)
         add_groups("SHAP (TreeSHAP)", "Random Forest", rf_r2, {g: d["share"] for g, d in rf_out["groups"].items()}, len(rf_out["row_index"]),
-                   "500 MOFs, same setting as Step 6a")
+                   "500 MOFs, same setting as Step 6a", net={g: d["net_share"] for g, d in rf_out["groups"].items()})
 
     # ---------------- GNNs ----------------
     if parts & {"gnn_shap", "gnnexplainer"}:
@@ -105,7 +105,8 @@ def main() -> None:
             bg_idx = np.sort(rng.choice(tr, size=100, replace=False))
             out = gnn_shap_values(model, Xs, bg_idx, ex_idx, ys, seed=SEED)
             add_groups("SHAP (expected gradients)", "GCN, no edges (training fix)", gcn_r2, group_shares(out["shap_values"], groups), len(ex_idx),
-                       f"additivity gap mean {out['additivity_error_mean']:.3f} A, max {out['additivity_error_max']:.3f} A (approximate method)")
+                       f"additivity gap mean {out['additivity_error_mean']:.3f} A, max {out['additivity_error_max']:.3f} A (approximate method)",
+                       net=group_shares(out["shap_values"], groups, net=True))
             mean_abs = np.abs(out["shap_values"]).mean(0)
             pd.DataFrame([{"feature": n, "mean_abs_shap": float(v), "test_r2": gcn_r2, **base} for n, v in sorted(zip(names, mean_abs), key=lambda t: -t[1])]).to_csv(
                 os.path.join(config.results_dir, "step6b_gcn_shap_features.csv"), index=False)
@@ -140,7 +141,7 @@ def main() -> None:
             shap_out = compute_shap_values(model, X[lime_rows], names, max_samples=len(lime_rows), seed=SEED)
             S = shap_out["shap_values"]
             add_groups("LIME (15 features per MOF)", label, m_r2, group_shares(W, groups), len(lime_rows),
-                       f"mean local-model R2 {np.mean(scores):.2f}")
+                       f"mean local-model R2 {np.mean(scores):.2f}", net=group_shares(W, groups, net=True))
             for i in range(len(lime_rows)):
                 top_l = set(np.argsort(-np.abs(W[i]))[:5])
                 top_s = set(np.argsort(-np.abs(S[i]))[:5])
@@ -173,21 +174,26 @@ def _save(fig, config, name):
 
 
 def make_comparison_figure(config, res):
+    """Two panels: group shares as the sum of per-column mean |value| (left) and as each group's NET contribution per MOF (right)."""
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     res = res.assign(label=res["method"].str.split(" \\(").str[0] + "\n" + res["model"])
-    pivot = res.pivot_table(index="label", columns="group", values="share", aggfunc="first").fillna(0)
-    cols = [c for c in ("pore geometry", "linker fingerprint", "metal") if c in pivot.columns]
-    fig, ax = plt.subplots(figsize=(8, 4.5))
-    left = np.zeros(len(pivot))
     colors = {"pore geometry": "#2f6fb5", "linker fingerprint": "#e0a030", "metal": "#8a8a8a"}
-    for c in cols:
-        ax.barh(pivot.index, pivot[c], left=left, label=c, color=colors[c])
-        left += pivot[c].values
-    ax.set_xlabel("share of the explanation")
-    ax.set_xlim(0, 1)
-    ax.legend(loc="lower center", ncol=3, bbox_to_anchor=(0.5, 1.0), frameon=False)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.6), sharey=True)
+    for ax, col, title in ((axes[0], "share", "sum of per-column mean |value|"), (axes[1], "share_net", "net contribution of each group per MOF")):
+        pivot = res.pivot_table(index="label", columns="group", values=col, aggfunc="first")
+        pivot = pivot.reindex(res["label"].drop_duplicates())
+        left = np.zeros(len(pivot))
+        for c in [c for c in colors if c in pivot.columns]:
+            vals = pivot[c].fillna(0).values
+            ax.barh(pivot.index, vals, left=left, color=colors[c], label=c)
+            left += vals
+        ax.set_xlim(0, 1)
+        ax.set_xlabel(title)
+        ax.invert_yaxis()
+    axes[0].tick_params(axis="y", labelsize=8)
+    axes[0].legend(loc="lower center", ncol=3, bbox_to_anchor=(1.0, 1.0), frameon=False)
     fig.tight_layout()
     _save(fig, config, "step6b_method_comparison.png")
 

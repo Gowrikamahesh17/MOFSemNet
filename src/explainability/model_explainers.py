@@ -199,11 +199,17 @@ def lime_explanations(predict_fn, X_train, X_explain, feature_names, categorical
     return out, scores
 
 
-def group_shares(values: np.ndarray, groups: list[str]) -> dict[str, float]:
-    """Share of the total mean |value| that belongs to each feature group."""
-    mean_abs = np.abs(values).mean(axis=0)
-    total = float(mean_abs.sum()) or 1.0
-    return {g: float(mean_abs[[i for i, gg in enumerate(groups) if gg == g]].sum() / total) for g in dict.fromkeys(groups)}
+def group_shares(values: np.ndarray, groups: list[str], net: bool = False) -> dict[str, float]:
+    """Share of the explanation per feature group. net=False: summed per-column mean |value| (as in Step 6a);
+    net=True: mean over rows of |sum of the group's values| (the group's net contribution to each prediction)."""
+    groups = np.asarray(groups)
+    if net:
+        per = {g: float(np.abs(values[:, groups == g].sum(axis=1)).mean()) for g in dict.fromkeys(groups)}
+    else:
+        mean_abs = np.abs(values).mean(axis=0)
+        per = {g: float(mean_abs[groups == g].sum()) for g in dict.fromkeys(groups)}
+    total = sum(per.values()) or 1.0
+    return {g: v / total for g, v in per.items()}
 
 
 # ---------------------------------------------------------------------------------------------- explainers for GNNs WITH a graph
@@ -288,3 +294,34 @@ def lime_one(predict_fn, X_train, x, feature_names, categorical_idx, num_feature
                                      mode="regression", discretize_continuous=True, random_state=seed)
     exp = explainer.explain_instance(x, predict_fn, num_features=num_features, num_samples=num_samples)
     return {int(f): float(w) for f, w in exp.local_exp[1]}, float(exp.score)
+
+
+def group_shapley_exact(predict_rows, X_explain, X_background, group_indices):
+    """EXACT Shapley values over feature GROUPS (e.g. pore / fingerprint / metal) for a model that predicts each row on its
+    own. v(S) = mean prediction when the groups in S take the explained row's values and the others take background values.
+    With 3 groups that is 8 coalitions per row, so the result is exact (given the background), unlike expected gradients.
+    Returns (n_rows, n_groups) contributions."""
+    import itertools
+    import math
+
+    g = len(group_indices)
+    out = np.zeros((len(X_explain), g))
+    for r, x in enumerate(X_explain):
+        value = {}
+        for mask in itertools.product((0, 1), repeat=g):
+            z = X_background.copy()
+            for gi, on in enumerate(mask):
+                if on:
+                    z[:, group_indices[gi]] = x[group_indices[gi]]
+            value[mask] = float(predict_rows(z).mean())
+        for gi in range(g):
+            phi = 0.0
+            for mask in itertools.product((0, 1), repeat=g):
+                if mask[gi]:
+                    continue
+                size = sum(mask)
+                w = math.factorial(size) * math.factorial(g - size - 1) / math.factorial(g)
+                with_g = tuple(1 if i == gi else m for i, m in enumerate(mask))
+                phi += w * (value[with_g] - value[mask])
+            out[r, gi] = phi
+    return out

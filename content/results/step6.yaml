@@ -6,7 +6,7 @@ summary: >
   prediction intervals with measured coverage. Random test set (2,144 MOFs) throughout, plus
   Case Study 2's hub test set (664 MOFs) for the intervals. Seeds 0 to 4.
 headline: "74%"
-headline_label: "of the Random Forest's reliance (SHAP) sits on just two pore-geometry columns"
+headline_label: "of the Random Forest's SHAP reliance sits on just two pore-geometry columns (74% as a sum of per-column importances, 88% as the group's net contribution per MOF)"
 stats:
   - label: "Two pore columns alone, R²"
     value: "0.72"
@@ -22,13 +22,15 @@ rows:
   - ["SHAP share of reliance", "Fingerprint-only forest", "pore geometry 74%, linker fingerprint 23%, metal 3%"]
   - ["SHAP share of reliance", "Fingerprint + ChemBERTa / + MolT5", "pore geometry 64% / 64%, embedding 34% / 34%, fingerprint 0.7% / 0.8%"]
   - ["SHAP by chemical fragment", "Top 12 fingerprint bits, mapped to fragments", "largest single bit 1.1% of reliance; aromatic carbon bearing an oxygen (hydroxyl or ether type) raises PLD about 0.3 Å, imidazole-type lowers it about 0.5 Å (gallery below)"]
-  - ["SHAP share of reliance (pore geometry / linker fingerprint / metal)", "XGBoost, TreeSHAP", "56% / 39% / 5%"]
-  - ["SHAP share of reliance (pore geometry / linker fingerprint / metal)", "GCN with no edges, expected-gradients SHAP", "37% / 59% / 5% (approximate: additivity gap 0.24 Å on average)"]
-  - ["GNNExplainer feature mask", "GCN on the CS2 graph (k=3), own row", "13% / 83% / 4%; only 10% of the mask is on the node's own features, the rest on its neighbours"]
-  - ["SHAP on GNNs with the CS2 graph (own features: pore / fingerprint / metal; share of attribution on neighbours)", "GCN (R² 0.66) / GraphSAGE (0.87) / residual GCN (0.87), 30 test MOFs", "26/68/6, 81% on neighbours / 34/61/4, 46% / 32/64/4, 15% (approximate: additivity gap 0.13 to 0.33 Å)"]
-  - ["LIME on the GNNs (own features, neighbours fixed)", "No-edge GCN / GCN / GraphSAGE / residual GCN", "pore 7% / 8% / 8% / 7%; fingerprint 87% / 87% / 90% / 92%; top-5 overlap with SHAP 12 to 13%"]
-  - ["LIME share (15 features per MOF)", "Random Forest / XGBoost", "pore 13% / 14%, fingerprint 84% / 78%"]
-  - ["LIME vs SHAP agreement", "Top-5 features per MOF (same model, 100 MOFs)", "overlap 15% (Random Forest), 19% (XGBoost); LIME's top feature is the pore column in 56% / 44% of MOFs, SHAP's in 94% / 90%"]
+  - ["SHAP, net contribution of each group per MOF (pore / fingerprint / metal)", "Random Forest / XGBoost / GCN with no edges", "88/10/2 / 81/15/4 / 79/15/5 (as a sum of per-column importances: 74/23/3 / 56/39/5 / 37/59/5)"]
+  - ["SHAP check", "Expected gradients (GCN) vs exact Shapley over the three groups, per MOF", "correlation 0.99 pore, 0.92 fingerprint, 0.97 metal (3 seeds, 150 MOFs each)"]
+  - ["GNNs with a graph: share of the SHAP attribution on neighbours' features", "GCN / GraphSAGE / residual GCN; 3 seeds", "CS2 graph 81% / 46% / 23%; semantic ChemBERTa 84% / 47% / 16%; semantic MolT5 83% / 47% / 17%; CS2 + Black Hole 30% 56% / 31% / 18%"]
+  - ["GNNs with a graph: test R² of the explained models", "GCN / GraphSAGE / residual GCN", "CS2 0.62 / 0.87 / 0.87; ChemBERTa 0.58 / 0.88 / 0.87; MolT5 0.60 / 0.88 / 0.87; Black Hole 0.72 / 0.86 / 0.87"]
+  - ["GNNs with a graph: own-feature SHAP, net (pore / fingerprint / metal)", "GCN on CS2 / Black Hole CS2; GraphSAGE and residual GCN (all graphs)", "61/30/10 / 70/24/6; 76-79/16-19/5-6"]
+  - ["LIME, net contribution (pore / fingerprint / metal)", "Random Forest / XGBoost (100 MOFs); GNNs (30 MOFs)", "28/65/8 / 31/52/17; GNNs about 19-24 / 73-77 / 2-12"]
+  - ["LIME vs SHAP agreement", "Top-5 features per MOF", "overlap 15% (Random Forest), 19% (XGBoost), 11% (GNNs); LIME's top feature is the pore column in 27% of GNN explanations, SHAP's in 82%"]
+  - ["SHAP on the 768 embedding dimensions (Random Forest, fingerprint + embedding)", "ChemBERTa / MolT5", "embedding group 34% as a sum of columns but 13-14% as a net contribution; the top 15 dimensions carry only 15-16% of it (MolT5's top dimension 5%)"]
+  - ["What the embedding dimensions encode", "Top-15 dimensions vs 12 RDKit linker descriptors; net embedding SHAP vs the descriptors", "single dimensions track descriptors (|Spearman| up to 0.72: aromatic rings, rings, H-bond counts, logP), but the 12 descriptors explain none of the embedding's net contribution (cross-validated R² -0.01) while it follows the true PLD (Spearman 0.25 ChemBERTa, 0.32 MolT5)"]
   - ["Columns used alone (R²)", "All / pore only / fingerprint + metal", "0.883 / 0.721 / 0.596"]
   - ["Semantic graph, ChemBERTa (GCN R²)", "Real / shuffled / random / 64 dims", "0.553 / 0.353 / 0.392 / 0.553"]
   - ["Semantic graph, MolT5 (GCN R²)", "Real / shuffled / random / 64 dims", "0.554 / 0.346 / 0.376 / 0.552"]
@@ -46,14 +48,17 @@ figures:
     caption: "Same analysis in the MolT5 run (the fingerprint-only forest does not depend on the language model, so the chart matches)."
     alt: "Bar chart of the 15 most important columns for the MolT5 run, identical in shape to the ChemBERTa chart."
   - src: "/step6/method_comparison.png"
-    caption: "Share of the explanation by input group, for every method and model. SHAP on the trees is dominated by the pore columns; the GCN relies on the linker fingerprint more; LIME and GNNExplainer put most weight on the fingerprint."
+    caption: "Share of the explanation by input group. Left: summing each column's mean |value| (the fingerprint group has 1,024 columns, which inflates it). Right: each group's net contribution per MOF. By the net measure every SHAP result, trees and GCN alike, is about 80-88% pore geometry; LIME and GNNExplainer disagree."
     alt: "Stacked horizontal bars of pore geometry, linker fingerprint and metal shares for SHAP on XGBoost, Random Forest and a GCN, and for LIME and GNNExplainer."
   - src: "/step6/lime_example.png"
     caption: "One MOF explained twice (Random Forest): SHAP and LIME agree on the pore column and disagree on the fingerprint bits."
     alt: "Paired horizontal bars comparing SHAP and LIME contributions for the top features of a single MOF."
   - src: "/step6/gnn_graph_explainers.png"
-    caption: "GNNs with a graph. Left: which input groups the model's own-feature explanation rests on (SHAP and LIME). Right: how much of the SHAP attribution lies on neighbours' features rather than the MOF's own."
+    caption: "GNNs with a graph (CS2, Black Hole pruned CS2, ChemBERTa and MolT5 semantic graphs; mean of 3 seeds). Left: net share by input group of the MOF's own-feature explanation (SHAP and LIME). Right: share of the SHAP attribution that lies on neighbours' features, mean and spread over seeds."
     alt: "Stacked bars of pore geometry, linker fingerprint and metal shares for SHAP and LIME on GCN, GraphSAGE and residual GCN with the CS2 graph, next to a bar chart of the share of attribution on neighbours."
+  - src: "/step6/embedding_dimensions.png"
+    caption: "The 15 embedding dimensions with the largest SHAP importance (share of the embedding group in brackets), each correlated (Spearman) with RDKit linker descriptors. Single dimensions line up with chemistry (rings, polarity), but no dimension is a clean descriptor."
+    alt: "Two heatmaps, one per language model, of Spearman correlations between the top embedding dimensions and twelve linker descriptors."
 gallery_url: "/step6/substructures.json"
 gallery_title: "Which chemical fragments sit behind the top fingerprint bits"
 finding: >
@@ -74,24 +79,26 @@ finding: >
   bearing an oxygen (hydroxyl or ether type), which raises the predicted PLD by about 0.3 Å, and an
   imidazole-type ring, which lowers it by about 0.5 Å. Bits are hashed, so several fragments can share
   one bit; the gallery shows the most common one and how many collide.
-  More explainers (Step 6b) give a consistent picture for the pore columns and an inconsistent one for the
-  fingerprint. TreeSHAP on XGBoost puts 56% on pore geometry (Random Forest 74%); the GCN without edges
-  relies mostly on the linker fingerprint (59%), so the networks and the trees use the inputs
-  differently even though both reach R² near 0.87 to 0.89. For the GCN with a graph, GNNExplainer puts
-  only about 10% of its mask on the node's own features, so that model draws heavily on neighbours, which
-  fits the earlier result that a graph does not help. LIME is the weak one: its local models explain
-  little (R² about 0.3), its top-5 features overlap SHAP's by only 15 to 19%, and it names the pore
-  column as the top feature in about half the MOFs where SHAP does in about 90%. LIME gets the sign and
-  size right for the dominant pore column in single examples but scatters weight over fingerprint bits
-  that the forest does not use, which is a known instability with about a thousand sparse binary inputs.
-  The SHAP results are the ones to rely on.
-  For GNNs with a graph (Step 6c, 30 test MOFs, CS2 graph with k=3) the explanation depends on the
-  model. The plain GCN, which scores only R² 0.66, puts 81% of its SHAP attribution on its neighbours'
-  features rather than the MOF's own, which is the mechanism behind a graph hurting: the answer is built
-  from similar linkers, not from this MOF's own pore geometry. GraphSAGE (46% on neighbours) and the
-  residual GCN (15%) lean on neighbours far less and score 0.87, in line with the no-edge GNN. The
-  GraphSAGE here is PyG's SAGEConv, which keeps a separate weight for the node itself, so its score is
-  not comparable with the earlier GraphSAGE graph runs. LIME on every GNN repeats its pattern from the
-  trees: low-fidelity local models (R² about 0.2), top-5 overlap with SHAP of only 12 to 13%, and weight
-  mostly on fingerprint bits. SHAP for the graph models is an expected-gradients approximation with an
-  additivity gap of 0.13 to 0.33 Å.
+  More explainers (Steps 6b and 6c) first looked as if the GCN used its inputs differently from the trees,
+  but that was an aggregation artefact. Summing each column's mean |SHAP| inflates the fingerprint group
+  (1,024 columns that partly cancel within a MOF). As each group's net contribution per MOF, Random Forest
+  (88%), XGBoost (81%) and the GCN without edges (79%) all rest mostly on pore geometry, and expected
+  gradients agrees with an exact Shapley calculation over the three groups (correlation 0.92 to 0.99).
+  For GNNs with a graph (CS2, Black Hole pruned CS2, ChemBERTa and MolT5 semantic graphs; 3 seeds) the plain GCN,
+  which scores only R² 0.58 to 0.62 on the full graphs, puts 81 to 84% of its attribution on its neighbours' features and
+  uses its own pore geometry less (61 to 64% net). Black Hole pruning (30% retention) lowers that to 56% and lifts the GCN to
+  R² 0.72, so pruning helps by making the GCN lean on its neighbours less. GraphSAGE (31 to 47% on neighbours) and
+  the residual GCN (16 to 23%) lean on neighbours far less, rely on pore geometry as the no-edge models do (76 to 79%)
+  and score 0.86 to 0.88, in line with a GNN without edges. That is the mechanism behind a graph hurting: the answer
+  is built from similar linkers, not from this MOF's own pore geometry. MolT5 and ChemBERTa graphs behave alike.
+  The GraphSAGE here is PyG's SAGEConv, which keeps a separate weight for the node
+  itself, so its score is not comparable with the earlier GraphSAGE graph runs. LIME is the weak
+  method: its local models explain little (R² about 0.2), its top-5 features overlap SHAP's by only 11
+  to 19%, and it names the pore column as the top feature in about a quarter of GNN explanations where
+  SHAP does in about 80%. The SHAP results are the ones to rely on.
+  SHAP on the 768 embedding dimensions shows the embedding's contribution is spread thin: the group is 34% of the
+  summed importance but 13 to 14% as a net contribution, and the top 15 dimensions carry only about 15%. Some dimensions
+  track simple chemistry (ring counts, polarity; |Spearman| up to 0.72), yet twelve standard RDKit descriptors explain none of
+  the embedding's net contribution (cross-validated R² about 0), while that contribution follows the true PLD (Spearman 0.25
+  for ChemBERTa, 0.32 for MolT5). So the embeddings carry pore-relevant information that is not one of the usual descriptors,
+  which is consistent with them helping a graph's neighbour choice but adding nothing to a model that already has the pore columns.

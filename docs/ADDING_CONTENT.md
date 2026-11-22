@@ -83,6 +83,10 @@ rows:
   - ["value", "value"]
 ```
 
+A result card can also show images and a gallery: `figures` is a list of `{src, caption, alt}` (files under
+`frontend/public/`, e.g. `/step6/shap_top_features_chemberta.png`), and `gallery_url` (with `gallery_title`) points to a JSON file in
+`frontend/public/` that the Step 6 card renders as fragment cards (see `scripts/run_step6_explainability.py`, which writes it).
+
 A step with no `results/<id>.yaml` file returns 404, not a placeholder — `/implemented` simply
 skips it rather than showing an invented number.
 

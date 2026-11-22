@@ -90,12 +90,16 @@ src/
   models/                Non-graph baselines that aren't part of the Step 1 port (MLP), plus
                         gnn_residual.py (residual GCN used in the Step 5b diagnostics).
   explainability/        Step 6 — SHAP (with an additivity check), embedding ablation, split-conformal
-                        confidence intervals.
+                        confidence intervals, fragment mapping of fingerprint bits, and explainers for
+                        XGBoost / GNNs (model_explainers.py: SHAP, GNNExplainer, LIME).
 tests/                   Mirrors src/. tests/baseline/ was ported alongside its source; every
                         other directory has real tests where the module is testable offline,
                         and network-gated tests for the two pretrained models.
 scripts/                 One runnable entry point per step (run_step1_baseline.py ...
-                        run_step6_explainability.py), plus generate_architecture_diagram.py and
+                        run_step6_explainability.py, run_step6b_explainers.py,
+                        run_step6c_gnn_explainers.py, run_step6d_embedding_shap.py), results export / comparison scripts
+                        (export_traceable_results.py, build_mofgalaxynet_comparison.py), plus
+                        generate_architecture_diagram.py and
                         export_graph_comparison.py (data for the web console's network view).
 notebooks/               colab_setup.ipynb — Colab-only setup (Drive mount, dependency install),
                         kept out of src/ so core library code stays platform-agnostic.
@@ -105,7 +109,9 @@ data/
   embeddings/            Cached language-model embeddings (Step 2 output).
 outputs/
   logs/                  Per-module log files (src.common.logging_setup).
-  figures/, results/, models/   Generated plots, comparison tables, checkpoints.
+  figures/, results/, models/   Generated plots, comparison tables, checkpoints (git-ignored).
+results/                 Tracked copy of the result CSVs with MANIFEST.csv (script, configuration, data
+                        version, seeds per file) and its own README — see results/README.md.
 papers/                  Literature review PDFs + a short notes file per paper (see
                         papers/README.md) — kept for traceable citations.
 reports/
@@ -115,7 +121,7 @@ docs/                    Generated architecture diagram source (architecture.mmd
                         ADDING_CONTENT.md and DEPLOYMENT.md for the web console below.
 
 content/                 Content for the web console — architecture.yaml, papers.yaml,
-                        plan.yaml, progress.yaml, results/step{1..4}.yaml, and the generated
+                        plan.yaml, progress.yaml, results/step{1..6}.yaml, and the generated
                         graph_comparison_<model>.json. See "Web console".
 backend/                 FastAPI app serving the web console's API. See "Web console".
 frontend/                React/TypeScript web console UI. See "Web console".
@@ -176,6 +182,10 @@ python scripts/run_step3_build_graphs.py --model chemberta     # needs Step 2's 
 python scripts/run_step4_sparsification.py --model chemberta --graph-type semantic
 python scripts/run_step5_comparison.py --model chemberta       # the full RF/MLP/GCN/GraphSAGE sweep
 PYTHONPATH=. python scripts/run_step6_explainability.py --model chemberta [--test-set hubs]   # SHAP, column groups, ablation, conformal intervals
+PYTHONPATH=. python scripts/run_step6b_explainers.py            # Step 6b: SHAP for XGBoost + no-edge GCN, GNNExplainer, LIME
+PYTHONPATH=. python scripts/run_step6c_gnn_explainers.py        # Step 6c: SHAP + LIME for GNNs with a graph (3 seeds, CS2 + semantic)
+PYTHONPATH=. python scripts/run_step6d_embedding_shap.py        # Step 6d: SHAP on the embedding dimensions vs RDKit descriptors
+PYTHONPATH=. python scripts/export_traceable_results.py         # copy result CSVs into results/ + MANIFEST.csv
 PYTHONPATH=. python scripts/run_step5b_ablations.py --model chemberta   # Step 5b: no-edge GNN, CS2 graph, small k,
                                                                # ChemBERTa as input, residual GNN (5 seeds)
 ```
@@ -194,30 +204,48 @@ is comparing them, not just picking one upfront).
 
 ## Results so far
 
-All numbers are test-set R² (mean of seeds 0-4) on the 14,296-MOF dataset. Per-run CSVs sit in
-`outputs/results/`; the dated entries in `reports/logs/` explain each run.
+All numbers are test-set R² (mean of seeds 0-4) on the 14,296-MOF dataset unless stated otherwise (the Step 6
+explainer shares are on the 2,144-MOF random test set: the tree and no-edge SHAP numbers use the seed-0 split, the GNN-with-graph explainers
+use seeds 0-2 and 30 test MOFs). "Net" SHAP share means each input group's net contribution per MOF; the summed-column share
+adds each column's mean |SHAP| separately and inflates the 1,024-column fingerprint group. Per-run CSVs sit in
+`outputs/results/` (tracked copies and a manifest in `results/`); the dated entries in `reports/logs/` explain each run.
 
 | Finding | Evidence |
 |---|---|
-| Random Forest on fingerprints is the best model | R² 0.883 (random test set), 0.888 (Case Study 2 hub test set); Case Study 2 reported 0.893 (1 seed) |
-| A GNN with **no edges** beats every GNN with a graph | no edges 0.84; fingerprint / semantic / hybrid graphs 0.46-0.57; CS2 graph 0.52-0.65 |
+| Random Forest on fingerprints is the strongest simple model | R² 0.883 (random test set), 0.888 (Case Study 2 hub test set); Case Study 2 reported 0.893 (1 seed) |
+| Gradient boosting is not a consistent improvement | XGBoost 0.893 vs Random Forest 0.883 on the random test set (+0.010, above seed spread), 0.877 vs 0.888 on the hub set; LightGBM never clearly better; best single scores 0.897 (LightGBM, random) and 0.905 (Random Forest with RDKit descriptors, hub) |
+| GNN training was under-trained, and is fixed | the old runs always used all 200 epochs (target scale); z-scoring the target and continuous inputs lifts the no-edge GNN from 0.84 to 0.874 (random test set) and removes the log-target collapse (0.863). Longer training or a smaller learning rate added nothing |
+| A GNN with **no edges** is as good as any GNN with a graph | with the fix: no edges 0.874; full CS2 graph 0.64-0.66 (GCN / GraphSAGE), fingerprint graph 0.59-0.60; residual GCN with a graph equals its no-edge version (0.873 vs 0.875). One exception: residual GCN + Black Hole 30% on the hub test set, +0.009 (bias caveat); on the random set -0.008 |
 | Fewer neighbours are better | CS2 graph, GCN: k=3 0.622, k=5 0.575, k=10 0.527 |
+| Without the pore columns (LCD, LFS) R² falls to about 0.6, and the graph still adds nothing | best tree 0.613 (random) / 0.651 (hub); best graph GNN 0.594 / 0.588; every graph vs no-edge comparison is zero or negative |
+| New descriptors help only a little | RDKit linker descriptors add +0.01 to +0.03 R² to tree models without LCD/LFS and nothing with them; metal descriptors, count fingerprints, MACCS and all RDKit descriptors add nothing reliable |
+| Linker-level de-duplicated, descriptor-space graphs and graph-smoothed features do not help | all graph variants stay below the no-edge GNN |
+| Ensembles give at most a small gain | Random Forest + XGBoost + no-edge GNN: 0.906 on the hub set (+0.011 over XGBoost), 0.621 vs 0.609 without LCD/LFS (random), but 0.894 vs 0.897 on the random set with LCD/LFS |
 | Neither ChemBERTa nor MolT5 adds a reliable benefit over fingerprints | Random Forest: fingerprint 0.883 / 0.888, + ChemBERTa 0.876 / 0.897, + MolT5 0.882 / 0.895 (random / hub test set); the sign flips between test sets |
 | Black Hole vs random pruning depends on the test set | random test set: +0.009 R² (no clear difference); hub test set: +0.060, better in 81% of comparisons (the hub set uses the same gravity ranking, so this may be biased in Black Hole's favour) |
-| GNN vs Case Study 2 | GraphSAGE, CS2 graph, Black Hole 30%, hub test set: 0.751 (5 seeds) vs 0.687 (1 seed) |
-| The model is mostly a pore-geometry model (Step 6) | SHAP: 2 pore-geometry columns carry 74% of the reliance; they alone give R² 0.72, linker fingerprint + metal alone 0.60 |
+| GNN vs Case Study 2 | GraphSAGE, CS2 graph, Black Hole 30%, hub test set: 0.751 (5 seeds, old training) / 0.794 (training fix) vs 0.687 (1 seed); best graph GNN 0.883 |
+| MOFGalaxyNet (regression) vs MOFSemNet | same splits and seeds: the semantic layer gives no consistent gain (GCN worse in 59 of 60 random-set comparisons, mean ΔR² -0.05; GraphSAGE +0.05); tables in `results/mofgalaxynet_vs_mofsemnet/` |
+| The model is mostly a pore-geometry model (Step 6) | two pore-geometry columns carry 88% of the Random Forest's SHAP reliance as the group's net contribution per MOF (74% as a sum of per-column importances); XGBoost 81%, no-edge GCN 79%; the two columns alone give R² 0.72, linker fingerprint + metal alone 0.60 |
+| Individual fingerprint bits are weak (Step 6) | mapped to fragments: the largest bit carries 1.1% of the reliance; an aromatic carbon bearing O raises PLD about 0.3 Å, an imidazole-type ring lowers it about 0.5 Å (gallery on the Step 6 page) |
+| A plain GCN with a graph answers from its neighbours (Step 6) | SHAP puts 81-84% of the GCN's attribution on neighbours (CS2, ChemBERTa and MolT5 semantic graphs); Black Hole 30% pruning lowers it to 56% and lifts the GCN from 0.62 to 0.72; GraphSAGE (31-47%) and residual GCN (16-23%) lean on neighbours less and score 0.86-0.88. Expected-gradients SHAP agrees with exact group Shapley (correlation 0.92-0.99) |
+| The embedding dimensions have no clean meaning (Step 6) | SHAP: the embedding group is 34% as a sum of columns, 13-14% as a net contribution; the top 15 of 768 dimensions carry about 15%; single dimensions track ring counts / polarity (|Spearman| up to 0.72) but 12 RDKit descriptors explain none of the embedding's net contribution (CV R² about 0), which follows the true PLD (Spearman 0.25 / 0.32) |
+| LIME is unreliable here (Step 6) | local R² about 0.2-0.3; top-5 features overlap SHAP's by only 11-19%; it names the pore column as top feature in 27-56% of explanations vs SHAP's 82-94%. Rely on SHAP |
 | Embeddings carry real chemistry but no usable gain (Step 6) | semantic graph from real ChemBERTa 0.55 vs 0.35-0.39 from shuffled / random vectors; real embeddings in Random Forest 0.874 (ChemBERTa) / 0.884 (MolT5) vs 0.883 without |
 | Calibrated confidence works (Step 6) | adaptive conformal 90% intervals cover 90.8% of random-test MOFs and 89.9% of Case Study 2's hub test set; width tracks the error (rank correlation 0.72) |
 | MolT5 behaves like ChemBERTa in Step 6 | SHAP shares, ablation (real 0.554 vs random 0.376 / shuffled 0.346, GCN) and Random Forest input (0.884 vs 0.883) match |
+
+Note on the older GNN numbers: the Step 5 and first server runs (no-edge GNN 0.84, graphs 0.46-0.65) used the old GNN
+training. The conclusions did not change after the fix (see above), but the gap between the best graph GNN and the best
+tree model shrank from about 0.05 to 0.023.
 
 Two test sets are used and their numbers are not interchangeable: Step 5 uses 2,144 random MOFs
 (`split_random_state=42`); Case Study 2 and the `cs2_hubs` runs use about 664-680 high-gravity MOFs
 (hub nodes per Louvain community), which are harder for graph models.
 
 **Decision tree:** the web console serves a clickable picture of every choice tried (graph type, k, pruning method and
-retention, model, ChemBERTa / MolT5 as input or not, the Step 6 checks), the R² each gave, and what has not been tried yet, at
+retention, model, ChemBERTa / MolT5 as input or not, boosted trees and richer features, ensembles, the pore-column ablation, the GNN training fix and log target, all Step 6 checks including the GNN explainers), the R² each gave, and what has not been tried yet, at
 `/decision_tree.html` (`#step6` opens the Step 6 branch). The page is `frontend/public/decision_tree.html`; its numbers are
-`frontend/public/decision_tree_data.json`. After new results, run `python scripts/build_decision_tree.py [aggregated_results.csv]`
+`frontend/public/decision_tree_data.json`. After new results, run `python scripts/build_decision_tree.py [aggregated_results.csv]` (it also reads the `server_extra_*` runs and the `step6*` CSVs in `outputs/results/`)
 and `npm run build` in `frontend/`. It must be opened through the console, not by double-clicking the file.
 
 ### Experiment runs
@@ -229,7 +257,15 @@ and `npm run build` in `frontend/`. It must be opened through the console, not b
 | Server run, random test set (990 runs) | server notebook, profile `standard` | `outputs/results/server_standard_2026-11-19/` |
 | Server run, Case Study 2 hub test set (990 runs) | same notebook, `CFG["test_sets"] = ["cs2_hubs"]` | `outputs/results/server_cs2hubs_2026-11-19/` |
 | Server run, MolT5 on both test sets (1,020 runs) | same notebook, `CFG["language_models"] = ["molt5"]` | `outputs/results/server_molt5_2026-11-20/` |
-| Step 6: SHAP, column groups, embedding ablation, conformal intervals (ChemBERTa, MolT5; `--test-set hubs` for the hub test set) | `scripts/run_step6_explainability.py` | `outputs/results/step6_*.csv` (`*_chemberta*`, `*_molt5*`, `*_hubs*`), `outputs/figures/step6_*.png` |
+| Step 6: SHAP, column groups, embedding ablation, conformal intervals, fragment mapping of fingerprint bits (ChemBERTa, MolT5; `--test-set hubs` for the hub test set) | `scripts/run_step6_explainability.py` | `outputs/results/step6_*.csv` (`*_chemberta*`, `*_molt5*`, `*_hubs*`), `outputs/figures/step6_*.png`, `frontend/public/step6/` |
+| Step 6b: SHAP for XGBoost and the no-edge GCN, GNNExplainer, LIME (Random Forest, XGBoost) | `scripts/run_step6b_explainers.py` | `outputs/results/step6b_*.csv` |
+| Step 6c: SHAP + LIME for GNNs with a graph (GCN, GraphSAGE, residual GCN; CS2, Black Hole pruned CS2, ChemBERTa and MolT5 semantic graphs; seeds 0-2), exact group-Shapley check | `scripts/run_step6c_gnn_explainers.py` | `outputs/results/step6c_*.csv` |
+| Extra experiments, first run (XGBoost/LightGBM, log target, no LCD/LFS, descriptors, new graphs, stacking; 1,700 runs) | `MOFSemNet_server_extra_v2.ipynb` (earlier version), profile `extra` | `outputs/results/server_extra_2026-11-20/` |
+| GNN training fix + richer tree features + ensembles (820 runs) | `MOFSemNet_server_extra_v2.ipynb`, profile `extra_final` | `outputs/results/server_extra_final_2026-11-20/` |
+| Step 6d: SHAP on the 768 embedding dimensions and their link to RDKit descriptors (ChemBERTa, MolT5) | `scripts/run_step6d_embedding_shap.py` | `outputs/results/step6d_*.csv` |
+| MOFGalaxyNet-regression vs MOFSemNet comparison | `scripts/build_mofgalaxynet_comparison.py` | `results/mofgalaxynet_vs_mofsemnet/` |
+
+`results/` is the tracked copy of all result CSVs with `MANIFEST.csv`; regenerate it with `scripts/export_traceable_results.py` (see `results/README.md`).
 
 Every result row carries its seed, test set, data fingerprint (`MOFCSD.csv` SHA-256 starts
 `e23a42e742099b4c`) and either the script name or the run configuration (`run_metadata.json`).
@@ -244,6 +280,11 @@ GPU server. Upload it next to `MOFCSD.csv` (and optionally `chemberta_embeddings
 `CFG["test_sets"] = ["cs2_hubs"]` for Case Study 2's test set. Finished runs are skipped when it is run again.
 The `standard` profile took 6 h on the first run and about 1 h 25 min after k-center selections were cached
 (training itself is about 17 min). Re-running with the same seeds reproduces results to within 0.008 R² per run.
+
+`MOFSemNet_server_extra_v2.ipynb` extends the same notebook with the extra experiments (profiles `extra_smoke`, `extra`,
+`extra_gnnfix`, `extra_rich`, `extra_final`; all new switches are off in the older profiles, so old run ids and numbers are
+unchanged). The GNN training fix is opt-in as `gnn_train_setup="v2"` (standardised target and continuous inputs). `extra_final` runs
+the GNN re-run, the richer tree features and the ensembles in one go (about 820 runs, 2-2.5 h on a GPU).
 
 To regenerate the results: use the notebook with the profile and `CFG` overrides recorded in each
 `run_metadata.json`, or run the scripts above from the repo root with `PYTHONPATH=.`.
