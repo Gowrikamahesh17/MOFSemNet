@@ -212,7 +212,10 @@ adds each column's mean |SHAP| separately and inflates the 1,024-column fingerpr
 
 | Finding | Evidence |
 |---|---|
-| Random Forest on fingerprints is the strongest simple model | R² 0.883 (random test set), 0.888 (Case Study 2 hub test set); Case Study 2 reported 0.893 (1 seed) |
+| Random Forest on fingerprints is the strongest simple model | R² 0.883 (random test set), 0.888 (Case Study 2 hub test set); Case Study 2 reported 0.893 (1 seed). The small gap is explained, see below |
+| Tuning the Random Forest does improve it (validation-only search, data unchanged) | `max_features=0.3` (each split looks at 30% of the columns), chosen on the validation split, 300 trees: R² 0.8947 (random test set) vs 0.8825 default (+0.012, better in 5 of 5 seeds) and 0.8998 (Case Study 2 hub set, 664 MOFs) vs 0.8906 (+0.009, 5 of 5); also trained on training + validation: 0.8982 / 0.9029. ExtraTrees with default settings: 0.8935 / 0.9016. Case Study 2: 0.893. Script `scripts/tune_random_forest.py` |
+| Tuned GNNs: still no graph beats the same GNN with no edges (`scripts/tune_gnns.py`) | settings chosen on the validation split only, tested with the old defaults alongside, seeds 0-4, R² random / hub: no edges — GCN 0.8779 / 0.8692, GraphSAGE 0.8796 / 0.8741, residual GCN 0.8816 / 0.8725; CS2 graph k=3 — GCN 0.6381 / 0.4100, GraphSAGE 0.8760 / 0.8609, residual GCN 0.8790 / 0.8680, APPNP 0.7392 / 0.6078, GAT 0.6100 / 0.5846, SGC 0.6185 / 0.4323, GIN 0.5629 / 0.0929; CS2 + Black Hole 30% — GCN 0.7166 / 0.6920, GraphSAGE 0.8637 / 0.8485, residual GCN 0.8779 / 0.8658. Tuning adds +0.002 to +0.022 (no-edge GNN 0.874 -> 0.882). The earlier exception (residual GCN + Black Hole on the hub set) disappears once the no-edge model is tuned too. Gap to the best tree model (ExtraTrees 0.8998 / 0.9044) is 0.018 / 0.030 |
+| ExtraTrees (tuned) is the best single model so far; boosted trees, a Tanimoto-kernel regressor and Ridge are not better (`scripts/run_model_zoo.py`) | settings chosen on the validation split only, seeds 0-4, original data and target. R² random / hub (664 MOFs): ExtraTrees 0.8998 / 0.9044, tuned Random Forest 0.8950 / 0.8993, XGBoost 0.8972 / 0.8499, CatBoost 0.8954 / 0.8514, LightGBM 0.8924 / 0.8760, HistGradientBoosting 0.8843 / 0.8630, Tanimoto-kernel 0.7582 / 0.8317, Ridge 0.8071 / 0.7890. ExtraTrees beats the tuned forest by +0.005 in 5 of 5 seeds on both test sets. Averaging the 3 best on validation: 0.9042 / 0.9003 (a gain only on the random set). Case Study 2: 0.893 (1 seed); ExtraTrees MAE / RMSE 0.458 / 0.946 vs 0.525 / 1.001 |
 | Gradient boosting is not a consistent improvement | XGBoost 0.893 vs Random Forest 0.883 on the random test set (+0.010, above seed spread), 0.877 vs 0.888 on the hub set; LightGBM never clearly better; best single scores 0.897 (LightGBM, random) and 0.905 (Random Forest with RDKit descriptors, hub) |
 | GNN training was under-trained, and is fixed | the old runs always used all 200 epochs (target scale); z-scoring the target and continuous inputs lifts the no-edge GNN from 0.84 to 0.874 (random test set) and removes the log-target collapse (0.863). Longer training or a smaller learning rate added nothing |
 | A GNN with **no edges** is as good as any GNN with a graph | with the fix: no edges 0.874; full CS2 graph 0.64-0.66 (GCN / GraphSAGE), fingerprint graph 0.59-0.60; residual GCN with a graph equals its no-edge version (0.873 vs 0.875). One exception: residual GCN + Black Hole 30% on the hub test set, +0.009 (bias caveat); on the random set -0.008 |
@@ -239,8 +242,25 @@ training. The conclusions did not change after the fix (see above), but the gap 
 tree model shrank from about 0.05 to 0.023.
 
 Two test sets are used and their numbers are not interchangeable: Step 5 uses 2,144 random MOFs
-(`split_random_state=42`); Case Study 2 and the `cs2_hubs` runs use about 664-680 high-gravity MOFs
+(`split_random_state=42`); Case Study 2 and the `cs2_hubs` runs use 664 (repo code) to 680 (server notebook) high-gravity MOFs
 (hub nodes per Louvain community), which are harder for graph models.
+
+**Why Case Study 2's Random Forest (0.893) is a little higher than ours (0.888).** Checked on 2026-11-22 with `scripts/check_case_study_rf_gap.py`
+(Random Forest, 100 trees, seeds 0-4, fingerprint features; output `outputs/results/case_study_rf_gap_per_seed.csv`):
+
+| Setup | Hub test MOFs | Forest trained on | R² | MAE | RMSE |
+|---|---|---|---|---|---|
+| Case Study 2 (Table 3, 1 seed) | 664 | not recorded | 0.893 | 0.525 | 1.001 |
+| Server notebook (this thesis) | 680 | training split only | 0.8876 | 0.549 | 1.072 |
+| Repo code, same hub selection as the Case Study | 664 | training split only | 0.8906 | 0.540 | 1.012 |
+| Repo code, same hub selection | 664 | training + validation MOFs | 0.8945 | 0.5245 | 0.994 |
+
+Three small effects add up: the hub set (the repo code selects 664 MOFs, the server notebook 680; the cause is not yet resolved,
+about +0.003), the validation MOFs (all thesis experiments hold 15% of the non-test MOFs out for the GNNs' early stopping, which a
+Random Forest does not need; adding them back is about +0.004), and seed noise (std 0.002-0.004; Case Study 2 used one seed). With
+the first two the forest reproduces the Case Study (MAE 0.5245 vs 0.525), so Case Study 2 most likely trained on all non-test MOFs.
+The thesis keeps the same training set for every model for a fair comparison; no conclusion changes, and the gap between the forest
+and the GNNs would be slightly larger, not smaller.
 
 **Decision tree:** the web console serves a clickable picture of every choice tried (graph type, k, pruning method and
 retention, model, ChemBERTa / MolT5 as input or not, boosted trees and richer features, ensembles, the pore-column ablation, the GNN training fix and log target, all Step 6 checks including the GNN explainers), the R² each gave, and what has not been tried yet, at
@@ -263,6 +283,9 @@ and `npm run build` in `frontend/`. It must be opened through the console, not b
 | Extra experiments, first run (XGBoost/LightGBM, log target, no LCD/LFS, descriptors, new graphs, stacking; 1,700 runs) | `MOFSemNet_server_extra_v2.ipynb` (earlier version), profile `extra` | `outputs/results/server_extra_2026-11-20/` |
 | GNN training fix + richer tree features + ensembles (820 runs) | `MOFSemNet_server_extra_v2.ipynb`, profile `extra_final` | `outputs/results/server_extra_final_2026-11-20/` |
 | Step 6d: SHAP on the 768 embedding dimensions and their link to RDKit descriptors (ChemBERTa, MolT5) | `scripts/run_step6d_embedding_shap.py` | `outputs/results/step6d_*.csv` |
+| Tuned GNNs (GCN, GraphSAGE, residual GCN, GAT, GIN, APPNP, SGC; no edges, CS2 graph, CS2 + Black Hole 30%) | `scripts/tune_gnns.py` | `outputs/results/gnn_tuning_*.csv` |
+| Tuned tree models, Tanimoto kernel, Ridge, ensembles | `scripts/run_model_zoo.py` | `outputs/results/model_zoo_*.csv` |
+| Random Forest tuning | `scripts/tune_random_forest.py` | `outputs/results/rf_tuning_*.csv` |
 | MOFGalaxyNet-regression vs MOFSemNet comparison | `scripts/build_mofgalaxynet_comparison.py` | `results/mofgalaxynet_vs_mofsemnet/` |
 
 `results/` is the tracked copy of all result CSVs with `MANIFEST.csv`; regenerate it with `scripts/export_traceable_results.py` (see `results/README.md`).

@@ -1,0 +1,58 @@
+model,settings,val_r2_mean,val_r2_std,script,data_sha256_16
+random_forest,"{'max_features': 0.3, 'min_samples_leaf': 1}",0.8883115119405088,0.009048714879608122,scripts/run_model_zoo.py,e23a42e742099b4c
+random_forest,"{'max_features': 0.3, 'min_samples_leaf': 2}",0.8806105573936536,0.008239261534117082,scripts/run_model_zoo.py,e23a42e742099b4c
+random_forest,"{'max_features': 0.5, 'min_samples_leaf': 1}",0.8795378707283652,0.010768132847590428,scripts/run_model_zoo.py,e23a42e742099b4c
+random_forest,"{'max_features': 0.5, 'min_samples_leaf': 2}",0.8739008893177755,0.009689940439977729,scripts/run_model_zoo.py,e23a42e742099b4c
+random_forest,"{'max_features': 1.0, 'min_samples_leaf': 1}",0.8700584324684534,0.009967600090108442,scripts/run_model_zoo.py,e23a42e742099b4c
+random_forest,"{'max_features': 1.0, 'min_samples_leaf': 2}",0.8647806907936991,0.010767137062302368,scripts/run_model_zoo.py,e23a42e742099b4c
+extra_trees,"{'max_features': 0.3, 'min_samples_leaf': 1}",0.8989425708902121,0.009690028000189643,scripts/run_model_zoo.py,e23a42e742099b4c
+extra_trees,"{'max_features': 0.3, 'min_samples_leaf': 2}",0.895075779425611,0.008226421435208964,scripts/run_model_zoo.py,e23a42e742099b4c
+extra_trees,"{'max_features': 0.5, 'min_samples_leaf': 1}",0.8950629537530933,0.008740647979956884,scripts/run_model_zoo.py,e23a42e742099b4c
+extra_trees,"{'max_features': 0.5, 'min_samples_leaf': 2}",0.8937526862487684,0.008449445893984942,scripts/run_model_zoo.py,e23a42e742099b4c
+extra_trees,"{'max_features': 1.0, 'min_samples_leaf': 1}",0.887356443699169,0.010458344121204666,scripts/run_model_zoo.py,e23a42e742099b4c
+extra_trees,"{'max_features': 1.0, 'min_samples_leaf': 2}",0.8869263282949292,0.008247902630426185,scripts/run_model_zoo.py,e23a42e742099b4c
+xgboost,"{'max_depth': 10, 'learning_rate': 0.03, 'subsample': 0.9, 'colsample_bytree': 0.5, 'min_child_weight': 5, 'reg_lambda': 1.0}",0.8824707812451137,0.0061282779848012,scripts/run_model_zoo.py,e23a42e742099b4c
+xgboost,"{'max_depth': 4, 'learning_rate': 0.03, 'subsample': 0.7, 'colsample_bytree': 0.3, 'min_child_weight': 1, 'reg_lambda': 5.0}",0.8561253944272222,0.012530657793826061,scripts/run_model_zoo.py,e23a42e742099b4c
+xgboost,"{'max_depth': 8, 'learning_rate': 0.03, 'subsample': 0.7, 'colsample_bytree': 0.2, 'min_child_weight': 1, 'reg_lambda': 1.0}",0.8773951794386514,0.010013823935771882,scripts/run_model_zoo.py,e23a42e742099b4c
+xgboost,"{'max_depth': 8, 'learning_rate': 0.05, 'subsample': 0.7, 'colsample_bytree': 0.5, 'min_child_weight': 5, 'reg_lambda': 1.0}",0.8773375211651042,0.006663188835633438,scripts/run_model_zoo.py,e23a42e742099b4c
+xgboost,"{'max_depth': 6, 'learning_rate': 0.03, 'subsample': 0.9, 'colsample_bytree': 0.2, 'min_child_weight': 5, 'reg_lambda': 1.0}",0.871344539529017,0.0104426228233363,scripts/run_model_zoo.py,e23a42e742099b4c
+xgboost,"{'max_depth': 4, 'learning_rate': 0.1, 'subsample': 0.7, 'colsample_bytree': 0.2, 'min_child_weight': 3, 'reg_lambda': 5.0}",0.8587022085023631,0.004690685337366607,scripts/run_model_zoo.py,e23a42e742099b4c
+xgboost,"{'max_depth': 6, 'learning_rate': 0.03, 'subsample': 0.7, 'colsample_bytree': 0.3, 'min_child_weight': 1, 'reg_lambda': 1.0}",0.8743364279032337,0.007639214748015766,scripts/run_model_zoo.py,e23a42e742099b4c
+xgboost,"{'max_depth': 4, 'learning_rate': 0.03, 'subsample': 0.7, 'colsample_bytree': 0.5, 'min_child_weight': 5, 'reg_lambda': 5.0}",0.8507333298606572,0.015418659329553552,scripts/run_model_zoo.py,e23a42e742099b4c
+xgboost,"{'max_depth': 8, 'learning_rate': 0.05, 'subsample': 0.9, 'colsample_bytree': 0.3, 'min_child_weight': 3, 'reg_lambda': 5.0}",0.8791872487088995,0.009355025984359555,scripts/run_model_zoo.py,e23a42e742099b4c
+xgboost,"{'max_depth': 10, 'learning_rate': 0.03, 'subsample': 0.9, 'colsample_bytree': 0.3, 'min_child_weight': 1, 'reg_lambda': 5.0}",0.8849829810283889,0.005628233356923584,scripts/run_model_zoo.py,e23a42e742099b4c
+xgboost,"{'max_depth': 10, 'learning_rate': 0.05, 'subsample': 0.9, 'colsample_bytree': 0.5, 'min_child_weight': 5, 'reg_lambda': 1.0}",0.8816432092923238,0.0071674777746351115,scripts/run_model_zoo.py,e23a42e742099b4c
+xgboost,"{'max_depth': 4, 'learning_rate': 0.03, 'subsample': 0.9, 'colsample_bytree': 0.5, 'min_child_weight': 3, 'reg_lambda': 1.0}",0.8622006466682146,0.008374668830484877,scripts/run_model_zoo.py,e23a42e742099b4c
+lightgbm,"{'num_leaves': 127, 'learning_rate': 0.03, 'colsample_bytree': 0.5, 'subsample': 0.9, 'min_child_samples': 20, 'reg_lambda': 0.0}",0.8701554255338437,0.007262927662990359,scripts/run_model_zoo.py,e23a42e742099b4c
+lightgbm,"{'num_leaves': 15, 'learning_rate': 0.03, 'colsample_bytree': 0.2, 'subsample': 0.9, 'min_child_samples': 5, 'reg_lambda': 5.0}",0.8648558436007703,0.010073098701061323,scripts/run_model_zoo.py,e23a42e742099b4c
+lightgbm,"{'num_leaves': 63, 'learning_rate': 0.03, 'colsample_bytree': 0.2, 'subsample': 0.7, 'min_child_samples': 5, 'reg_lambda': 0.0}",0.8744564444721321,0.009218344507893439,scripts/run_model_zoo.py,e23a42e742099b4c
+lightgbm,"{'num_leaves': 63, 'learning_rate': 0.05, 'colsample_bytree': 0.3, 'subsample': 0.7, 'min_child_samples': 20, 'reg_lambda': 0.0}",0.8644209475412709,0.010353504939903169,scripts/run_model_zoo.py,e23a42e742099b4c
+lightgbm,"{'num_leaves': 31, 'learning_rate': 0.03, 'colsample_bytree': 0.3, 'subsample': 0.9, 'min_child_samples': 20, 'reg_lambda': 0.0}",0.8636162664398526,0.009356534473720313,scripts/run_model_zoo.py,e23a42e742099b4c
+lightgbm,"{'num_leaves': 15, 'learning_rate': 0.1, 'colsample_bytree': 0.2, 'subsample': 0.7, 'min_child_samples': 10, 'reg_lambda': 5.0}",0.8577614254586452,0.010094491222101709,scripts/run_model_zoo.py,e23a42e742099b4c
+lightgbm,"{'num_leaves': 31, 'learning_rate': 0.03, 'colsample_bytree': 0.2, 'subsample': 0.9, 'min_child_samples': 5, 'reg_lambda': 0.0}",0.8769607575320812,0.008659788548668335,scripts/run_model_zoo.py,e23a42e742099b4c
+lightgbm,"{'num_leaves': 15, 'learning_rate': 0.03, 'colsample_bytree': 0.3, 'subsample': 0.7, 'min_child_samples': 20, 'reg_lambda': 5.0}",0.8548634943926374,0.012488877352061445,scripts/run_model_zoo.py,e23a42e742099b4c
+lightgbm,"{'num_leaves': 63, 'learning_rate': 0.05, 'colsample_bytree': 0.5, 'subsample': 0.7, 'min_child_samples': 10, 'reg_lambda': 5.0}",0.8666793112668552,0.00748199189182347,scripts/run_model_zoo.py,e23a42e742099b4c
+lightgbm,"{'num_leaves': 127, 'learning_rate': 0.03, 'colsample_bytree': 0.5, 'subsample': 0.7, 'min_child_samples': 5, 'reg_lambda': 5.0}",0.879479694990883,0.007962047927963234,scripts/run_model_zoo.py,e23a42e742099b4c
+lightgbm,"{'num_leaves': 127, 'learning_rate': 0.05, 'colsample_bytree': 0.5, 'subsample': 0.9, 'min_child_samples': 20, 'reg_lambda': 0.0}",0.8698409594187302,0.006037345676474681,scripts/run_model_zoo.py,e23a42e742099b4c
+lightgbm,"{'num_leaves': 15, 'learning_rate': 0.03, 'colsample_bytree': 0.5, 'subsample': 0.9, 'min_child_samples': 10, 'reg_lambda': 0.0}",0.8713053231065184,0.004783847672765573,scripts/run_model_zoo.py,e23a42e742099b4c
+catboost,"{'depth': 6, 'learning_rate': 0.1, 'l2_leaf_reg': 3.0}",0.8708102385927285,0.007739727635742988,scripts/run_model_zoo.py,e23a42e742099b4c
+catboost,"{'depth': 8, 'learning_rate': 0.1, 'l2_leaf_reg': 3.0}",0.878312426545521,0.010109849548403771,scripts/run_model_zoo.py,e23a42e742099b4c
+catboost,"{'depth': 8, 'learning_rate': 0.05, 'l2_leaf_reg': 3.0}",0.8777556890770574,0.010783938622633271,scripts/run_model_zoo.py,e23a42e742099b4c
+catboost,"{'depth': 6, 'learning_rate': 0.1, 'l2_leaf_reg': 10.0}",0.8714212122519969,0.01065547733197686,scripts/run_model_zoo.py,e23a42e742099b4c
+hist_gradient_boosting,"{'max_leaf_nodes': 63, 'learning_rate': 0.1, 'l2_regularization': 1.0, 'min_samples_leaf': 10}",0.860287064218673,0.004664026591433612,scripts/run_model_zoo.py,e23a42e742099b4c
+hist_gradient_boosting,"{'max_leaf_nodes': 31, 'learning_rate': 0.05, 'l2_regularization': 0.0, 'min_samples_leaf': 20}",0.8582144983434272,0.0013756029282386284,scripts/run_model_zoo.py,e23a42e742099b4c
+hist_gradient_boosting,"{'max_leaf_nodes': 127, 'learning_rate': 0.1, 'l2_regularization': 1.0, 'min_samples_leaf': 20}",0.8571645514729069,0.0007745363720085829,scripts/run_model_zoo.py,e23a42e742099b4c
+hist_gradient_boosting,"{'max_leaf_nodes': 63, 'learning_rate': 0.05, 'l2_regularization': 0.0, 'min_samples_leaf': 20}",0.8589421135097051,2.4585587237113682e-05,scripts/run_model_zoo.py,e23a42e742099b4c
+hist_gradient_boosting,"{'max_leaf_nodes': 31, 'learning_rate': 0.1, 'l2_regularization': 1.0, 'min_samples_leaf': 10}",0.8595489052582975,0.0023385317596981148,scripts/run_model_zoo.py,e23a42e742099b4c
+hist_gradient_boosting,"{'max_leaf_nodes': 31, 'learning_rate': 0.1, 'l2_regularization': 0.0, 'min_samples_leaf': 20}",0.8579957283567037,0.0003616754081190443,scripts/run_model_zoo.py,e23a42e742099b4c
+hist_gradient_boosting,"{'max_leaf_nodes': 31, 'learning_rate': 0.05, 'l2_regularization': 0.0, 'min_samples_leaf': 10}",0.8615497089391959,0.007162538780566996,scripts/run_model_zoo.py,e23a42e742099b4c
+hist_gradient_boosting,"{'max_leaf_nodes': 63, 'learning_rate': 0.05, 'l2_regularization': 1.0, 'min_samples_leaf': 20}",0.8558921954648592,0.0013206965693898232,scripts/run_model_zoo.py,e23a42e742099b4c
+tanimoto_kernel,"{'w_pore': 2.0, 'gamma': 2.0, 'w_metal': 1.0, 'noise': 0.1}",0.818778949516721,0.021260943958275658,scripts/run_model_zoo.py,e23a42e742099b4c
+tanimoto_kernel,"{'w_pore': 2.0, 'gamma': 0.5, 'w_metal': 0.2, 'noise': 0.1}",0.8184872834632994,0.01889052936559288,scripts/run_model_zoo.py,e23a42e742099b4c
+tanimoto_kernel,"{'w_pore': 6.0, 'gamma': 2.0, 'w_metal': 1.0, 'noise': 0.1}",0.8168201465142289,0.01776611957961588,scripts/run_model_zoo.py,e23a42e742099b4c
+tanimoto_kernel,"{'w_pore': 2.0, 'gamma': 2.0, 'w_metal': 0.2, 'noise': 0.1}",0.8186048301872774,0.021097349340615357,scripts/run_model_zoo.py,e23a42e742099b4c
+tanimoto_kernel,"{'w_pore': 2.0, 'gamma': 2.0, 'w_metal': 0.2, 'noise': 0.03}",0.8068881451713441,0.025797122555271723,scripts/run_model_zoo.py,e23a42e742099b4c
+tanimoto_kernel,"{'w_pore': 2.0, 'gamma': 0.5, 'w_metal': 1.0, 'noise': 0.1}",0.8184768014054289,0.018857079168977442,scripts/run_model_zoo.py,e23a42e742099b4c
+tanimoto_kernel,"{'w_pore': 2.0, 'gamma': 0.5, 'w_metal': 0.2, 'noise': 0.03}",0.8096992404692447,0.020363539732422442,scripts/run_model_zoo.py,e23a42e742099b4c
+tanimoto_kernel,"{'w_pore': 2.0, 'gamma': 2.0, 'w_metal': 1.0, 'noise': 0.03}",0.8070415237016427,0.026026432171605274,scripts/run_model_zoo.py,e23a42e742099b4c
+ridge,{'dummy': 0},0.7814328724050428,0.006982504831729852,scripts/run_model_zoo.py,e23a42e742099b4c

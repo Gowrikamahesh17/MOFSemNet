@@ -1,0 +1,11 @@
+training_data,seed,r2,mae,rmse,n_test,n_train,script,data_sha256_16,test_set
+training split only (validation held out),0,0.8877821350161508,0.5448238079865654,1.0246540648125337,664,11588,scripts/check_case_study_rf_gap.py,e23a42e742099b4c,"cs2_hubs (repo code, 664 MOFs)"
+training + validation,0,0.8952660614019216,0.5270900518446264,0.9898969457903285,664,13632,scripts/check_case_study_rf_gap.py,e23a42e742099b4c,"cs2_hubs (repo code, 664 MOFs)"
+training split only (validation held out),1,0.8923551731851749,0.5411026500149904,1.0035588567212819,664,11588,scripts/check_case_study_rf_gap.py,e23a42e742099b4c,"cs2_hubs (repo code, 664 MOFs)"
+training + validation,1,0.8945237583841528,0.5252445933006136,0.993398705160023,664,13632,scripts/check_case_study_rf_gap.py,e23a42e742099b4c,"cs2_hubs (repo code, 664 MOFs)"
+training split only (validation held out),2,0.8928883387714428,0.5381976303368448,1.0010704545811284,664,11588,scripts/check_case_study_rf_gap.py,e23a42e742099b4c,"cs2_hubs (repo code, 664 MOFs)"
+training + validation,2,0.8910592056632187,0.5299043612248567,1.0095818519571353,664,13632,scripts/check_case_study_rf_gap.py,e23a42e742099b4c,"cs2_hubs (repo code, 664 MOFs)"
+training split only (validation held out),3,0.894045867507971,0.5344223901013951,0.9956466031340221,664,11588,scripts/check_case_study_rf_gap.py,e23a42e742099b4c,"cs2_hubs (repo code, 664 MOFs)"
+training + validation,3,0.8954893764625028,0.5188411211208945,0.9888410470943894,664,13632,scripts/check_case_study_rf_gap.py,e23a42e742099b4c,"cs2_hubs (repo code, 664 MOFs)"
+training split only (validation held out),4,0.8859716974852425,0.540486321956847,1.0328864877357815,664,11588,scripts/check_case_study_rf_gap.py,e23a42e742099b4c,"cs2_hubs (repo code, 664 MOFs)"
+training + validation,4,0.8960563138107098,0.521634789667874,0.9861553235966058,664,13632,scripts/check_case_study_rf_gap.py,e23a42e742099b4c,"cs2_hubs (repo code, 664 MOFs)"

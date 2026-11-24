@@ -168,6 +168,61 @@ def untried(name, note=""):
     return d
 
 
+TS_KEY = {"random15": "random15", "cs2_hubs (664, repo code)": "cs2_hubs"}
+GNN_LABEL = {"gcn": "GCN", "graphsage": "GraphSAGE", "residual_gcn": "Residual GCN", "gat": "GAT", "gin": "GIN", "appnp": "APPNP", "sgc": "SGC"}
+GNN_GRAPH_LABEL = {"none": "No edges", "cs2": "CS2 graph, k=3 (full)", "cs2_blackhole30": "CS2 graph, k=3, Black Hole 30%"}
+
+
+def tuned_branch(results_dir: Path):
+    """Tuned models: Random Forest tuning, the tree / kernel / linear zoo with ensembles, and the tuned GNNs (tuned vs default settings).
+    Settings were chosen on the validation split only; results are the mean of seeds 0-4 on the random test set and on the 664-MOF hub set."""
+    def agg(df, keys):
+        out = {}
+        for key, g in df.groupby(keys):
+            ts = TS_KEY.get(key[0] if isinstance(key, tuple) else key)
+            rest = key[1:] if isinstance(key, tuple) else ()
+            out.setdefault(rest, {})[ts] = [round(g.r2.mean(), 4), round(g.r2.std(), 4), round(g.mae.mean(), 3)]
+        return out
+
+    rf, zoo, gnn = (results_dir / f for f in ("rf_tuning_per_seed.csv", "model_zoo_per_seed.csv", "gnn_tuning_per_seed.csv"))
+    kids = []
+    if rf.exists():
+        a = agg(pd.read_csv(rf), ["test_set", "variant"])
+        kids.append({"name": "Random Forest tuning", "q": "variant", "note": "max_features chosen on the validation split",
+                     "children": [{"name": k[0], "res": v} for k, v in a.items()]})
+    if zoo.exists():
+        a = agg(pd.read_csv(zoo), ["test_set", "model"])
+        label = {"random_forest": "Random Forest (tuned)", "extra_trees": "ExtraTrees (tuned)", "xgboost": "XGBoost (wider search)", "lightgbm": "LightGBM (wider search)",
+                 "catboost": "CatBoost", "hist_gradient_boosting": "HistGradientBoosting", "tanimoto_kernel": "Tanimoto-kernel regressor (Gaussian-process mean)",
+                 "ridge": "Ridge regression (linear reference)"}
+        leaves = [{"name": label.get(k[0], k[0]), "res": v} for k, v in a.items()]
+        leaves += [untried("TabPFN", "pretrained tabular model: needs a GPU, run on the server"), untried("Wider kernel search", "best point was on the grid edge")]
+        kids.append({"name": "Tree, kernel and linear models (tuned)", "q": "model", "children": leaves,
+                     "note": "Boosted models do well on the random test set but fall back on the hub set"})
+    if gnn.exists():
+        d = pd.read_csv(gnn)
+        graph_kids = []
+        for graph in ("none", "cs2", "cs2_blackhole30"):
+            g = d[d.graph == graph]
+            if g.empty:
+                continue
+            leaves = []
+            for model in ("gcn", "graphsage", "residual_gcn", "appnp", "gat", "sgc", "gin"):
+                for setting in ("tuned", "default"):
+                    h = g[(g.model == model) & (g.setting == setting)]
+                    if not h.empty:
+                        res = {TS_KEY[ts]: [round(x.r2.mean(), 4), round(x.r2.std(), 4), round(x.mae.mean(), 3)] for ts, x in h.groupby("test_set")}
+                        leaves.append({"name": f"{GNN_LABEL[model]} ({setting} settings)", "res": res})
+            graph_kids.append({"name": GNN_GRAPH_LABEL[graph], "q": "GNN model", "children": leaves})
+        graph_kids.append(untried("Wider GNN search", "only 6 settings per model, 2 seeds"))
+        kids.append({"name": "GNNs: tuned vs default settings", "q": "graph", "children": graph_kids,
+                     "note": "No graph beats the same GNN with no edges, even when every model is tuned"})
+    kids.append(untried("Linker-level molecular GNN (Chemprop)", "atoms and bonds of the linker + pore columns"))
+    kids.append(untried("Other language models (ChemBERTa-2, MoLFormer)"))
+    return {"name": "Tuned models (validation-selected settings)", "q": "model family", "children": kids,
+            "note": "Hub set = the 664-MOF Case Study 2 set from the repo code (the server notebook's hub set has 680)"} if kids else None
+
+
 def step6_extension(results_dir: Path):
     """Steps 6b-6d: SHAP for other models, GNN explainers, LIME vs SHAP, embedding dimensions, fragments."""
     def rd(name):
@@ -396,6 +451,9 @@ def main(csv_path: Path) -> None:
                 "note": "Edges join similar MOFs"}
 
     extra = extra_branches(X_extra)
+    tuned = tuned_branch(ROOT / "outputs/results")
+    if tuned:
+        extra.append(tuned)
     root = {"name": "MOFCSD dataset", "q": "does the model use a graph?",
             "note": "14,296 MOFs, target PLD in Å. 5 seeds (0-4).", "children": [branch_a, branch_b, branch_c] + extra}
     branch_d = step6_branch(ROOT / "outputs/results")
@@ -410,6 +468,7 @@ def main(csv_path: Path) -> None:
         {"group": "GNN training", "items": [["hidden 64, lr 0.005, patience 20", "done"], ["Longer training / lower learning rate (no gain)", "done"], ["Tuned hidden size / depth", "todo"]]},
         {"group": "Target", "items": [["Raw PLD", "done"], ["log(1 + PLD)", "done"]]},
         {"group": "Pore columns", "items": [["With LCD / LFS", "done"], ["Without LCD / LFS", "done"]]},
+        {"group": "Hyperparameter tuning", "items": [["Chosen on the validation split (trees and GNNs)", "done"], ["Wider GNN / kernel search", "todo"], ["TabPFN (GPU)", "todo"]]},
         {"group": "Significance test", "items": [["Paired comparison vs seed spread", "done"], ["Formal test", "todo"]]},
     ]
 

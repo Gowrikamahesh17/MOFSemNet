@@ -7,17 +7,18 @@ summary: >
   random 15% (2,144 MOFs) and Case Study 2's harder hub set (680 MOFs). About 3,000 runs. A follow-up added
   XGBoost and LightGBM, richer inputs (RDKit descriptors, count fingerprints), a log target, a pore-column
   ablation, graph variants, ensembles and a fix to the GNN training (a further 2,500 runs), and a regression
-  MOFGalaxyNet baseline for the comparison with MOFSemNet.
-headline: "0.897"
-headline_label: "Best single score (test R², random test set): LightGBM with count fingerprints, MACCS keys and RDKit descriptors. Plain Random Forest 0.883, plain XGBoost 0.893"
+  MOFGalaxyNet baseline for the comparison with MOFSemNet. Finally the tree models and the GNNs were
+  tuned the same way (settings chosen on the validation split only, original data and target).
+headline: "0.900"
+headline_label: "Best single model (test R², random test set; 0.904 on the hub set): ExtraTrees with settings chosen on the validation split. Untuned Random Forest 0.883, tuned 0.895"
 stats:
   - label: "Random Forest R² (hub set)"
     value: "0.888"
     emphasis: true
-  - label: "GNN with no edges R² (after the training fix; 0.84 before)"
-    value: "0.874"
-  - label: "Best GNN with a graph R² (random / hub set)"
-    value: "0.873 / 0.883"
+  - label: "Best GNN, no edges, tuned R² (0.84 originally)"
+    value: "0.882"
+  - label: "Best tuned GNN with a graph R² (random / hub set)"
+    value: "0.879 / 0.868"
   - label: "Case Study 2 best GNN R²"
     value: "0.687"
 columns: ["Model and setting", "Random test set R²", "Hub test set R²"]
@@ -26,6 +27,15 @@ rows:
   - ["Random Forest, fingerprint + ChemBERTa", "0.876", "0.897"]
   - ["Random Forest, fingerprint + MolT5", "0.882", "0.895"]
   - ["MLP, fingerprint", "0.865", "0.873"]
+  - ["ExtraTrees, tuned on validation", "0.8998", "0.9044"]
+  - ["Random Forest, default / tuned on validation", "0.8825 / 0.8950", "0.8906 / 0.8993"]
+  - ["XGBoost / CatBoost / LightGBM, wider search", "0.8972 / 0.8954 / 0.8924", "0.8499 / 0.8514 / 0.8760"]
+  - ["Tanimoto-kernel regressor / Ridge", "0.7582 / 0.8071", "0.8317 / 0.7890"]
+  - ["Average of the 3 best on validation", "0.9042", "0.9003"]
+  - ["GNN, no edges, tuned: GCN / GraphSAGE / residual GCN", "0.8779 / 0.8796 / 0.8816", "0.8692 / 0.8741 / 0.8725"]
+  - ["GNN, CS2 graph, tuned: GCN / GraphSAGE / residual GCN", "0.6381 / 0.8760 / 0.8790", "0.4100 / 0.8609 / 0.8680"]
+  - ["GNN, CS2 graph + Black Hole 30%, tuned: GCN / GraphSAGE / residual GCN", "0.7166 / 0.8637 / 0.8779", "0.6920 / 0.8485 / 0.8658"]
+  - ["GNNs on the CS2 graph, tuned: APPNP / GAT / SGC / GIN", "0.739 / 0.610 / 0.619 / 0.563", "0.608 / 0.585 / 0.432 / 0.093"]
   - ["XGBoost, fingerprint", "0.893", "0.877"]
   - ["LightGBM, fingerprint", "0.885", "0.868"]
   - ["Best tree model with count fingerprints, MACCS and RDKit descriptors", "0.897 (LightGBM)", "0.905 (Random Forest)"]
@@ -55,7 +65,14 @@ finding: >
   0.6 and no graph variant (de-duplicated, descriptor-space, Black Hole pruned) beats the same GNN
   with no edges. Against the regression MOFGalaxyNet baseline, the semantic layer gives no consistent
   gain (GCN worse in 59 of 60 random-set comparisons, GraphSAGE better on average). The GNN accuracy
-  gap to the best tree model shrank from about 0.05 to 0.023. Fewer neighbours help (GCN on the Case Study 2 graph:
+  gap to the best tree model shrank from about 0.05 to 0.023. Tuning every model on the validation split
+  moves the numbers by a few thousandths to hundredths: ExtraTrees is the best single model (0.8998 and 0.9044,
+  +0.005 over the tuned forest in 5 of 5 seeds on both test sets, and above Case Study 2's 0.893 with a
+  lower error: MAE 0.458, RMSE 0.946 on the hub set against 0.525 and 1.001). The boosted models do not hold up on the
+  hub set, and a Tanimoto-kernel regressor and Ridge are clearly worse. The tuned GNNs improve by
+  0.002 to 0.022, but still no graph version beats the same GNN with no edges (best 0.8816 random,
+  0.8741 hub), and the one earlier exception (residual GCN with Black Hole on the hub set) disappears
+  once the no-edge model is tuned too. The best GNN stays 0.018 to 0.030 below ExtraTrees. Fewer neighbours help (GCN on the Case Study 2 graph:
   k=3 0.622, k=5 0.575, k=10 0.527). Neither ChemBERTa nor MolT5 improves on fingerprints
   (Random Forest rows differ by under 0.01, and the sign flips between test sets). Black Hole
   beats random pruning on the hub test set (+0.06 R², better in 81% of comparisons) but not on

@@ -28,7 +28,7 @@ nodes:
       - "MOFGalaxyNet's similarity-graph + GCN design, and where its reference implementation
          leaked test-set information into early stopping."
       - "The Black Hole Strategy's gravity-score formula and its community-stratified pruning."
-    references: [p1, p2]
+    references: [p1, p2, p35, p36, p34]
     metrics:
       "Random Forest R² (Case Study 2, 1 seed)": "0.893"
       "Random Forest R² (reproduced, 5 seeds)": "0.888"
@@ -75,7 +75,7 @@ nodes:
       graph; serves as the direct control every new graph type is measured against.
     why_chosen: "The known quantity the Case Study already showed adds nothing on its own."
     studied: []
-    references: [p1]
+    references: [p1, p27, p36]
     metrics:
       "Nodes": "14,296"
       "Edges": "115,576"
@@ -145,7 +145,7 @@ nodes:
          citation/social networks to molecular similarity graphs."
       - "A 2024 graph-reduction survey's taxonomy — confirming gravity-based scoring sits
          outside mainstream graph-ML sparsification literature on its own terms."
-    references: [p2, p15, p16]
+    references: [p2, p15, p16, p30]
     metrics:
       "Bugs found and fixed": "2"
       "Black Hole isolated-node rate": "24–41%"
@@ -167,11 +167,11 @@ nodes:
       what each graph adds or removes, not only which graph is best.
     studied:
       - "Gradient boosting (XGBoost, LightGBM) as stronger non-graph baselines."
-    references: [p21, p22]
+    references: [p21, p22, p26, p27, p28, p29, p31, p37]
     metrics:
-      "Best model": "Random Forest R² 0.883 / 0.888; best single score 0.897 / 0.905"
-      "GNN with no edges": "R² 0.874 (0.84 before the training fix)"
-      "Best GNN with a graph": "R² 0.873 / 0.883"
+      "Best model (tuned)": "ExtraTrees R² 0.900 / 0.904 (Random Forest 0.883 / 0.888 untuned)"
+      "GNN with no edges (tuned)": "R² 0.882 / 0.874 (0.84 originally)"
+      "Best tuned GNN with a graph": "R² 0.879 / 0.868"
       "Runs": "about 5,500 (incl. boosted trees, ensembles, GNN fix)"
 
   - id: step6

@@ -1,0 +1,61 @@
+graph,model,settings,val_r2_mean,val_r2_std,script,data_sha256_16
+none,gcn,"{'hidden': 64, 'layers': 3, 'dropout': 0.3, 'lr': 0.01, 'weight_decay': 0.001}",0.8568373024463654,0.0062954723834991455,scripts/tune_gnns.py,e23a42e742099b4c
+none,gcn,"{'hidden': 128, 'layers': 3, 'dropout': 0.5, 'lr': 0.002, 'weight_decay': 0.001}",0.8617956638336182,0.00690305233001709,scripts/tune_gnns.py,e23a42e742099b4c
+none,gcn,"{'hidden': 128, 'layers': 3, 'dropout': 0.1, 'lr': 0.002, 'weight_decay': 0.0001}",0.8600690364837646,0.0005602240562438965,scripts/tune_gnns.py,e23a42e742099b4c
+none,gcn,"{'hidden': 64, 'layers': 3, 'dropout': 0.5, 'lr': 0.005, 'weight_decay': 0.001}",0.8551427125930786,0.008759617805480957,scripts/tune_gnns.py,e23a42e742099b4c
+none,gcn,"{'hidden': 64, 'layers': 2, 'dropout': 0.1, 'lr': 0.01, 'weight_decay': 0.0001}",0.8599294126033783,0.00867953896522522,scripts/tune_gnns.py,e23a42e742099b4c
+none,gcn,"{'hidden': 256, 'layers': 2, 'dropout': 0.5, 'lr': 0.01, 'weight_decay': 0.001}",0.8594638407230377,0.006299346685409546,scripts/tune_gnns.py,e23a42e742099b4c
+none,graphsage,"{'hidden': 64, 'layers': 3, 'dropout': 0.3, 'lr': 0.01, 'weight_decay': 0.001}",0.8578474521636963,0.014075696468353271,scripts/tune_gnns.py,e23a42e742099b4c
+none,graphsage,"{'hidden': 128, 'layers': 3, 'dropout': 0.5, 'lr': 0.002, 'weight_decay': 0.001}",0.8606836795806885,0.006467700004577637,scripts/tune_gnns.py,e23a42e742099b4c
+none,graphsage,"{'hidden': 128, 'layers': 3, 'dropout': 0.1, 'lr': 0.002, 'weight_decay': 0.0001}",0.8584213256835938,0.00027185678482055664,scripts/tune_gnns.py,e23a42e742099b4c
+none,graphsage,"{'hidden': 64, 'layers': 3, 'dropout': 0.5, 'lr': 0.005, 'weight_decay': 0.001}",0.8461054563522339,0.008944392204284668,scripts/tune_gnns.py,e23a42e742099b4c
+none,graphsage,"{'hidden': 64, 'layers': 2, 'dropout': 0.1, 'lr': 0.01, 'weight_decay': 0.0001}",0.850459635257721,0.009439051151275635,scripts/tune_gnns.py,e23a42e742099b4c
+none,graphsage,"{'hidden': 256, 'layers': 2, 'dropout': 0.5, 'lr': 0.01, 'weight_decay': 0.001}",0.8611806333065033,0.00338175892829895,scripts/tune_gnns.py,e23a42e742099b4c
+none,residual_gcn,"{'hidden': 64, 'layers': 2, 'dropout': 0.3, 'lr': 0.01, 'weight_decay': 0.001}",0.8582703471183777,0.007076382637023926,scripts/tune_gnns.py,e23a42e742099b4c
+none,residual_gcn,"{'hidden': 128, 'layers': 2, 'dropout': 0.5, 'lr': 0.002, 'weight_decay': 0.001}",0.859164834022522,0.007103681564331055,scripts/tune_gnns.py,e23a42e742099b4c
+none,residual_gcn,"{'hidden': 128, 'layers': 2, 'dropout': 0.1, 'lr': 0.002, 'weight_decay': 0.0001}",0.8563714623451233,0.0018551349639892578,scripts/tune_gnns.py,e23a42e742099b4c
+none,residual_gcn,"{'hidden': 64, 'layers': 2, 'dropout': 0.5, 'lr': 0.005, 'weight_decay': 0.001}",0.8553458452224731,0.005662083625793457,scripts/tune_gnns.py,e23a42e742099b4c
+none,residual_gcn,"{'hidden': 64, 'layers': 1, 'dropout': 0.1, 'lr': 0.01, 'weight_decay': 0.0001}",0.8569647371768951,0.003532499074935913,scripts/tune_gnns.py,e23a42e742099b4c
+none,residual_gcn,"{'hidden': 256, 'layers': 1, 'dropout': 0.5, 'lr': 0.01, 'weight_decay': 0.001}",0.8698144257068634,0.005349844694137573,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gcn,"{'hidden': 64, 'layers': 3, 'dropout': 0.3, 'lr': 0.01, 'weight_decay': 0.001}",0.5607778429985046,0.011626660823822021,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gcn,"{'hidden': 128, 'layers': 3, 'dropout': 0.5, 'lr': 0.002, 'weight_decay': 0.001}",0.5578266978263855,0.015249311923980713,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gcn,"{'hidden': 128, 'layers': 3, 'dropout': 0.1, 'lr': 0.002, 'weight_decay': 0.0001}",0.5465551018714905,0.01684790849685669,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gcn,"{'hidden': 64, 'layers': 3, 'dropout': 0.5, 'lr': 0.005, 'weight_decay': 0.001}",0.558247983455658,0.010441005229949951,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gcn,"{'hidden': 64, 'layers': 2, 'dropout': 0.1, 'lr': 0.01, 'weight_decay': 0.0001}",0.5940105617046356,0.012469738721847534,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gcn,"{'hidden': 256, 'layers': 2, 'dropout': 0.5, 'lr': 0.01, 'weight_decay': 0.001}",0.6100731492042542,0.007887184619903564,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,graphsage,"{'hidden': 64, 'layers': 3, 'dropout': 0.3, 'lr': 0.01, 'weight_decay': 0.001}",0.8484094142913818,0.007058441638946533,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,graphsage,"{'hidden': 128, 'layers': 3, 'dropout': 0.5, 'lr': 0.002, 'weight_decay': 0.001}",0.851836621761322,0.004902541637420654,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,graphsage,"{'hidden': 128, 'layers': 3, 'dropout': 0.1, 'lr': 0.002, 'weight_decay': 0.0001}",0.8512581884860992,0.004087775945663452,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,graphsage,"{'hidden': 64, 'layers': 3, 'dropout': 0.5, 'lr': 0.005, 'weight_decay': 0.001}",0.8488495945930481,0.0023412108421325684,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,graphsage,"{'hidden': 64, 'layers': 2, 'dropout': 0.1, 'lr': 0.01, 'weight_decay': 0.0001}",0.8488539457321167,0.005696535110473633,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,graphsage,"{'hidden': 256, 'layers': 2, 'dropout': 0.5, 'lr': 0.01, 'weight_decay': 0.001}",0.8528855443000793,0.0012931227684020996,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,residual_gcn,"{'hidden': 64, 'layers': 2, 'dropout': 0.3, 'lr': 0.01, 'weight_decay': 0.001}",0.8544507026672363,0.0028258562088012695,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,residual_gcn,"{'hidden': 128, 'layers': 2, 'dropout': 0.5, 'lr': 0.002, 'weight_decay': 0.001}",0.8526503443717957,0.005428969860076904,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,residual_gcn,"{'hidden': 128, 'layers': 2, 'dropout': 0.1, 'lr': 0.002, 'weight_decay': 0.0001}",0.84035924077034,0.0005736649036407471,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,residual_gcn,"{'hidden': 64, 'layers': 2, 'dropout': 0.5, 'lr': 0.005, 'weight_decay': 0.001}",0.8466991782188416,0.0033280253410339355,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,residual_gcn,"{'hidden': 64, 'layers': 1, 'dropout': 0.1, 'lr': 0.01, 'weight_decay': 0.0001}",0.8534234762191772,0.0006676316261291504,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,residual_gcn,"{'hidden': 256, 'layers': 1, 'dropout': 0.5, 'lr': 0.01, 'weight_decay': 0.001}",0.8617933094501495,0.005467444658279419,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gat,"{'hidden': 64, 'layers': 3, 'dropout': 0.3, 'lr': 0.01, 'weight_decay': 0.001, 'heads': 2}",0.5500408113002777,0.006218940019607544,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gat,"{'hidden': 128, 'layers': 3, 'dropout': 0.5, 'lr': 0.002, 'weight_decay': 0.01, 'heads': 4}",0.5580721497535706,0.018430054187774658,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gat,"{'hidden': 128, 'layers': 3, 'dropout': 0.1, 'lr': 0.002, 'weight_decay': 0.001, 'heads': 2}",0.550750195980072,0.01944035291671753,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gat,"{'hidden': 64, 'layers': 3, 'dropout': 0.5, 'lr': 0.005, 'weight_decay': 0.001, 'heads': 4}",0.5483629703521729,0.007768988609313965,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gat,"{'hidden': 64, 'layers': 2, 'dropout': 0.1, 'lr': 0.01, 'weight_decay': 0.0001, 'heads': 4}",0.6218631267547607,0.028976798057556152,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gat,"{'hidden': 256, 'layers': 3, 'dropout': 0.1, 'lr': 0.002, 'weight_decay': 0.0001, 'heads': 4}",0.5225623846054077,0.006875753402709961,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gin,"{'hidden': 64, 'layers': 3, 'dropout': 0.3, 'lr': 0.01, 'weight_decay': 0.001}",0.6171143651008606,0.026751458644866943,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gin,"{'hidden': 128, 'layers': 3, 'dropout': 0.5, 'lr': 0.002, 'weight_decay': 0.001}",0.6019032299518585,0.024575918912887573,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gin,"{'hidden': 128, 'layers': 3, 'dropout': 0.1, 'lr': 0.002, 'weight_decay': 0.0001}",0.5894233584403992,0.022096574306488037,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gin,"{'hidden': 64, 'layers': 3, 'dropout': 0.5, 'lr': 0.005, 'weight_decay': 0.001}",0.6148687899112701,0.02500411868095398,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gin,"{'hidden': 64, 'layers': 2, 'dropout': 0.1, 'lr': 0.01, 'weight_decay': 0.0001}",0.523859053850174,0.002946704626083374,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,gin,"{'hidden': 256, 'layers': 2, 'dropout': 0.5, 'lr': 0.01, 'weight_decay': 0.001}",0.5385335385799408,0.006234198808670044,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,appnp,"{'hidden': 64, 'dropout': 0.5, 'lr': 0.005, 'weight_decay': 0.0001, 'K': 10, 'alpha': 0.1}",0.6455448865890503,0.013953208923339844,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,appnp,"{'hidden': 128, 'dropout': 0.5, 'lr': 0.005, 'weight_decay': 0.01, 'K': 10, 'alpha': 0.2}",0.6981165409088135,0.0186464786529541,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,appnp,"{'hidden': 128, 'dropout': 0.3, 'lr': 0.005, 'weight_decay': 0.01, 'K': 5, 'alpha': 0.1}",0.6242853403091431,0.01903223991394043,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,appnp,"{'hidden': 64, 'dropout': 0.5, 'lr': 0.01, 'weight_decay': 0.0001, 'K': 10, 'alpha': 0.2}",0.7300444841384888,0.0024805068969726562,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,appnp,"{'hidden': 64, 'dropout': 0.1, 'lr': 0.005, 'weight_decay': 0.0001, 'K': 5, 'alpha': 0.2}",0.7286947071552277,0.0088634192943573,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,appnp,"{'hidden': 256, 'dropout': 0.3, 'lr': 0.005, 'weight_decay': 0.001, 'K': 10, 'alpha': 0.2}",0.7390517592430115,0.0013058781623840332,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,sgc,"{'K': 1, 'dropout': 0.3, 'lr': 0.01, 'weight_decay': 0.0001}",0.5766802132129669,0.01211366057395935,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,sgc,"{'K': 2, 'dropout': 0.3, 'lr': 0.01, 'weight_decay': 0.001}",0.5805056095123291,0.020218372344970703,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,sgc,"{'K': 2, 'dropout': 0.1, 'lr': 0.01, 'weight_decay': 0.0001}",0.5770015716552734,0.022314071655273438,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,sgc,"{'K': 1, 'dropout': 0.3, 'lr': 0.02, 'weight_decay': 0.0001}",0.5780775249004364,0.00949433445930481,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,sgc,"{'K': 1, 'dropout': 0.0, 'lr': 0.01, 'weight_decay': 0.0001}",0.5720129609107971,0.013722479343414307,scripts/tune_gnns.py,e23a42e742099b4c
+cs2,sgc,"{'K': 3, 'dropout': 0.1, 'lr': 0.005, 'weight_decay': 0.001}",0.538779616355896,0.023967742919921875,scripts/tune_gnns.py,e23a42e742099b4c
