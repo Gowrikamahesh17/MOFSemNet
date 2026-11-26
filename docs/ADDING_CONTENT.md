@@ -1,5 +1,11 @@
 # Adding content to the web console
 
+> **Update 2026-11-26.** The React console pages this guide was written for (Plan, Architecture, Implemented, Studied,
+> References, Progress) were removed. The web app is now the single page `frontend/public/mofworld.html`. Only the
+> Progress tab reads `content/progress.yaml` live; the architecture, papers, plan and results content is embedded in
+> `mofworld.html`, so after editing those YAML files, update the matching block in `mofworld.html` and run `npm run build`.
+> The section "Add a new page / nav section" no longer applies.
+
 Everything the console shows lives in `content/*.yaml`. You should rarely, if ever, need to
 touch `backend/` or `frontend/` code just to add a new result, paper, or pipeline stage — that's
 the point of keeping content separate from layout.
