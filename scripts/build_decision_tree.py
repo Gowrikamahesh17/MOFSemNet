@@ -36,7 +36,7 @@ FEATURE_OPTIONS = [("fingerprint", "-", "Fingerprint only"),
                    ("embedding", "molt5", "MolT5 embedding only"),
                    ("fingerprint+embedding", "molt5", "Fingerprint + MolT5")]
 # (graph type, language model, label)
-GRAPH_OPTIONS = [("cs2", "-", "Case Study 2 graph"), ("fingerprint", "-", "Fingerprint graph"),
+GRAPH_OPTIONS = [("cs2", "-", "Baseline graph (fingerprint + metal)"), ("fingerprint", "-", "Fingerprint graph"),
                  ("semantic", "chemberta", "Semantic graph (ChemBERTa)"), ("hybrid", "chemberta", "Hybrid graph (ChemBERTa)"),
                  ("semantic", "molt5", "Semantic graph (MolT5)"), ("hybrid", "molt5", "Hybrid graph (MolT5)")]
 GRAPH_NOTE = {"cs2": "0.9 x Tanimoto + 0.1 x same-metal", "fingerprint": "linker Tanimoto only",
@@ -61,9 +61,9 @@ WITH_PORE = ["fp+pore+m1h", "fp+pore+m1h+ldesc", "fp+pore+m1h+mdesc", "fp+pore+m
              "fp+maccs+pore+m1h+mdesc+ldesc", "fp+pore+m1h+mdesc+rdall", "fpc+maccs+pore+m1h+mdesc+rdall"]
 WITHOUT_PORE = ["fp+m1h", "fp+m1h+ldesc", "fp+m1h+mdesc", "fp+mdesc", "fp+m1h+mdesc+ldesc", "fpc+m1h+mdesc+ldesc",
                 "fp+maccs+m1h+mdesc+ldesc", "fp+m1h+mdesc+rdall", "fpc+maccs+m1h+mdesc+rdall"]
-EXTRA_GRAPH_LABEL = {("none", 0, "none", 1.0): "No edges", ("cs2", 3, "none", 1.0): "CS2 graph, k=3 (full)",
-                     ("fingerprint", 3, "none", 1.0): "Fingerprint graph, k=3 (full)", ("cs2", 3, "black_hole", 0.3): "CS2 graph, k=3, Black Hole 30%",
-                     ("dedup_cs2", 3, "none", 1.0): "De-duplicated CS2 graph (one MOF per neighbouring linker), k=3",
+EXTRA_GRAPH_LABEL = {("none", 0, "none", 1.0): "No edges", ("cs2", 3, "none", 1.0): "Baseline graph, k=3 (full)",
+                     ("fingerprint", 3, "none", 1.0): "Fingerprint graph, k=3 (full)", ("cs2", 3, "black_hole", 0.3): "Baseline graph, k=3, Black Hole 30%",
+                     ("dedup_cs2", 3, "none", 1.0): "De-duplicated baseline graph (one MOF per neighbouring linker), k=3",
                      ("desc", 3, "none", 1.0): "Descriptor-space graph (RDKit + metal descriptors), k=3",
                      ("desc_dedup", 3, "none", 1.0): "De-duplicated descriptor graph, k=3"}
 
@@ -153,7 +153,7 @@ def extra_branches(X):
                  for g in (("none", 0, "none", 1.0), ("cs2", 3, "none", 1.0), ("dedup_cs2", 3, "none", 1.0), ("desc", 3, "none", 1.0), ("desc_dedup", 3, "none", 1.0))]
         gkids.append({"name": "XGBoost + graph-smoothed neighbour features", "q": "graph", "children": [
             xleaf(lbl, block="extra_tab", model="xgboost_smooth", node_features=feats, graph_type=gt, k=3, sparsify="none", retention=1.0, target="raw", train_setup="v1")
-            for gt, lbl in (("cs2", "Smoothed over the CS2 graph"), ("dedup_cs2", "Smoothed over the de-duplicated graph"))]})
+            for gt, lbl in (("cs2", "Smoothed over the baseline graph"), ("dedup_cs2", "Smoothed over the de-duplicated graph"))]})
         other.append({"name": flabel, "q": "graph", "children": gkids})
     other.append(untried("GNN predictions as XGBoost input", "needs out-of-fold predictions to avoid leakage"))
     out.append({"name": "Other graphs and stacking (old GNN training)", "q": "input columns", "children": other,
@@ -170,7 +170,7 @@ def untried(name, note=""):
 
 TS_KEY = {"random15": "random15", "cs2_hubs (664, repo code)": "cs2_hubs"}
 GNN_LABEL = {"gcn": "GCN", "graphsage": "GraphSAGE", "residual_gcn": "Residual GCN", "gat": "GAT", "gin": "GIN", "appnp": "APPNP", "sgc": "SGC"}
-GNN_GRAPH_LABEL = {"none": "No edges", "cs2": "CS2 graph, k=3 (full)", "cs2_blackhole30": "CS2 graph, k=3, Black Hole 30%"}
+GNN_GRAPH_LABEL = {"none": "No edges", "cs2": "Baseline graph, k=3 (full)", "cs2_blackhole30": "Baseline graph, k=3, Black Hole 30%"}
 
 
 def tuned_branch(results_dir: Path):
@@ -220,7 +220,7 @@ def tuned_branch(results_dir: Path):
     kids.append(untried("Linker-level molecular GNN (Chemprop)", "atoms and bonds of the linker + pore columns"))
     kids.append(untried("Other language models (ChemBERTa-2, MoLFormer)"))
     return {"name": "Tuned models (validation-selected settings)", "q": "model family", "children": kids,
-            "note": "Hub set = the 664-MOF Case Study 2 set from the repo code (the server notebook's hub set has 680)"} if kids else None
+            "note": "Hub set = the 664-MOF hub test set from the repo code (the server notebook's hub set has 680)"} if kids else None
 
 
 def step6_extension(results_dir: Path):
@@ -357,7 +357,7 @@ def step6_branch(results_dir: Path):
                      "note": "Split conformal prediction; calibration = validation split"})
     children.extend(step6_extension(results_dir))
     children.append(untried("Intervals for the GNN models"))
-    children.append(untried("Explainers on the Case Study 2 hub test set", "Steps 6b-6d use the random test set"))
+    children.append(untried("Explainers on the hub test set", "Steps 6b-6d use the random test set"))
     return {"name": "Trustworthiness checks (Step 6)", "q": "analysis", "children": children,
             "note": "SHAP, embedding ablation, calibrated confidence"}
 
@@ -461,7 +461,7 @@ def main(csv_path: Path) -> None:
         root["children"].append(branch_d)
 
     settings = [
-        {"group": "Test set", "items": [["Random 15% (2,144 MOFs)", "done"], ["Case Study 2 hubs (680 MOFs)", "done"]]},
+        {"group": "Test set", "items": [["Random 15% (2,144 MOFs)", "done"], ["Hub test set (680 MOFs)", "done"]]},
         {"group": "Language model", "items": [["ChemBERTa", "done"], ["MolT5", "done"]]},
         {"group": "Seeds", "items": [["0-4 (5 seeds)", "done"], ["10 seeds", "todo"]]},
         {"group": "Feature scaling", "items": [["None (raw)", "done"], ["Standardised target + inputs (GNN training fix)", "done"]]},
@@ -472,7 +472,8 @@ def main(csv_path: Path) -> None:
         {"group": "Significance test", "items": [["Paired comparison vs seed spread", "done"], ["Formal test", "todo"]]},
     ]
 
-    OUT.write_text(json.dumps({"tree": root, "settings": settings}))
+    # result files label the graph of the earlier research "CS2"; the page calls it the baseline graph
+    OUT.write_text(json.dumps({"tree": root, "settings": settings}).replace("CS2 graph", "Baseline graph"))
     print(f"wrote {OUT} ({OUT.stat().st_size // 1024} KB)")
 
 if __name__ == "__main__":

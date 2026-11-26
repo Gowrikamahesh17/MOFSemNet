@@ -51,6 +51,17 @@ app.include_router(routes_results.router)
 app.include_router(routes_predict.router)
 
 
+@app.on_event("startup")
+def _warm_up_predictor() -> None:
+    """Loads the saved demo models in a background thread, so the first Live Demo prediction does not wait for them.
+    Skipped when the models are not unpacked (the endpoint then answers 503 with a hint)."""
+    import threading
+
+    models = Path(__file__).resolve().parents[2] / "outputs" / "models" / "mofsemnet_models"
+    if (models / "manifest.json").exists():
+        threading.Thread(target=routes_predict._predictor, daemon=True).start()
+
+
 @app.get("/api/health", tags=["health"])
 def health() -> dict:
     return {"status": "ok"}

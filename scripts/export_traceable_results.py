@@ -79,6 +79,11 @@ def main() -> None:
         record(Path("mofgalaxynet_vs_mofsemnet") / f.name, "scripts/build_mofgalaxynet_comparison.py",
                "reads results/server_runs/server_molt5_2026-11-20/per_run_results.csv", SEEDS, "regression MOFGalaxyNet baseline vs MOFSemNet")
 
+    pred_scripts = {"new_mof_accuracy.csv": "scripts/evaluate_new_mof_predictions.py"}
+    for f in sorted((DST / "predictions").glob("*.csv")) if (DST / "predictions").exists() else []:
+        record(Path("predictions") / f.name, pred_scripts.get(f.name, "scripts/export_model_predictions.py"),
+               "saved models from MOFSemNet_server_save_models.ipynb (outputs/models/mofsemnet_models, manifest.json)", "0",
+               "predictions of the saved demo models")
     pd.DataFrame(rows).to_csv(DST / "MANIFEST.csv", index=False)
     print(f"copied results into {DST.relative_to(ROOT)}; MANIFEST.csv lists {len(rows)} files (commit {commit[:8]}, code uncommitted: {dirty})")
 

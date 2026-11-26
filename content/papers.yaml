@@ -22,7 +22,7 @@ clusters:
       literature. MolFormer's own correlation analysis — its embeddings track Tanimoto
       similarity more closely than ChemBERTa's do — was the deciding factor: a graph built
       from MolFormer embeddings risked being redundant with the fingerprint graph by the
-      same mechanism that sank the Case Study. Praski et al.'s rigorous benchmark is the
+      same mechanism that sank the earlier research. Praski et al.'s rigorous benchmark is the
       most direct threat to the thesis premise: across 25 datasets, ChemBERTa used flatly
       as classifier input is only equivalent to ECFP fingerprints, not better. This thesis
       tests a different question — graph-structural use via message passing — that
@@ -538,7 +538,7 @@ papers:
     venue: "Journal of Chemical Information and Modeling 50(5), 742-754"
     url: "https://pubmed.ncbi.nlm.nih.gov/20426451/"
     summary: >
-      The circular (Morgan) fingerprint family. Every feature matrix, the Tanimoto-based CS2 and fingerprint graphs and the
+      The circular (Morgan) fingerprint family. Every feature matrix, the Tanimoto-based baseline and fingerprint graphs and the
       Random Forest inputs here are built from a 1,024-bit radius-2 Morgan fingerprint.
     has_local_pdf: false
 

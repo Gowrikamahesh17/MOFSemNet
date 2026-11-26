@@ -31,7 +31,7 @@ sentencepiece
 networkx==3.5
 
 # Classical ML baselines (Random Forest, k-NN, MLP) + k-center coreset utilities
-scikit-learn==1.7.2
+scikit-learn==1.8.0
 
 # Explainability (Step 6)
 shap==0.54.1

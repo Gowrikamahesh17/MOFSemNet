@@ -1,0 +1,7 @@
+mode,role,model_id,model,graph,k,pruning,val_r2,test_r2,test_mae,test_rmse,interval_halfwidth_90
+with_pore,best tree model,tree__with_pore__extra_trees,extra_trees,none,0,none,0.9075231266167187,0.9004628730988763,0.4630081919661667,0.9208371040419931,1.1099424274762466
+with_pore,"best GNN, no edges",gnn__with_pore__none__k0__none__graphsage,graphsage,none,0,none,0.8700083494186401,0.8786750435829163,0.6067050099372864,1.0166355680701815,1.3620691299438477
+with_pore,best GNN with a graph,gnn__with_pore__semantic_molt5__k10__none__residual_gcn,residual_gcn,semantic_molt5,10,none,0.8714138865470886,0.8816050291061401,0.6066828966140747,1.0042847984653198,1.3498387336730957
+chemistry_only,best tree model,tree__chemistry_only__catboost,catboost,none,0,none,0.5773720642367093,0.60656566585809,1.2052864749850565,1.8307388109340592,2.6413659655347264
+chemistry_only,"best GNN, no edges",gnn__chemistry_only__none__k0__none__gcn,gcn,none,0,none,0.5944955348968506,0.5872950553894043,1.1562625169754028,1.87503801943062,2.7390928268432617
+chemistry_only,best GNN with a graph,gnn__chemistry_only__hybrid_chemberta__k3__none__graphsage,graphsage,hybrid_chemberta,3,none,0.6050182580947876,0.6063487529754639,1.1637591123580933,1.8312434147530847,2.6951401233673096

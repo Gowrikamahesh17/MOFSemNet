@@ -1,8 +1,0 @@
-.callout {
-  background: var(--color-ink);
-  color: #f1efe8;
-  border-radius: var(--radius-md);
-  padding: var(--space-5);
-  font-size: var(--text-sm);
-  line-height: 1.65;
-}

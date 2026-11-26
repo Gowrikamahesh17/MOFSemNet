@@ -14,26 +14,24 @@ nodes:
     label: "Step 1\nBaseline Reproduction"
     group: pipeline
     status: done
-    summary: "Ported, re-verified Tanimoto-graph baseline from the prior Case Study."
+    summary: "Ported, re-verified Tanimoto-graph baseline from the earlier research."
     description: >
-      Ports the working, tested pipeline from the prior Case Study into this repository:
+      Ports the working, tested pipeline from the earlier research into this repository:
       data ingestion, fingerprint feature engineering, Tanimoto graph construction, Black
       Hole sparsification, and the GCN / GraphSAGE / GAT training loop, plus Random Forest
       and k-NN non-graph baselines. Re-run end-to-end on the real 14,296-MOF dataset to
       re-establish the reference numbers everything else compares against.
     why_chosen: >
       Reused unmodified rather than rewritten, so this thesis's results stay directly
-      comparable to the Case Study's own reported numbers.
+      comparable to the earlier research's own reported numbers.
     studied:
       - "MOFGalaxyNet's similarity-graph + GCN design, and where its reference implementation
          leaked test-set information into early stopping."
       - "The Black Hole Strategy's gravity-score formula and its community-stratified pruning."
     references: [p1, p2, p35, p36, p34]
     metrics:
-      "Random Forest R² (Case Study 2, 1 seed)": "0.893"
-      "Random Forest R² (reproduced, 5 seeds)": "0.888"
-      "Best GNN R² (Case Study 2, 1 seed)": "0.687"
-      "Same GNN (reproduced, 5 seeds)": "0.751"
+      "Baseline Random Forest R² (hub test set, 5 seeds)": "0.888"
+      "GraphSAGE, baseline graph + Black Hole 30% (5 seeds)": "0.751"
 
   - id: step2
     label: "Step 2\nLanguage Embeddings"
@@ -71,9 +69,9 @@ nodes:
     summary: "Tanimoto similarity over Morgan fingerprints — the control condition."
     description: >
       Top-k (k=10) nearest-neighbour graph built from Tanimoto similarity over 1024-bit
-      Morgan fingerprints of the linker SMILES. Identical signal to the Case Study's own
+      Morgan fingerprints of the linker SMILES. Identical signal to the earlier research's own
       graph; serves as the direct control every new graph type is measured against.
-    why_chosen: "The known quantity the Case Study already showed adds nothing on its own."
+    why_chosen: "The known quantity the earlier research already showed adds nothing on its own."
     studied: []
     references: [p1, p27, p36]
     metrics:
@@ -130,7 +128,7 @@ nodes:
     status: done
     summary: "Black Hole vs. random vs. k-center, at 30% and 50% retention."
     description: >
-      Applies Black Hole gravity-based pruning (reused unmodified from the Case Study),
+      Applies Black Hole gravity-based pruning (reused unmodified from the earlier research),
       random sampling, and greedy k-center sampling to all three graph types at two
       retention levels, with one fixed test set held constant across every method and
       graph type so the comparison is genuinely apples-to-apples.
@@ -159,11 +157,11 @@ nodes:
     description: >
       Trained Random Forest, MLP and k-NN (no graph) against GCN, GraphSAGE and a residual GCN on
       every combination of graph type, neighbours (k = 3, 5, 10), sparsification method and
-      retention, with both language models, 5 seeds each, on a random test set and on Case Study 2's
+      retention, with both language models, 5 seeds each, on a random test set and on the
       hub test set, reporting MAE / RMSE / R². Random Forest on fingerprints is the best model, and a
       GNN with no edges beats every GNN with a graph.
     why_chosen: >
-      A no-edge GNN and the Case Study 2 graph were added as reference rows, so the comparison shows
+      A no-edge GNN and the baseline graph were added as reference rows, so the comparison shows
       what each graph adds or removes, not only which graph is best.
     studied:
       - "Gradient boosting (XGBoost, LightGBM) as stronger non-graph baselines."
@@ -188,7 +186,7 @@ nodes:
       columns carry 74% of the Random Forest's reliance summed over columns and 88% as a net contribution per
       MOF; a plain GCN with a graph puts over 80% of its attribution on neighbours; LIME disagrees with SHAP and
       is unreliable here; the embeddings carry real chemistry but no usable gain (same for ChemBERTa and MolT5);
-      adaptive 90% intervals cover 90.8% of random test MOFs and 89.9% of Case Study 2's hub test set.
+      adaptive 90% intervals cover 90.8% of random test MOFs and 89.9% of the hub test set.
     why_chosen: >
       Conformal prediction gives a measured, distribution-free coverage guarantee instead of a
       qualitative claim about trust.
@@ -199,7 +197,7 @@ nodes:
     references: [p17, p18, p19, p20, p23, p24, p25]
     metrics:
       "Pore columns' SHAP share (summed / net per MOF)": "74% / 88%"
-      "GCN attribution on neighbours (CS2 graph)": "81%"
+      "GCN attribution on neighbours (baseline graph)": "81%"
       "LIME top-5 overlap with SHAP": "11-19%"
       "Two pore columns alone": "R² 0.72"
       "90% interval coverage (random / hub set)": "90.8% / 89.9%"

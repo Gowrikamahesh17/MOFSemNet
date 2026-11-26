@@ -56,6 +56,8 @@ milestones:
     label: "Step 5 sweeps (ChemBERTa and MolT5, two test sets) and Step 6 analysis (ChemBERTa and MolT5) complete"
   - date: "2026-11-22"
     label: "Follow-up experiments (boosted trees, GNN training fix, richer features, ensembles, MOFGalaxyNet baseline) and extended explainers (SHAP, LIME, GNNExplainer) complete; web console updated"
+  - date: "2026-11-26"
+    label: "All 286 demo models trained and saved on the GPU server; new web app live (landing page, Live Demo predicting any new linker + metal with the saved models, Research Explorer)"
   - date: "2027-02-28"
     label: "Full Step 5 comparison sweep complete for ChemBERTa; Step 6 trustworthiness analysis begins"
   - date: "2027-03-10"
